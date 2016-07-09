@@ -1,0 +1,33 @@
+﻿@model IEnumerable<ASPInformationSystem.Models.ArchiveTable>
+
+<!--Table-->
+<div class="table-responsive">
+    <table>
+        <tr>
+            <th>Назва</th>
+            <th>Автор(и)</th>
+            <th>Категорія</th>
+            <th>Факультет</th>
+            <th>Кафедра</th>
+            <th>Обсяг</th>
+            <th>Рік публікації</th>
+            <th class="edit-column"></th>
+        </tr>
+        @foreach (var publication in Model)
+            {
+            <tr>
+                <td>@publication.Name</td>
+                <td>@publication.Authors</td>
+                <td>@publication.Category</td>
+                <td>@publication.Faculty</td>
+                <td>@publication.Department</td>
+                <td>@publication.Amount</td>
+                <td>@publication.Date</td>
+                <td class="edit-column">
+                    <a href=@string.Concat("~/edit/index/?id=", publication.PublicationID.ToString())><img src="~/images/edit-image.png"></a>
+                    <a href=@string.Concat("~/delete/index/?id=", publication.PublicationID.ToString())><img src="~/images/delete-image.png"></a>
+                </td>
+            </tr>
+        }
+    </table>
+</div>

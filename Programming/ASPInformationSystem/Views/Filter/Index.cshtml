@@ -1,0 +1,83 @@
+﻿@using ASPInformationSystem.Models;
+
+@model IEnumerable<ArchiveTable>
+@{
+    ViewData["Title"] = "Список публікацій";
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head></head>
+<body>
+    <script type="text/javascript">
+        $.ajax({
+            type: 'POST',
+            contentType: "application/x-javascript; charset:ISO-8859-1",
+            url: '/Filter/JGet/',
+            success: function (data) {
+                faculties = data;
+            }
+        });
+    </script>
+
+    <!--Filter select lists-->
+    <form class="form-inline">
+        @Html.Label("Категорія")
+        <select id="categoryID" name="categoryID" class="form-control">
+            @foreach (var cat in ViewBag.Categories)
+            {
+                @if (cat.ID == ViewBag.CategoryID)
+                {
+                    <option value="@cat.ID" selected>@cat.Name</option>
+                }
+                else
+                {
+                    <option value="@cat.ID">@cat.Name</option>
+                }
+            }
+        </select>
+        @Html.Label("Факультет")
+        <select id="facultyID" name="facultyID" class="form-control" onchange="updateDepartments(true)">
+            @foreach (var fac in ViewBag.Faculties)
+            {
+                @if (fac.ID == ViewBag.FacultyID)
+                {
+                    <option value="@fac.ID" selected>@fac.Name</option>
+                }
+                else
+                {
+                    <option value="@fac.ID">@fac.Name</option>
+                }
+            }
+        </select>
+        @Html.Label("Кафедра")
+        <select id="departmentID" name="departmentID" class="form-control">
+            @foreach (var dep in ViewBag.Departments)
+            {
+                @if(dep.FacultyID == ViewBag.FacultyID)
+                {
+                    @if (dep.ID == ViewBag.DepartmentID)
+                    {
+                        <option value="@dep.ID" selected>@dep.Name</option>
+                    }
+                    else
+                    {
+                        <option value="@dep.ID">@dep.Name</option>
+                    }
+                }
+
+            }
+        </select>
+        <input type="submit" class="btn btn-success btn-md" value="Фільтрувати"/>
+    </form>
+    <hr />
+    
+    @Html.Partial("~/Views/PartialViews/Table")
+
+    <form action="~/add">
+        <input type="submit" class="add-button" value="Додати"/>
+    </form>
+</body>
+</html>

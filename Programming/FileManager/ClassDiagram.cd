@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Manager.XMLSearcher">
+    <Position X="0.5" Y="0.5" Width="2.25" />
+    <Members>
+      <Method Name="button1_Click" Hidden="true" />
+      <Method Name="Dispose" Hidden="true" />
+      <Method Name="InitializeComponent" Hidden="true" />
+      <Method Name="LoadFile" Hidden="true" />
+      <Method Name="MakeHTML" Hidden="true" />
+      <Method Name="SearchAndShow" Hidden="true" />
+      <Method Name="XMLSearcher" Hidden="true" />
+      <Method Name="XMLSearcher_Load" Hidden="true" />
+      <Method Name="завантажитиФайлToolStripMenuItem_Click" Hidden="true" />
+      <Method Name="перетворитиВHTMLToolStripMenuItem_Click" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AQAAAAEgACAAABBgQQCDAAACAAgIIAAAAEAUAAAABAI=</HashCode>
+      <FileName>XML Implementation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manager.SAX_XML_Parser">
+    <Position X="3" Y="1.5" Width="1.5" />
+    <AssociationLine Name="DOM_XML_Parser" Type="Manager.DOM_XML_Parser" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="4.5" Y="1.829" />
+        <Point X="4.875" Y="1.829" />
+        <Point X="4.875" Y="0.625" />
+        <Point X="5.75" Y="0.625" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAACKAAAAAAAAAAAAAAgBAAAgAAA=</HashCode>
+      <FileName>SAX_XML_Parser.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="DOM_XML_Parser" />
+      <Property Name="LINQ_TO_XML_Parser" />
+    </ShowAsAssociation>
+    <Lollipop Orientation="Bottom" Position="0.651" />
+  </Class>
+  <Class Name="Manager.DOM_XML_Parser">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <AssociationLine Name="LINQ_TO_XML_Parser" Type="Manager.LINQ_TO_XML_Parser" FixedFromPoint="true">
+      <Path>
+        <Point X="7.25" Y="2.188" />
+        <Point X="8.25" Y="2.188" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAAAAAAAKAAAAAAAAAAAAAAAAAAAgAAA=</HashCode>
+      <FileName>DOM_XML_Parser.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="SAX_XML_Parser" />
+      <Property Name="LINQ_TO_XML_Parser" />
+    </ShowAsAssociation>
+    <Lollipop Orientation="Bottom" Position="0.682" />
+  </Class>
+  <Class Name="Manager.LINQ_TO_XML_Parser">
+    <Position X="8.25" Y="1.5" Width="1.5" />
+    <AssociationLine Name="DOM_XML_Parser" Type="Manager.DOM_XML_Parser" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="8.25" Y="1.875" />
+        <Point X="7.875" Y="1.875" />
+        <Point X="7.875" Y="0.625" />
+        <Point X="7.25" Y="0.625" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAAAAAACCAAAAAAAAAAAAAEAAAAAgAAA=</HashCode>
+      <FileName>LINQ_TO_XML_Parser.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="DOM_XML_Parser" />
+      <Property Name="SAX_XML_Parser" />
+    </ShowAsAssociation>
+    <Lollipop Orientation="Bottom" Position="0.734" />
+  </Class>
+  <Class Name="Manager.EventItem">
+    <Position X="7.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAoAABQAAAAAAQAAAAAAAAAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>EventItem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manager.FilterEvent">
+    <Position X="4.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAoAABQAAAAAAQAAAAAAAAAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>FilterEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="Manager.IParser" Collapsed="true">
+    <Position X="5.75" Y="3.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAA=</HashCode>
+      <FileName>IParser.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -1,0 +1,14 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/bin/Debug
+/obj/Debug
+/Properties
+/EFInformationSystem.csproj
+/src/ArchiveDataEF/obj/Debug
+/src/ArchiveDataEF/Properties
+/src/ArchiveDataEF/ArchiveDataEF.csproj
+/src/ArchiveDataEF/Class1.cs
+/src/ArchiveDataEF/bin/Debug
+/src/ArchiveDataEF/packages.config

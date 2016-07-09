@@ -1,0 +1,17 @@
+﻿@using ASPInformationSystem.Models;
+
+@model IEnumerable<ArchiveTable>
+@{
+    ViewData["Title"] = "Результати пошуку";
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+<html>
+<head></head>
+<body>
+    <h3>Результати пошуку</h3>
+  
+    @Html.Partial("~/Views/PartialViews/Table")
+</body>
+</html>

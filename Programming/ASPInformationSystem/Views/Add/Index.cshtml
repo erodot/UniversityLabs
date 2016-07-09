@@ -1,0 +1,113 @@
+﻿@using ASPInformationSystem.Models;
+
+@model Archive
+@{
+    ViewData["Title"] = "Додавання книги";
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/mvc/5.2/jquery.validate.unobtrusive.min.js" type="text/javascript"></script>
+</head>
+<body>
+    <script type="text/javascript">
+        $.ajax({
+            type: 'POST',
+            contentType: "application/x-javascript; charset:ISO-8859-1",
+            url: '/Filter/JGet/',
+            success: function (data) {
+                faculties = data;
+            }
+        });
+    </script>
+    <h3 class="text-primary">Додавання книги</h3>
+    @using (Html.BeginForm("result", "add", FormMethod.Post))
+    {
+        @Html.Hidden("ID", "0")
+
+        <!--Publication name input field-->
+        <div class="form-group">
+            <div class="text-info">
+                @Html.LabelFor(model => model.Name)
+            </div>
+            @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Name)
+        </div>   
+
+        <!--Authors input field-->
+        <div class="form-group">
+            <div class="text-info">
+                @Html.LabelFor(model => model.Authors)
+            </div>
+            @Html.TextBoxFor(model => model.Authors, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Authors)
+        </div>
+
+        <!--Categories select list-->
+        <div class="form-group">
+            <div class="text-info">
+                @Html.Label("Категорія:")
+            </div>
+            <select name="CategoryID" class="form-control">
+                @foreach (var cat in ViewBag.Categories)
+                {
+                    <option value="@cat.ID">@cat.Name</option>
+                }
+            </select>
+        </div>
+
+        <!--Faculties select list-->
+        <div class="form-group">
+            <div class="text-info">
+                @Html.Label("Факультет:")
+            </div>
+            <select id="facultyID" name="FacultyID" class="form-control" onchange="updateDepartments(false)">
+                @foreach (var fac in ViewBag.Faculties)
+                {
+                    <option value="@fac.ID">@fac.Name</option>
+                }
+            </select>
+        </div>
+
+        <!--Departments select list-->
+        <div class="form-group">
+            <div class="text-info">
+                @Html.Label("Кафедра:")
+            </div>
+            <select id="departmentID" name="DepartmentID" class="form-control">
+                @foreach (var dep in ViewBag.Departments)
+                {
+                    @if (dep.FacultyID == 2)
+                    {
+                        <option value="@dep.ID">@dep.Name</option>
+                    }
+                }
+            </select>
+        </div>
+
+        <!--Amount input field-->
+        <div class="form-group">
+            <div class="text-info">
+                @Html.LabelFor(model => model.Amount)
+            </div>
+            @Html.TextBoxFor(model => model.Amount, new { @class = "form-control textbox-numbers" })
+            @Html.ValidationMessageFor(model => model.Amount)
+        </div>
+
+        <!--Year input field-->
+        <div class="form-group">
+            <div class="text-info">
+                @Html.LabelFor(model => model.Year)
+            </div>
+            @Html.TextBoxFor(model => model.Year, new { @class = "form-control textbox-numbers" })
+            @Html.ValidationMessageFor(model => model.Year)
+        </div>
+
+        <!--Add book submit-->
+        <input type="submit" class="btn btn-success btn-md" value="Додати" />
+    }
+</body>
+</html>

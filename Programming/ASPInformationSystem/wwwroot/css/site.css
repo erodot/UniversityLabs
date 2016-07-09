@@ -1,0 +1,105 @@
+﻿table{
+    width: 100%;
+}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+table,th,td{
+    padding:5px;
+    font-size: 15px;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2
+}
+
+tr:hover {
+    background-color: #f5f5f5
+}
+
+hr{
+    margin-right:2%;
+}
+
+img{
+    height:15px;
+}
+
+select{
+    max-width:250px;
+}
+
+.hyperlink{
+    text-decoration:none;
+}
+
+.hyperlink:hover{
+    text-decoration:none;
+    color:#4CAF50;
+}
+
+.add-button{
+    border-radius: 5px;
+    text-align: center;
+    text-decoration: none;
+    color: grey;
+    background-color: white;
+    font-size: 15px;
+    padding: 2px 8px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width:20%;
+    border:none;
+}
+
+.add-button:hover{
+    border: 1px solid grey;
+}
+
+.edit-column{
+    background-color:white;
+}
+
+.textbox-numbers{
+    max-width: 120px;
+}
+
+/*Validation styles*/
+.field-validation-error {
+    color: #f00;
+}
+ 
+.field-validation-valid {
+    display: none;
+}
+ 
+.validation-summary-errors {
+    font-weight: bold;
+    color: #f00;
+}
+ 
+.validation-summary-valid {
+    display: none;
+}
+
+
+/*Layout styles*/
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 80px;
+}
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 80px;
+}

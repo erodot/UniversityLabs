@@ -1,0 +1,99 @@
+﻿@model ASPInformationSystem.Models.Archive
+
+@{
+    ViewData["Title"] = "Пошук";
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+    <script type="text/javascript">
+        $.ajax({
+            type: 'POST',
+            contentType: "application/x-javascript; charset:ISO-8859-1",
+            url: '/Filter/JGet/',
+            success: function (data) {
+                faculties = data;
+            }
+        });
+    </script>
+    <h3 class="text-primary">Пошук</h3>
+    <!--Search form-->
+    @{ ViewContext.ClientValidationEnabled = false; }
+    <form method="post" action="~/search/result">
+        @Html.HiddenFor(model => model.ID)
+
+        <!--Publication name input field-->
+        <div class="form-group">
+            <div class="text-info">
+                @Html.LabelFor(model => model.Name)
+            </div>
+            @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Name)
+        </div>  
+
+        <!--Authors input field-->
+        <div class="form-group">
+            <div class="text-info">
+                @Html.LabelFor(model => model.Authors)
+            </div>
+            @Html.TextBoxFor(model => model.Authors, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Authors)
+        </div>
+
+        <!--Categories select list-->
+        <div class="form-group">
+            <div class="text-info">
+                @Html.Label("Категорія:")
+            </div>
+            <select name="CategoryID" class="form-control">
+                @foreach (var cat in ViewBag.Categories)
+                {
+                    <option value="@cat.ID">@cat.Name</option>
+                }
+            </select>
+        </div>
+
+        <!--Faculties select list-->
+        <div class="form-group">
+            <div class="text-info">
+                @Html.Label("Факультет:")
+            </div>
+            <select id="facultyID" name="FacultyID" class="form-control" onchange="updateDepartments(false)">
+                @foreach (var fac in ViewBag.Faculties)
+                {
+                    <option value="@fac.ID">@fac.Name</option>
+                }
+            </select>
+        </div>
+
+        <!--Departments select list-->
+        <div class="form-group">
+            <div class="text-info">
+                @Html.Label("Кафедра:")
+            </div>
+            <select id="departmentID" name="DepartmentID" class="form-control">
+                <option value="1">Усі</option>
+            </select>
+        </div>
+
+        @Html.HiddenFor(model=>model.Amount)
+
+        <!--Year input field-->
+        <div class="form-group">
+            <div class="text-info">
+                @Html.LabelFor(model => model.Year)
+            </div>
+            @Html.TextBoxFor(model => model.Year, new { @class = "form-control textbox-numbers" })
+            @Html.ValidationMessageFor(model => model.Year)
+        </div>
+
+        <!--Search submit-->
+        <input type="submit" class="btn btn-success btn-md" value="Шукати" />
+    </form>
+    @{ ViewContext.ClientValidationEnabled = true; }
+</body>
+</html>

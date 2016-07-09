@@ -1,0 +1,505 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="DBEArchiveModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Archive">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PubID" Type="int" Nullable="false" />
+          <Property Name="DepartmentID" Type="int" />
+          <Property Name="FacultyID" Type="int" />
+          <Property Name="CategoryID" Type="int" Nullable="false" />
+          <Property Name="Amount" Type="int" />
+          <Property Name="PubDate" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Authors">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Surname" Type="nvarchar" MaxLength="30" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="30" />
+          <Property Name="SecondName" Type="nvarchar" MaxLength="30" />
+          <Property Name="ShortName" Type="nvarchar" MaxLength="128" />
+        </EntityType>
+        <EntityType Name="AuthorsOfPublications">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PublicationID" Type="int" Nullable="false" />
+          <Property Name="AuthorID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Categories">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Departments">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="60" Nullable="false" />
+          <Property Name="FacultyID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Faculties">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Publications">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Archive_DepartmentID">
+          <End Role="Departments" Type="Self.Departments" Multiplicity="0..1" />
+          <End Role="Archive" Type="Self.Archive" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Departments">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Archive">
+              <PropertyRef Name="DepartmentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Archive_FacultyID">
+          <End Role="Faculties" Type="Self.Faculties" Multiplicity="0..1" />
+          <End Role="Archive" Type="Self.Archive" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Faculties">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Archive">
+              <PropertyRef Name="FacultyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Archive_PubID">
+          <End Role="Publications" Type="Self.Publications" Multiplicity="1" />
+          <End Role="Archive" Type="Self.Archive" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Publications">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Archive">
+              <PropertyRef Name="PubID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Archive_TypeID">
+          <End Role="Categories" Type="Self.Categories" Multiplicity="1" />
+          <End Role="Archive" Type="Self.Archive" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Archive">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AuthorsOfPublications_AuthorID">
+          <End Role="Authors" Type="Self.Authors" Multiplicity="1" />
+          <End Role="AuthorsOfPublications" Type="Self.AuthorsOfPublications" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Authors">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="AuthorsOfPublications">
+              <PropertyRef Name="AuthorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AuthorsOfPublications_PublicationID">
+          <End Role="Publications" Type="Self.Publications" Multiplicity="1" />
+          <End Role="AuthorsOfPublications" Type="Self.AuthorsOfPublications" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Publications">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="AuthorsOfPublications">
+              <PropertyRef Name="PublicationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Departments_FacultyID">
+          <End Role="Faculties" Type="Self.Faculties" Multiplicity="1" />
+          <End Role="Departments" Type="Self.Departments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Faculties">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Departments">
+              <PropertyRef Name="FacultyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="AuthorsOfPub" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="pub_id" Type="int" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="Authors" Type="nvarchar" MaxLength="128" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
+        <EntityContainer Name="DBEArchiveModelStoreContainer">
+          <EntitySet Name="Archive" EntityType="Self.Archive" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Authors" EntityType="Self.Authors" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AuthorsOfPublications" EntityType="Self.AuthorsOfPublications" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Departments" EntityType="Self.Departments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Faculties" EntityType="Self.Faculties" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Publications" EntityType="Self.Publications" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Archive_DepartmentID" Association="Self.FK_Archive_DepartmentID">
+            <End Role="Departments" EntitySet="Departments" />
+            <End Role="Archive" EntitySet="Archive" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Archive_FacultyID" Association="Self.FK_Archive_FacultyID">
+            <End Role="Faculties" EntitySet="Faculties" />
+            <End Role="Archive" EntitySet="Archive" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Archive_PubID" Association="Self.FK_Archive_PubID">
+            <End Role="Publications" EntitySet="Publications" />
+            <End Role="Archive" EntitySet="Archive" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Archive_TypeID" Association="Self.FK_Archive_TypeID">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="Archive" EntitySet="Archive" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AuthorsOfPublications_AuthorID" Association="Self.FK_AuthorsOfPublications_AuthorID">
+            <End Role="Authors" EntitySet="Authors" />
+            <End Role="AuthorsOfPublications" EntitySet="AuthorsOfPublications" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AuthorsOfPublications_PublicationID" Association="Self.FK_AuthorsOfPublications_PublicationID">
+            <End Role="Publications" EntitySet="Publications" />
+            <End Role="AuthorsOfPublications" EntitySet="AuthorsOfPublications" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Departments_FacultyID" Association="Self.FK_Departments_FacultyID">
+            <End Role="Faculties" EntitySet="Faculties" />
+            <End Role="Departments" EntitySet="Departments" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DBEArchiveModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <ComplexType Name="AuthorsOfPub_Result">
+          <Property Name="Authors" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+        </ComplexType>
+        <EntityType Name="Archive">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PubID" Type="Int32" Nullable="false" />
+          <Property Name="DepartmentID" Type="Int32" />
+          <Property Name="FacultyID" Type="Int32" />
+          <Property Name="CategoryID" Type="Int32" Nullable="false" />
+          <Property Name="Amount" Type="Int32" />
+          <Property Name="PubDate" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Department" Relationship="Self.FK_Archive_DepartmentID" FromRole="Archive" ToRole="Departments" />
+          <NavigationProperty Name="Faculty" Relationship="Self.FK_Archive_FacultyID" FromRole="Archive" ToRole="Faculties" />
+          <NavigationProperty Name="Publication" Relationship="Self.FK_Archive_PubID" FromRole="Archive" ToRole="Publications" />
+          <NavigationProperty Name="Category" Relationship="Self.FK_Archive_TypeID" FromRole="Archive" ToRole="Categories" />
+        </EntityType>
+        <EntityType Name="Author">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Surname" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="SecondName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="ShortName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AuthorsOfPublications" Relationship="Self.FK_AuthorsOfPublications_AuthorID" FromRole="Authors" ToRole="AuthorsOfPublications" />
+        </EntityType>
+        <EntityType Name="AuthorsOfPublication">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PublicationID" Type="Int32" Nullable="false" />
+          <Property Name="AuthorID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Author" Relationship="Self.FK_AuthorsOfPublications_AuthorID" FromRole="AuthorsOfPublications" ToRole="Authors" />
+          <NavigationProperty Name="Publication" Relationship="Self.FK_AuthorsOfPublications_PublicationID" FromRole="AuthorsOfPublications" ToRole="Publications" />
+        </EntityType>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Archives" Relationship="Self.FK_Archive_TypeID" FromRole="Categories" ToRole="Archive" />
+        </EntityType>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="60" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FacultyID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Archives" Relationship="Self.FK_Archive_DepartmentID" FromRole="Departments" ToRole="Archive" />
+          <NavigationProperty Name="Faculty" Relationship="Self.FK_Departments_FacultyID" FromRole="Departments" ToRole="Faculties" />
+        </EntityType>
+        <EntityType Name="Faculty">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Archives" Relationship="Self.FK_Archive_FacultyID" FromRole="Faculties" ToRole="Archive" />
+          <NavigationProperty Name="Departments" Relationship="Self.FK_Departments_FacultyID" FromRole="Faculties" ToRole="Departments" />
+        </EntityType>
+        <EntityType Name="Publication">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Archives" Relationship="Self.FK_Archive_PubID" FromRole="Publications" ToRole="Archive" />
+          <NavigationProperty Name="AuthorsOfPublications" Relationship="Self.FK_AuthorsOfPublications_PublicationID" FromRole="Publications" ToRole="AuthorsOfPublications" />
+        </EntityType>
+        <Association Name="FK_Archive_DepartmentID">
+          <End Role="Departments" Type="Self.Department" Multiplicity="0..1" />
+          <End Role="Archive" Type="Self.Archive" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Departments">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Archive">
+              <PropertyRef Name="DepartmentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Archive_FacultyID">
+          <End Role="Faculties" Type="Self.Faculty" Multiplicity="0..1" />
+          <End Role="Archive" Type="Self.Archive" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Faculties">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Archive">
+              <PropertyRef Name="FacultyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Archive_PubID">
+          <End Role="Publications" Type="Self.Publication" Multiplicity="1" />
+          <End Role="Archive" Type="Self.Archive" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Publications">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Archive">
+              <PropertyRef Name="PubID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Archive_TypeID">
+          <End Role="Categories" Type="Self.Category" Multiplicity="1" />
+          <End Role="Archive" Type="Self.Archive" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Archive">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AuthorsOfPublications_AuthorID">
+          <End Role="Authors" Type="Self.Author" Multiplicity="1" />
+          <End Role="AuthorsOfPublications" Type="Self.AuthorsOfPublication" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Authors">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="AuthorsOfPublications">
+              <PropertyRef Name="AuthorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AuthorsOfPublications_PublicationID">
+          <End Role="Publications" Type="Self.Publication" Multiplicity="1" />
+          <End Role="AuthorsOfPublications" Type="Self.AuthorsOfPublication" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Publications">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="AuthorsOfPublications">
+              <PropertyRef Name="PublicationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Departments_FacultyID">
+          <End Role="Faculties" Type="Self.Faculty" Multiplicity="1" />
+          <End Role="Departments" Type="Self.Department" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Faculties">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Departments">
+              <PropertyRef Name="FacultyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DBEArchiveEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Archives" EntityType="Self.Archive" />
+          <EntitySet Name="Authors" EntityType="Self.Author" />
+          <EntitySet Name="AuthorsOfPublications" EntityType="Self.AuthorsOfPublication" />
+          <EntitySet Name="Categories" EntityType="Self.Category" />
+          <EntitySet Name="Departments" EntityType="Self.Department" />
+          <EntitySet Name="Faculties" EntityType="Self.Faculty" />
+          <EntitySet Name="Publications" EntityType="Self.Publication" />
+          <AssociationSet Name="FK_Archive_DepartmentID" Association="Self.FK_Archive_DepartmentID">
+            <End Role="Departments" EntitySet="Departments" />
+            <End Role="Archive" EntitySet="Archives" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Archive_FacultyID" Association="Self.FK_Archive_FacultyID">
+            <End Role="Faculties" EntitySet="Faculties" />
+            <End Role="Archive" EntitySet="Archives" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Archive_PubID" Association="Self.FK_Archive_PubID">
+            <End Role="Publications" EntitySet="Publications" />
+            <End Role="Archive" EntitySet="Archives" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Archive_TypeID" Association="Self.FK_Archive_TypeID">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="Archive" EntitySet="Archives" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AuthorsOfPublications_AuthorID" Association="Self.FK_AuthorsOfPublications_AuthorID">
+            <End Role="Authors" EntitySet="Authors" />
+            <End Role="AuthorsOfPublications" EntitySet="AuthorsOfPublications" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AuthorsOfPublications_PublicationID" Association="Self.FK_AuthorsOfPublications_PublicationID">
+            <End Role="Publications" EntitySet="Publications" />
+            <End Role="AuthorsOfPublications" EntitySet="AuthorsOfPublications" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Departments_FacultyID" Association="Self.FK_Departments_FacultyID">
+            <End Role="Faculties" EntitySet="Faculties" />
+            <End Role="Departments" EntitySet="Departments" />
+          </AssociationSet>
+          <FunctionImport Name="AuthorsOfPub" IsComposable="true" ReturnType="Collection(DBEArchiveModel.AuthorsOfPub_Result)">
+            <Parameter Name="pub_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DBEArchiveModelStoreContainer" CdmEntityContainer="DBEArchiveEntities">
+          <EntitySetMapping Name="Archives">
+            <EntityTypeMapping TypeName="DBEArchiveModel.Archive">
+              <MappingFragment StoreEntitySet="Archive">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="PubID" ColumnName="PubID" />
+                <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+                <ScalarProperty Name="FacultyID" ColumnName="FacultyID" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="PubDate" ColumnName="PubDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Authors">
+            <EntityTypeMapping TypeName="DBEArchiveModel.Author">
+              <MappingFragment StoreEntitySet="Authors">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="SecondName" ColumnName="SecondName" />
+                <ScalarProperty Name="ShortName" ColumnName="ShortName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AuthorsOfPublications">
+            <EntityTypeMapping TypeName="DBEArchiveModel.AuthorsOfPublication">
+              <MappingFragment StoreEntitySet="AuthorsOfPublications">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="PublicationID" ColumnName="PublicationID" />
+                <ScalarProperty Name="AuthorID" ColumnName="AuthorID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Categories">
+            <EntityTypeMapping TypeName="DBEArchiveModel.Category">
+              <MappingFragment StoreEntitySet="Categories">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Departments">
+            <EntityTypeMapping TypeName="DBEArchiveModel.Department">
+              <MappingFragment StoreEntitySet="Departments">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="FacultyID" ColumnName="FacultyID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Faculties">
+            <EntityTypeMapping TypeName="DBEArchiveModel.Faculty">
+              <MappingFragment StoreEntitySet="Faculties">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Publications">
+            <EntityTypeMapping TypeName="DBEArchiveModel.Publication">
+              <MappingFragment StoreEntitySet="Publications">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionName="DBEArchiveModel.Store.AuthorsOfPub" FunctionImportName="AuthorsOfPub">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DBEArchiveModel.AuthorsOfPub_Result">
+                <ScalarProperty Name="Authors" ColumnName="Authors" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
