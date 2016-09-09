@@ -1,14 +1,25 @@
-import Lab.*;
+import Services.ExtractorService;
+import Services.FinderService;
+import Services.IOService;
+
+import java.util.ArrayList;
 
 class Main {
     public static void main(String [] args) {
-        // New instance of Lab.Lab
-        Lab lab1 = new Lab();
 
         // The name of the file to open
         String fileName = Config.getFileNameWithPath();
 
-        // Process file
-        lab1.work(fileName);
+        ArrayList<String> words;
+        ArrayList<String> longestConsonantChain;
+
+        //Reading tests from file
+        ArrayList<String> tests = IOService.readFile(fileName);
+
+        for(String testLine : tests){
+            words = ExtractorService.extractWords(testLine);
+            longestConsonantChain = FinderService.findLongestConsonantChain(words);
+            longestConsonantChain.forEach(System.out::println);
+        }
     }
 }
