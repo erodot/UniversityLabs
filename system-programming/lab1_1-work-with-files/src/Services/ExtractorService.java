@@ -3,8 +3,7 @@ package Services;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-// TODO: write tests for ExtractorService
-
+/* Singleton Service for extracting data from files */
 public class ExtractorService {
     private static ExtractorService ourInstance = new ExtractorService();
 

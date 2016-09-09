@@ -1,7 +1,6 @@
 package Services;
 
-// TODO: write tests for FinderService
-
+/* Singleton Service for counting longest cons chain */
 class CounterService {
     private static CounterService ourInstance = new CounterService();
 

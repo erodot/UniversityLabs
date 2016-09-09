@@ -2,8 +2,7 @@ package Services;
 
 import java.util.ArrayList;
 
-// TODO: write tests for FinderService
-
+/* Singleton Service for finding longest cons chain */
 public class FinderService {
     private static FinderService ourInstance = new FinderService();
 
