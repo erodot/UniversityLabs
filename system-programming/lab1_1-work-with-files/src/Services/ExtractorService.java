@@ -18,7 +18,7 @@ public class ExtractorService {
     public static ArrayList<String> extractWords(String row){
 
         //Splitting row into words
-        String[] extractedRow = row.split("[^a-z]");
+        String[] extractedRow = row.split("[^a-zA-Z]");
 
         ArrayList<String> alExtractedRow = new ArrayList<>(Arrays.asList(extractedRow));
 
