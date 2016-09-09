@@ -18,9 +18,9 @@ public class ExtractorService {
     public static ArrayList<String> extractWords(String row){
 
         //Splitting row into words
-        String[] extractedRow = row.split("[^a-zA-Z]");
+        String[] extractedRow = row.split("[^a-z]");
 
-        ArrayList<String> alExtractedRow = new ArrayList<String>(Arrays.asList(extractedRow));
+        ArrayList<String> alExtractedRow = new ArrayList<>(Arrays.asList(extractedRow));
 
         // Deleting all empty strings from the array
         alExtractedRow.removeIf(p -> p.length()==0);
