@@ -1,43 +1,14 @@
-/**
- * Created by @romanus on 9/8/2016.
- */
+import Lab.*;
 
-import java.io.*;
-
-public class Main {
+class Main {
     public static void main(String [] args) {
+        // New instance of Lab.Lab
+        Lab lab1 = new Lab();
 
-        // The name of the file to open.
-        String fileName = "txt/test.txt";
+        // The name of the file to open
+        String fileName = Config.getFileNameWithPath();
 
-        // This will reference one line at a time
-        String line = null;
-
-        try {
-            // FileReader reads text files in the default encoding.
-            FileReader fileReader = new FileReader(fileName);
-
-            // Always wrap FileReader in BufferedReader.
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-
-            while((line = bufferedReader.readLine()) != null) {
-                System.out.println(line);
-            }
-
-            // Always close files.
-            bufferedReader.close();
-        }
-        catch(FileNotFoundException ex) {
-            System.out.println(
-                    "Unable to open file '" +
-                            fileName + "'");
-        }
-        catch(IOException ex) {
-            System.out.println(
-                    "Error reading file '"
-                            + fileName + "'");
-            // Or we could just do this:
-            // ex.printStackTrace();
-        }
+        // Process file
+        lab1.work(fileName);
     }
 }
