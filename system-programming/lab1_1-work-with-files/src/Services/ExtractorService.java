@@ -1,6 +1,9 @@
 package Services;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+
+// TODO: write tests for ExtractorService
 
 public class ExtractorService {
     private static ExtractorService ourInstance = new ExtractorService();
@@ -13,7 +16,15 @@ public class ExtractorService {
     }
 
     public static ArrayList<String> extractWords(String row){
-        // TODO: implement Services.ExtractorService
-        return new ArrayList<>();
+
+        //Splitting row into words
+        String[] extractedRow = row.split("[^a-zA-Z]");
+
+        ArrayList<String> alExtractedRow = new ArrayList<String>(Arrays.asList(extractedRow));
+
+        // Deleting all empty strings from the array
+        alExtractedRow.removeIf(p -> p.length()==0);
+
+        return alExtractedRow;
     }
 }

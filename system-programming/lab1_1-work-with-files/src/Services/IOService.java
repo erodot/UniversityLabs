@@ -6,6 +6,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+// TODO: write tests for IOService
+
 /* Singleton Service for reading text files */
 public class IOService {
     private static final IOService ourInstance = new IOService();

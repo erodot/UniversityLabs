@@ -19,7 +19,10 @@ class Main {
         for(String testLine : tests){
             words = ExtractorService.extractWords(testLine);
             longestConsonantChain = FinderService.findLongestConsonantChain(words);
-            longestConsonantChain.forEach(System.out::println);
+            for(String word: longestConsonantChain){
+                System.out.print(word + ' ');
+            }
+            System.out.println();
         }
     }
 }

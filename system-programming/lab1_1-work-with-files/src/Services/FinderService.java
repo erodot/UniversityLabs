@@ -13,7 +13,7 @@ public class FinderService {
     }
 
     public static ArrayList<String> findLongestConsonantChain(ArrayList<String> words){
-        // TODO: implement Services.FinderService
-        return new ArrayList<>();
+        // TODO: implement and write tests for FinderService
+        return words;
     }
 }
