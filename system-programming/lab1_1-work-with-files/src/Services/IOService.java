@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 /* Singleton Service for reading text files */
 public class IOService {
-    private static final IOService ourInstance = new IOService();
+    private static IOService ourInstance = new IOService();
 
     public static IOService getInstance() {
         return ourInstance;

@@ -1,7 +1,7 @@
 package Services;
 
 /* Singleton Service for counting longest cons chain */
-class CounterService {
+public class CounterService {
     private static CounterService ourInstance = new CounterService();
 
     public static CounterService getInstance() {
@@ -11,7 +11,7 @@ class CounterService {
     private CounterService() {
     }
 
-    static int getLongestChain(String word){
+    public static int getLongestChain(String word){
         word = word.toLowerCase();
         String vowels = "aeiouy";
         int currChain = 0;

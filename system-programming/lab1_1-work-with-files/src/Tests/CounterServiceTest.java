@@ -1,5 +1,7 @@
-package Services;
+package Tests;
 
+import Services.CounterService;
+import org.junit.Assert;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -7,7 +9,7 @@ import static org.junit.Assert.*;
 public class CounterServiceTest {
     @Test
     public void letterSequences() throws Exception {
-        assertEquals("a must return 0", 0, CounterService.getLongestChain("a"));
+        Assert.assertEquals("a must return 0", 0, CounterService.getLongestChain("a"));
         assertEquals("b must return 1", 1, CounterService.getLongestChain("b"));
         assertEquals("aa must return 0", 0, CounterService.getLongestChain("aa"));
         assertEquals("bb must return 2", 2, CounterService.getLongestChain("bb"));
