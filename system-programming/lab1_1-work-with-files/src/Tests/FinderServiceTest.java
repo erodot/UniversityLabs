@@ -76,6 +76,17 @@ public class FinderServiceTest {
         assertEquals(expectedOutput,FinderService.findLongestConsonantChain(words));
     }
 
+    @Test
+    public void emptyString() throws Exception {
+        String[] _words = {""};
+        String[] _expectedOutput = {""};
+
+        ArrayList<String> words = new ArrayList<>(Arrays.asList(_words));
+        ArrayList<String> expectedOutput = new ArrayList<>(Arrays.asList(_expectedOutput));
+
+        assertEquals(expectedOutput,FinderService.findLongestConsonantChain(words));
+    }
+
     @Test(expected=IllegalArgumentException.class)
     public void notOnlyLettersInTheEnd() {
         String[] _notCorrectArray = {"Ias1,", "sdf9*^"};

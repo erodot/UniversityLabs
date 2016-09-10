@@ -3,6 +3,7 @@ package Tests;
 import Services.CounterService;
 import org.junit.Assert;
 import org.junit.Test;
+import org.omg.IOP.ExceptionDetailMessage;
 
 import static org.junit.Assert.*;
 
@@ -68,5 +69,15 @@ public class CounterServiceTest {
         assertEquals("uncopyrightable must return 3", 3, CounterService.getLongestChain("uncopyrightable"));
         assertEquals("subdermatoglyphic must return 2", 2, CounterService.getLongestChain("subdermatoglyphic"));
         assertEquals("sesquipedalianism must return 2", 2, CounterService.getLongestChain("sesquipedalianism"));
+    }
+
+    @Test
+    public void emptyString() throws Exception {
+        assertEquals("Empty string must return 0", 0, CounterService.getLongestChain(""));
+    }
+
+    @Test
+    public void noOneLetter() throws Exception {
+        assertEquals("'123' string must return 0", 0, CounterService.getLongestChain("123"));
     }
 }

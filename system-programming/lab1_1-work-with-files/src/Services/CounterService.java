@@ -12,12 +12,13 @@ public class CounterService {
     }
 
     public static int getLongestChain(String word){
+
         word = word.toLowerCase();
-        String vowels = "aeiouy";
+        String cons = "qwrtpsdfghjklzxcvbnm";
         int currChain = 0;
         int maxChain = 0;
         for (int i = 0; i < word.length(); i++) {
-            if(vowels.indexOf(word.charAt(i)) == -1)
+            if(cons.indexOf(word.charAt(i)) != -1)
             {
                 currChain++;
                 if(currChain > maxChain)
