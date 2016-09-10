@@ -14,6 +14,11 @@ public class FinderService {
     }
 
     public static ArrayList<String> findLongestConsonantChain(final ArrayList<String> words){
+        for(String word: words){
+            if(!word.matches("[a-zA-z]")) // Not a word
+                throw new IllegalArgumentException("Array of words contains not only letters.");
+        }
+
         // Getting Iterable array
         String[] wordsArray = new String[words.size()];
         words.toArray(wordsArray);
@@ -22,6 +27,7 @@ public class FinderService {
 
         int maxLength = 0;
 
+        // Finding max cons chain length
         for (int i = 0; i < words.size(); i++) {
             longestChain[i] = CounterService.getLongestChain(wordsArray[i]);
             if(longestChain[i]>maxLength)
@@ -33,7 +39,7 @@ public class FinderService {
         ArrayList<String> maxChainArray = new ArrayList<>();
 
         for (int i = 0; i < words.size(); i++) {
-            if(longestChain[0]==maxLength)
+            if(longestChain[i]==maxLength && !maxChainArray.contains(wordsArray[i])) // Add only unique words
                 maxChainArray.add(wordsArray[i]);
         }
 
