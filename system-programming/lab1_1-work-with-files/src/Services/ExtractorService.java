@@ -15,10 +15,13 @@ public class ExtractorService {
     }
 
     public static ArrayList<String> extractWords(String row){
-
         //Splitting row into words
-        String[] extractedRow = row.split("[^a-zA-Z]{1,}");
+        String[] extractedArray = row.split("[^a-zA-Z]{1,}");
 
-        return new ArrayList<>(Arrays.asList(extractedRow));
+        ArrayList<String> extractedArrayList = new ArrayList<>(Arrays.asList(extractedArray));
+
+        extractedArrayList.removeIf(word -> word.length() == 0);
+
+        return extractedArrayList;
     }
 }
