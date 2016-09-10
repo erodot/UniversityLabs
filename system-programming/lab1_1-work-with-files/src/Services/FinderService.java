@@ -15,8 +15,8 @@ public class FinderService {
 
     public static ArrayList<String> findLongestConsonantChain(final ArrayList<String> words){
         for(String word: words){
-            if(!word.matches("[a-zA-z]")) // Not a word
-                throw new IllegalArgumentException("Array of words contains not only letters.");
+            if(word.matches(".*[^a-zA-Z].*")) // Not a word
+                throw new IllegalArgumentException("Word '" + word + "' contains not only letters.");
         }
 
         // Getting Iterable array
