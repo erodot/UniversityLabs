@@ -19,37 +19,26 @@ public class IOService {
     private IOService() {
     }
 
-    public static ArrayList<String> readFile(String fileName){
+    public static ArrayList<String> readFile(String fileName) throws IOException {
         // This will reference one line at a time
         String line;
 
         ArrayList<String> arrayList = new ArrayList<>();
 
-        try {
-            // FileReader reads text files in the default encoding.
-            FileReader fileReader = new FileReader(fileName);
+        // FileReader reads text files in the default encoding.
+        FileReader fileReader = new FileReader(fileName);
 
-            // Always wrap FileReader in BufferedReader.
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
+        try (BufferedReader bufferedReader = new BufferedReader(fileReader)) {
 
             while((line = bufferedReader.readLine()) != null) {
                 arrayList.add(line);
             }
-
-            // Always close files.
-            bufferedReader.close();
         }
         catch(FileNotFoundException ex) {
-            System.out.println(
-                    "Unable to open file '" +
-                            fileName + "'");
+            throw new FileNotFoundException("Unable to open file '" + fileName + "'");
         }
         catch(IOException ex) {
-            System.out.println(
-                    "Error reading file '"
-                            + fileName + "'");
-            // Or we could just do this:
-            // ex.printStackTrace();
+            throw new IOException("Error reading file '" + fileName + "'");
         }
 
         return arrayList;
