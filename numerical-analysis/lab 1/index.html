@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Lab 1</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+  <body>
+
+    <div class="container">
+      <div class="row row-content">
+
+        <!-- NAV TABS -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active"><a href="#dichotomy" aria-controls="dichotomy" role="tab" data-toggle="tab">Dichotomy Method</a></li>
+          <li role="presentation"><a href="#newton" aria-controls="newton" role="tab" data-toggle="tab">Newton's Method</a></li>
+          <li role="presentation"><a href="#fixedpoint" aria-controls="fixedpoint" role="tab" data-toggle="tab">Fixed Point Method</a></li>
+        </ul>
+        <!-- END NAV TABS -->
+
+        <!-- MAIN CONTENT -->
+        <div class="tab-content">
+
+          <!-- DICHOTOMY METHOD -->
+          <div role="tabpanel" class="tab-pane fade in active" id="dichotomy">
+            <div class="form">
+              <div class="form-group">
+                Left limit: <input class="form-control limits" type="number" id="dichotomyLeftLimit">
+              </div>
+              <div class="form-group">
+                Right limit: <input class="form-control limits" type="number" id="dichotomyRightLimit">
+              </div>
+              <div class="form-group">
+                Enter accuracy (ε): <input type="number" class="form-control accuracy" id="dichotomyAccuracy">
+              </div>
+              <div class="form-group">
+                <button type="button" class="btn btn-default" onclick="doDichotomy();" name="button">Do Dichotomy</button>
+              </div>
+            </div>
+            <div id="dichotomyAnswer"></div>
+          </div>
+          <!-- END DICHOTOMY METHOD -->
+
+          <!-- NEWTON'S METHOD -->
+          <div role="tabpanel" class="tab-pane fade" id="newton">
+            <div class="form">
+              <div class="form-group">
+                Starting point: <input class="form-control limits" type="number" id="newtonsStartingPoint">
+              </div>
+              <div class="form-group">
+                Enter accuracy (ε): <input type="number" class="form-control accuracy" id="newtonsAccuracy">
+              </div>
+              <div class="form-group">
+                <button type="button" class="btn btn-default" onclick="doNewtons();" name="button">Do Newton's</button>
+              </div>
+            </div>
+            <div id="newtonsAnswer"></div>
+          </div>
+          <!-- END NEWTON'S METHOD -->
+
+          <!-- FIXED POINT ITERATION METHOD -->
+          <div role="tabpanel" class="tab-pane fade" id="fixedpoint">
+            <div class="form">
+              <div class="form-group">
+                Starting point: <input class="form-control limits" type="number" id="fixedpointStartingPoint">
+              </div>
+              <div class="form-group">
+                Enter accuracy (ε): <input type="number" class="form-control accuracy" id="fixedpointAccuracy">
+              </div>
+              <div class="form-group">
+                <button type="button" class="btn btn-default" onclick="doFixedPoint()" name="button">Do Fixed Point</button>
+              </div>
+            </div>
+            <div id="fixedpointAnswer"></div>
+          </div>
+          <!-- END FIXED POINT ITERATION METHOD -->
+        </div>
+      </div>
+    </div>
+    <!-- END MAIN CONTENT -->
+
+    <script type="text/javascript" src="scripts/f.js"></script>
+    <script type="text/javascript" src="scripts/dichotomy.js"></script>
+    <script type="text/javascript" src="scripts/newton.js"></script>
+    <script type="text/javascript" src="scripts/fixedpoint.js"></script>
+    <script type="text/javascript" src="scripts/jquery.min.js"></script>
+    <script type="text/javascript" src="scripts/bootstrap.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+          $(".nav-tabs a").click(function(){
+              $(this).tab('show');
+          });
+      });
+    </script>
+
+  </body>
+</html>
