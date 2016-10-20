@@ -1,0 +1,15 @@
+body{
+  margin-top: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+input{
+  max-width: 100px;
+}
+.tab-content {
+  border-bottom: 1px solid #dddddd;
+  border-left: 1px solid #dddddd;
+  border-right: 1px solid #dddddd;
+  padding: 10px;
+  overflow: hidden;
+}

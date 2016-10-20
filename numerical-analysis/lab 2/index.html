@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html ng-app='NMApp'>
+  <head>
+    <meta charset="utf-8">
+    <title>NMLab 2</title>
+    <link rel="stylesheet" href="libs/bootstrap.min.css">
+    <link rel="stylesheet" href="styles/styles.css">
+  </head>
+  <body>
+
+    <div class="container">
+      <div class="row row-content">
+
+        <!-- NAV TABS -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active"><a href="#gauss" aria-controls="gauss" role="tab" data-toggle="tab">Метод Гауса</a></li>
+          <li role="presentation"><a href="#jacobiandseidel" aria-controls="jacobiandseidel" role="tab" data-toggle="tab">Метод Якобі і Зейделя</a></li>
+        </ul>
+        <!-- END NAV TABS -->
+
+        <!-- MAIN CONTENT -->
+        <div class="tab-content">
+          <gauss-form role="tabpanel" class="tab-pane fade in active" id="gauss"></gauss-form>
+          <jacobi-and-seidel-form role="tabpanel" class="tab-pane fade" id="jacobiandseidel"></jacobi-and-seidel-form>
+        </div>
+        <!-- END MAIN CONTENT -->
+      </div>
+    </div>
+
+    <!-- Libraries -->
+    <script src='libs/angular.min.js'></script>
+    <script src='libs/jquery.min.js'></script>
+    <script src='libs/bootstrap.min.js'></script>
+
+    <!-- Modules -->
+    <script src='app/app.module.js'></script>
+
+    <!-- Services -->
+    <script src='app/matrix.service.js'></script>
+
+    <!-- Components -->
+    <script src='app/gauss/gauss.component.js'></script>
+    <script src='app/gauss/gauss.controller.js'></script>
+    <script src='app/gauss/gauss.service.js'></script>
+
+    <script src='app/jacobi-and-seidel/jacobi-and-seidel.component.js'></script>
+    <script src='app/jacobi-and-seidel/jacobi-and-seidel.controller.js'></script>
+    <script src='app/jacobi-and-seidel/jacobi.service.js'></script>
+    <script src='app/jacobi-and-seidel/seidel.service.js'></script>
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+          $(".nav-tabs a").click(function(){
+              $(this).tab('show');
+          });
+      });
+    </script>
+  </body>
+</html>
