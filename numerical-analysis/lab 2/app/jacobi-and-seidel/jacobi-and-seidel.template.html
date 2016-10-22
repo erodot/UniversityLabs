@@ -3,14 +3,32 @@
   <input type="number" name="dimension" id="dimension" class='form-control' ng-model='dimension'>
 </div>
 <div class="form-group">
-  <label for="precision" class='text text-default'>Точність (кількість знаків після коми):</label>
+  <label for="precision" class='text text-default'>Точність норми(кількість знаків після коми):</label>
   <input type="number" name="precision" id="precision" class='form-control' ng-model='precision'>
 </div>
-<button class='btn btn-default' ng-click="solveGauss()">Рахувати</button>
-<table ng-show="answer">
-  <tr ng-repeat="matrixRow in matrix">
-    <td ng-repeat="elem in matrixRow track by $index">
-      {{elem}}&nbsp;
-    </td>
-  </tr>
+<div class="form-group">
+  <label for="rounding" class='text text-default'>Округлення відповіді(кількість знаків після коми):</label>
+  <input type="number" name="rounding" id="rounding" class='form-control' ng-model='rounding'>
+</div>
+<div class="ckeckbox">
+  <label><input type="checkbox" ng-model='generateDominantingDiagonalFlag'> Домінантна головна діагональ</label>
+</div>
+<div class="ckeckbox">
+  <label><input type="checkbox" ng-model='preparedAnswerFlag'> Наперед готова відповідь</label>
+</div>
+<button class='btn btn-default' ng-click="solveJacobiAndSeidel()">Рахувати</button>
+<table>
+  <tbody>
+    <tr ng-repeat="matrixRow in matrix">
+      <td ng-repeat="elem in matrixRow track by $index">
+        {{elem}}&nbsp;
+      </td>
+    </tr>
+  </tbody>
 </table>
+<div ng-if="jacobi && seidel">
+  Якобі:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span ng-repeat='item in jacobi.answer track by $index'>{{item}}&nbsp;</span><br>
+  Зейдель: <span ng-repeat='item in seidel.answer track by $index'>{{item}}&nbsp;</span><br>
+  Кількість ітерацій в методі Якобі: {{jacobi.count}} <br>
+  Кількість ітерацій в методі Зейделя: {{seidel.count}}
+</div>

@@ -27,9 +27,9 @@ function MatrixService(){
   }
 
   service.createRandomDiagMatrix = function(dimension){
-    console.log('createRandomDiagMatrix() is working...');
     var matrix = service.createRandomMatrix(dimension);
     for(var i=0; i<dimension; i++){
+      matrix[i][i] = 1;
       for(var j=0; j<dimension; j++){
         matrix[i][i]+=Math.abs(matrix[i][j]);
       }

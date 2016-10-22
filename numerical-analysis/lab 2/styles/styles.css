@@ -13,3 +13,11 @@ input{
   padding: 10px;
   overflow: hidden;
 }
+
+td {
+  min-width: 35px;
+}
+
+button.btn {
+  margin-bottom: 10px;
+}
