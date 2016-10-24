@@ -1,4 +1,3 @@
-import Services.ExtractorService;
 import Services.FinderService;
 import Services.IOService;
 
@@ -13,14 +12,12 @@ class Main {
         String fileName = Config.getFileNameWithPath();
 
         try {
-            ArrayList<String> words;
             ArrayList<String> longestConsonantChain;
 
             //Reading tests from file
-            ArrayList<String> tests = IOService.readFile(fileName);
+            ArrayList<ArrayList<String>> rows = IOService.readFile(fileName);
 
-            for(String testLine : tests){
-                words = ExtractorService.extractWords(testLine);
+            for(ArrayList<String> words : rows){
                 longestConsonantChain = FinderService.findLongestConsonantChain(words);
                 for(String word: longestConsonantChain){
                     System.out.print(word + ' ');

@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 // TODO: write tests for IOService
 
@@ -19,7 +20,7 @@ public class IOService {
     private IOService() {
     }
 
-    public static ArrayList<String> readFile(String fileName) throws IOException {
+    public static ArrayList<ArrayList<String>> readFile(String fileName) throws IOException {
         // This will reference one line at a time
         String line;
 
@@ -41,6 +42,19 @@ public class IOService {
             throw new IOException("Error reading file '" + fileName + "'");
         }
 
-        return arrayList;
+        ArrayList<ArrayList<String>> arrayListArray = new ArrayList<>();
+
+        for(String row: arrayList){
+            //Splitting row into words
+            String[] extractedArray = row.split("[^a-zA-Z]{1,}");
+
+            ArrayList<String> extractedArrayList = new ArrayList<>(Arrays.asList(extractedArray));
+
+            extractedArrayList.removeIf(word -> word.length() == 0);
+
+            arrayListArray.add(extractedArrayList);
+        }
+
+        return arrayListArray;
     }
 }
