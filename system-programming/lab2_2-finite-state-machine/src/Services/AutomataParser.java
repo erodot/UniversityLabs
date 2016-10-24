@@ -1,6 +1,7 @@
 package Services;
 
 import Entities.Automaton;
+import Entities.FinalFlag;
 import Entities.State;
 import Entities.Transition;
 
@@ -19,7 +20,7 @@ public class AutomataParser {
 
     public static Automaton parseFile(String path) throws IOException {
 
-        //Reading tests from file
+        //Reading rows from file
         ArrayList<String> fileRows = IOService.readFile(path);
 
         Automaton automaton = new Automaton();
@@ -40,7 +41,7 @@ public class AutomataParser {
         Arrays
                 .stream(fileRows.get(3).split(" "))
                 .map(Integer::parseInt)
-                .forEach(num -> automaton.finalStates.add(num));
+                .forEach(num -> automaton.getStateByNumber(num).finalFlag = FinalFlag.Final);
 
 
         //extract all rows with transitions
