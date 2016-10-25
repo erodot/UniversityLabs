@@ -1,13 +1,9 @@
 package Services;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
-
-// TODO: write tests for IOService
 
 /* Singleton Service for reading text files */
 public class IOService {
@@ -21,40 +17,47 @@ public class IOService {
     }
 
     public static ArrayList<ArrayList<String>> readFile(String fileName) throws IOException {
-        // This will reference one line at a time
-        String line;
+        Charset encoding = Charset.defaultCharset();
+        File file = new File(fileName);
 
-        ArrayList<String> arrayList = new ArrayList<>();
+        ArrayList<ArrayList<String>> arrayList = new ArrayList<>();
+        arrayList.add(new ArrayList<>());
 
-        // FileReader reads text files in the default encoding.
-        FileReader fileReader = new FileReader(fileName);
+        try(InputStream in = new FileInputStream(file)){
+            Reader reader = new InputStreamReader(in, encoding);
+            Reader buffer = new BufferedReader(reader);
 
-        try (BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+            StringBuilder lastWord = new StringBuilder("");
 
-            while((line = bufferedReader.readLine()) != null) {
-                arrayList.add(line);
+            int r;
+            while((r = buffer.read()) != -1){
+                Character ch = (char) r;
+
+                if((int)ch == 32){ //end of word
+                    arrayList.get(arrayList.size()-1) //last row
+                            .add(lastWord.toString());
+                    lastWord = new StringBuilder(""); //clear buffer
+                    continue;
+                }
+
+                if((int)ch == 10){ //end of row
+                    arrayList.get(arrayList.size()-1) //last row
+                            .add(lastWord.toString());
+                    lastWord = new StringBuilder(""); //clear buffer
+                    arrayList.add(new ArrayList<>());
+                    continue;
+                }
+
+                if(Character.isLetter(ch)){
+                    lastWord.append(ch);
+                }
+
             }
-        }
-        catch(FileNotFoundException ex) {
-            throw new FileNotFoundException("Unable to open file '" + fileName + "'");
-        }
-        catch(IOException ex) {
-            throw new IOException("Error reading file '" + fileName + "'");
+
+            arrayList.get(arrayList.size()-1) //last row
+                    .add(lastWord.toString());
         }
 
-        ArrayList<ArrayList<String>> arrayListArray = new ArrayList<>();
-
-        for(String row: arrayList){
-            //Splitting row into words
-            String[] extractedArray = row.split("[^a-zA-Z]{1,}");
-
-            ArrayList<String> extractedArrayList = new ArrayList<>(Arrays.asList(extractedArray));
-
-            extractedArrayList.removeIf(word -> word.length() == 0);
-
-            arrayListArray.add(extractedArrayList);
-        }
-
-        return arrayListArray;
+        return arrayList;
     }
 }
