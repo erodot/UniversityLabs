@@ -6,6 +6,9 @@
   <label for="precision" class='text text-default'>Округлення відповіді(кількість знаків після коми):</label>
   <input type="number" name="precision" id="precision" class='form-control' ng-model='precision'>
 </div>
+<div class="checkbox">
+  <label><input type="checkbox" ng-model="isGilbert">Матриця Гільберта</label>
+</div>
 <button class='btn btn-default' ng-click="solveGauss()">Рахувати</button>
 <button class='btn btn-default' ng-show="answer" ng-click="toggleTable()"><span ng-show="toggle">Сховати</span><span ng-show="!toggle">Показати</span> відповідь</button>
 <table ng-show="toggle">

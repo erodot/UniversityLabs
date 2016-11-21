@@ -37,4 +37,25 @@ function MatrixService(){
     return matrix;
   }
 
+  service.createGilbertMatrix = function(dimension){
+    var matrix = [];
+    for(var i=0; i<dimension; i++){
+      matrix[i]=[];
+      for(var j=0; j<dimension; j++)
+        matrix[i][j] = 1/(i+j+1);
+    }
+    
+    return matrix;
+  }
+
+  service.computeError = function(row, ans, answer){
+    // ans - value of row, answer - vector, answer of matrix
+    var err = 0;
+    for(var i=0; i<answer.length; i++)
+      err += row[i]*answer[i];
+    err -= ans;
+
+    return err;
+  }
+
 }

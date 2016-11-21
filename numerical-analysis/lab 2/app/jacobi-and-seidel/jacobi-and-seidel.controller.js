@@ -34,6 +34,9 @@ function JacobiAndSeidelController($scope, JacobiService, SeidelService, MatrixS
     $scope.matrix.forEach(function(matrixRow, index){
       matrixRow.push('= ');
       matrixRow.push($scope.vector[index]);
+      matrixRow.push(' | ');
+      matrixRow.push(MatrixService.computeError(matrixRow, $scope.vector[index], $scope.jacobi.answer));
+      matrixRow.push(MatrixService.computeError(matrixRow, $scope.vector[index], $scope.seidel.answer));
     });
   }
 }

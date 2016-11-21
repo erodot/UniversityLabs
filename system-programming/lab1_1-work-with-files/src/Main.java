@@ -52,7 +52,7 @@ class Main {
 
         try {
             bw = new BufferedWriter(new FileWriter(fileName, true));
-            for(int i=0; i<953211187; i++)
+            for(int i=0; i<100000000; i++)
             bw.write("some te ");
 
             bw.write("lognphrase");

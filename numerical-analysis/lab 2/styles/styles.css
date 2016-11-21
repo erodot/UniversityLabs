@@ -11,7 +11,7 @@ input{
   border-left: 1px solid #dddddd;
   border-right: 1px solid #dddddd;
   padding: 10px;
-  overflow: hidden;
+  /*overflow: hidden;*/
 }
 
 td {
