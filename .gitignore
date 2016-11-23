@@ -7,4 +7,13 @@
 # OS X system files
 **/.DS_Store
 
+# Visual Studio Build files
+**/bin/
+**/obj/
+**/*.csproj
+**/*.sln
+**/*.userprefs
+**/*.user
+**/AssemblyInfo.cs
+
 **/verylongfile.txt
