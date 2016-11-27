@@ -11,16 +11,8 @@ import java.util.stream.Collectors;
 
 public class AutomataChecker {
 
-    public AutomataChecker(Automaton _automaton){
-
-        this.automaton = _automaton;
-
-        this.alphabet = this.getAlphabetWithLength(_automaton.alphabetSize);
-
-        this.statePassed = new ArrayList<>();
-    }
-
     private Automaton automaton;
+    private ArrayList<ArrayList<State>> automaton_memory;
     private ArrayList<State> statePassed;
     private Character[] alphabet;
 
@@ -37,76 +29,89 @@ public class AutomataChecker {
         return alphabet;
     }
 
-    private boolean checkStateToBe(State state , FinalFlag flag){
-        // check if we already passed this state
-        if(this.statePassed.contains(state))
+    public AutomataChecker(Automaton _automaton){
+
+        this.automaton = _automaton;
+
+        this.automaton_memory = new ArrayList<>();
+
+        this.alphabet = this.getAlphabetWithLength(_automaton.alphabetSize);
+
+        this.statePassed = new ArrayList<>();
+    }
+
+    private ArrayList<State> GoNext(ArrayList<State> automaton_state){
+        ArrayList<State> new_automaton_state = new ArrayList<>();
+
+        for (State st :
+                automaton_state) {
+            new_automaton_state.addAll(st.transitions.stream().map(tr -> tr.nextState).collect(Collectors.toList()));
+        }
+
+        return new_automaton_state;
+    }
+
+    private boolean IsIteration(ArrayList<State> automaton_state){
+
+        upper:
+        for (ArrayList<State> previous_automaton_state :
+                automaton_memory) {
+
+            //check if automaton_state is subset of previous_automaton_state
+            for(int counter = 0; counter < automaton_state.size(); counter++) {
+                if(!previous_automaton_state.contains(automaton_state.get(counter)))
+                    continue upper;
+            }
+
+            //check if previous_automaton_state is subset of automaton_state
+            for(int counter = 0; counter < previous_automaton_state.size(); counter++) {
+                if(!automaton_state.contains(previous_automaton_state.get(counter)))
+                    continue upper;
+            }
+
             return true;
-
-        FinalFlag oppositeFlag;
-        if(flag==FinalFlag.Final)
-            oppositeFlag = FinalFlag.NotFinal;
-        else
-            oppositeFlag = FinalFlag.Final;
-
-        long badStatesCount = state.transitions //transition states that have the same final status as current state
-                .stream()
-                .map(tr -> tr.nextState)
-                .distinct()
-                .filter(st -> st.finalFlag==flag)
-                .count();
-        if(badStatesCount>0)
-            return false;
-
-        List<Transition> transitions;
-        for (Character ch : this.alphabet) {
-            transitions = state.transitions
-                    .stream()
-                    .filter(tr -> tr.input==ch) //transitions which input is current character
-                    .collect(Collectors.toList());
-
-            if(transitions.size()!=1)
-                return false; //automata is not not deterministic or not working with some symbols
         }
 
-        this.statePassed.add(state);
-
-        //run function with all transition states
-        for (Transition tr : state.transitions) {
-            if(!this.checkStateToBe(tr.nextState, oppositeFlag))
-                return false;
-        }
-
-        return true;
+        return false;
     }
 
     public boolean isValid(){
 
-        List<Transition> transitions;
-        for (Character ch : this.alphabet) {
-            transitions = automaton.initialState.transitions
-                    .stream()
-                    .filter(tr -> tr.input==ch) //transitions which input is current character
-                    .collect(Collectors.toList());
+        // set initial parameters
+        int depth = 0;
+        ArrayList<State> automaton_state = new ArrayList<>();
+        automaton_state.add(automaton.initialState);
 
-            if(transitions.size()!=1)
-                return false; //automata is not not deterministic or not working with some symbols
+        // first iteration
+        automaton_state = GoNext(automaton_state);
+        depth ++;
+
+        while(true){
+            if(depth % 2 == 0) { // even word length
+                boolean has_final = false;
+
+                if(IsIteration(automaton_state))
+                    return true;
+
+                for (State st : automaton_state)
+                    if(st.finalFlag == FinalFlag.Final)
+                        has_final = true;
+
+                if(has_final)
+                    automaton_memory.add(automaton_state);
+                else
+                    return false; // there is no final state on words with even length
+
+            }
+            else { // odd word length
+                for (State st : automaton_state)
+                    if(st.finalFlag == FinalFlag.Final)
+                        return false; // exit if there is final state on odd word length
+            }
+
+            automaton_state = GoNext(automaton_state);
+            depth ++;
         }
 
-        long badStatesCount = automaton.initialState.transitions //transition states that have the same final status as current state
-                .stream()
-                .map(tr -> tr.nextState)
-                .distinct()
-                .filter(st -> st.finalFlag==FinalFlag.Final)
-                .count();
-        if(badStatesCount>0)
-            return false;
-
-        //run function with all transition states
-        for (Transition tr : automaton.initialState.transitions) {
-            if(!this.checkStateToBe(tr.nextState, FinalFlag.NotFinal))
-                return false;
-        }
-
-        return true;
     }
 }
