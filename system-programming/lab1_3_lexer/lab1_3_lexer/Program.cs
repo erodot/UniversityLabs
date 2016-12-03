@@ -22,21 +22,21 @@ namespace lab1_3_lexer
 			Comment, // коментарі
 			Directive, // директиви препроцесора
 			Operator, // оператори
-			Punctuation // розділові знаки
+			Punctuation, // розділові знаки
+			Error // помилки
 		};
 
 		class Token
 		{
 			public TokenType Type;
 			public string Value;
-			public int Index;
 			public int Length;
 		}
 
 		// searching in the beginning of string
 		Dictionary<TokenType, Regex> regexes = new Dictionary<TokenType, Regex>()
 		{
-			[TokenType.Keyword] = new Regex(@"^(abstract|event|new|struct|as|explicit|null|switch|base|extern|object|this|bool|false|operator|throw|break|finally|out|true|byte|fixed|override|try|case|float|params|typeof|catch|for|private|uint|char|foreach|protected|ulong|checked|goto|public|unchecked|class|if|readonly|unsafe|const|implicit|ref|ushort|continue|in|return|using|decimal|int|sbyte|virtual|default|interface|sealed|volatile|delegate|internal|short|void|do|is|sizeof|while|double|lock|stackalloc|else|long|static|enum|namespace|string)", RegexOptions.Compiled),
+			[TokenType.Keyword] = new Regex(@"^(abstract|event|int|new|struct|as|explicit|null|switch|base|extern|object|this|bool|false|operator|throw|break|finally|out|true|byte|fixed|override|try|case|float|params|typeof|catch|for|private|uint|char|foreach|protected|ulong|checked|goto|public|unchecked|class|if|readonly|unsafe|const|implicit|ref|ushort|continue|in|return|using|decimal|sbyte|virtual|default|interface|sealed|volatile|delegate|internal|short|void|do|is|sizeof|while|double|lock|stackalloc|else|long|static|enum|namespace|string)", RegexOptions.Compiled),
 			[TokenType.Hex] = new Regex(@"^0[xX]((0|[1-9a-fA-F][\da-fA-F]*)(UL|Ul|uL|ul|LU|Lu|lU|lu|U|u|L|l)?)", RegexOptions.Compiled),
 			[TokenType.Identifier] = new Regex(@"^@?([_\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}][\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}\p{Mn}\p{Mc}\p{Nd}\p{Pc}\p{Cf}]*)", RegexOptions.Compiled),
 			[TokenType.Int] = new Regex(@"^((0|[1-9]\d*)(UL|Ul|uL|ul|LU|Lu|lU|lu|U|u|L|l)?)", RegexOptions.Compiled),
@@ -54,6 +54,7 @@ namespace lab1_3_lexer
 		{
 			// trim whitespaces
 			var remainingText = text.TrimStart();
+			String error = "";
 			while (remainingText != "")
 			{
 				// looking for best matching
@@ -63,14 +64,25 @@ namespace lab1_3_lexer
 					let regex = pair.Value
 					let match = regex.Match(remainingText)
 					let matchLength = match.Length
-				orderby matchLength descending, tokenType
-					select new { tokenType, value = match.Value, matchLength, index = match.Index }).First();
-				
+					orderby matchLength descending, tokenType
+					select new { tokenType, value = match.Value, matchLength}).First();
+
 				// no match
 				if (bestMatch.matchLength == 0)
-					throw new Exception("Unknown lexeme");
+				{
+					error += remainingText[0];
+					remainingText = remainingText.Substring(1);
+					continue;
+				}
+				else if (error != "")
+				{
+					error = error.Trim();
+					var errtoken = new Token() { Type = TokenType.Error, Value = error, Length = error.Length };
+					error = "";
+					yield return errtoken;
+				}
 
-				var token = new Token() { Type = bestMatch.tokenType, Index = bestMatch.index, Value = bestMatch.value, Length = bestMatch.matchLength };
+				var token = new Token() { Type = bestMatch.tokenType, Value = bestMatch.value, Length = bestMatch.matchLength };
 				yield return token;
 
 				// cut out proceeded lexeme
