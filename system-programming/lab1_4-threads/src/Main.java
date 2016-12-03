@@ -1,4 +1,3 @@
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import static java.lang.Thread.sleep;
@@ -7,6 +6,9 @@ import static java.lang.Thread.sleep;
  * Created by tedromanus on 12/3/16.
  */
 public class Main {
+
+    public static final int SECONDS_DELAY = 10;
+
     public static void main(String[] args){
 
         Scanner keyboard = new Scanner(System.in);
@@ -26,7 +28,7 @@ public class Main {
 
         do try {
             sleep(50);
-            if (i % 200 == 0 && interrupt) { // 10 seconds
+            if (i % SECONDS_DELAY * 1000 / 20 == 0 && interrupt) { // 10 seconds
                 System.out.printf("Calculations take longer than expected. Do you want to continue?\ny - yes, yy - continue and never ask again, other - terminate\n");
                 String str = keyboard.next();
                 switch (str) {
@@ -45,7 +47,7 @@ public class Main {
             i++;
         } catch (InterruptedException e) {
             e.printStackTrace();
-        } while((fThread.isAlive() || gThread.isAlive()) && !exitFlag);
+        } while(((fThread.isAlive() || gThread.isAlive()) && !exitFlag) && fThread.result * gThread.result != 0);
 
         if(!exitFlag)
             System.out.println("f(x)*g(x) = " + fThread.result * gThread.result);

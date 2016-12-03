@@ -4,7 +4,7 @@
 public class FThread extends Thread {
 
     private double x;
-    public volatile double result;
+    public volatile double result = 1;
 
     FThread(double _x){
         super();
@@ -13,7 +13,7 @@ public class FThread extends Thread {
     }
 
     private double f(double x) throws InterruptedException {
-       for(int i=0; i<5000; i++) {
+       for(int i=0; i<500; i++) {
            if(interrupted())
                throw new InterruptedException();
            sleep(50);

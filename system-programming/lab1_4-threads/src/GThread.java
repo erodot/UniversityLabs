@@ -2,8 +2,9 @@
  * Created by tedromanus on 12/3/16.
  */
 public class GThread extends Thread {
+
     private double x;
-    public volatile double result;
+    public volatile double result = 1;
 
     GThread(double _x){
         super();
@@ -12,13 +13,10 @@ public class GThread extends Thread {
     }
 
     private double g(double x) throws InterruptedException {
-        for(int i=0; i<500; i++) {
-            if(interrupted())
-                throw new InterruptedException();
-            sleep(50);
-        }
+//        if(interrupted())
+//            throw new InterruptedException();
 
-        return 1 / x;
+        return 1/x;
     }
 
     @Override
