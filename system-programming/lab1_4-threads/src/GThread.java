@@ -3,6 +3,7 @@
  */
 public class GThread extends Thread {
     private double x;
+    public volatile double result;
 
     GThread(double _x){
         super();
@@ -10,18 +11,22 @@ public class GThread extends Thread {
         x = _x;
     }
 
-    private double g(double x){
-        try {
-            sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+    private double g(double x) throws InterruptedException {
+        for(int i=0; i<500; i++) {
+            if(interrupted())
+                throw new InterruptedException();
+            sleep(50);
         }
 
-        return x;
+        return 1 / x;
     }
 
     @Override
     public void run(){
-        Storage.setG(g(x));
+        try {
+            result = g(x);
+        } catch(InterruptedException ex){
+            return;
+        }
     }
 }

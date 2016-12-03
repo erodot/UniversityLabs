@@ -4,6 +4,7 @@
 public class FThread extends Thread {
 
     private double x;
+    public volatile double result;
 
     FThread(double _x){
         super();
@@ -11,18 +12,22 @@ public class FThread extends Thread {
         x = _x;
     }
 
-    private double f(double x){
-        try {
-            sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    private double f(double x) throws InterruptedException {
+       for(int i=0; i<5000; i++) {
+           if(interrupted())
+               throw new InterruptedException();
+           sleep(50);
+       }
 
-        return x;
+        return x*x;
     }
 
     @Override
     public void run(){
-        Storage.setF(f(x));
+        try {
+            result = f(x);
+        } catch(InterruptedException ex){
+            return;
+        }
     }
 }
