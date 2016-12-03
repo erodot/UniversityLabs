@@ -4,10 +4,6 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Linq;
 
-/*
- Written by Ted Romanus
- */
-
 namespace lab1_3_lexer
 {
 	class Program
