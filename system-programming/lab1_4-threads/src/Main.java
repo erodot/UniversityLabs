@@ -9,7 +9,7 @@ public class Main {
 
     public static final int SECONDS_DELAY = 10;
 
-    public static void main(String[] args){
+    public static void main(String []args){
 
         Scanner keyboard = new Scanner(System.in);
         double x;
@@ -27,8 +27,8 @@ public class Main {
         gThread.start();
 
         do try {
-            sleep(50);
-            if (i % SECONDS_DELAY * 1000 / 20 == 0 && interrupt) { // 10 seconds
+            sleep(500);
+            if (i % (SECONDS_DELAY * 2) == 0 && interrupt) { // 10 seconds
                 System.out.printf("Calculations take longer than expected. Do you want to continue?\ny - yes, yy - continue and never ask again, other - terminate\n");
                 String str = keyboard.next();
                 switch (str) {
@@ -39,8 +39,8 @@ public class Main {
                         break;
                     default:
                         exitFlag = true;
-                        fThread.interrupt();
-                        gThread.interrupt();
+                        fThread.stop();
+                        gThread.stop();
                         break;
                 }
             }
