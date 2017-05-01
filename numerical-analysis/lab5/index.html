@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Lab 1</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.10.0/math.min.js"></script>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://maurizzzio.github.io/function-plot/js/function-plot.js"></script>
+
+  <style>
+    input[type=text] {
+      width: 50px;
+    }
+    #eq {
+      width: 300px;
+    }
+    input {
+      padding: 6px;
+    }
+    body, html, input {
+      font-family: sans-serif;
+      font-size: 11pt;
+    }
+    form {
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+
+<form id="form">
+  <label for="eq">Enter an equation:</label><input type="text" id="eq" value="4 * sin(x) + 5 * cos(x/2)" /><br/>
+  <label for="lower-limit">Lower limit: </label><input type="text" id="lower-limit" value="-pi" />
+  <label for="upper-limit">Upper limit: </label><input type="text" id="upper-limit" value="pi" /><br/>
+  <label for="intervals-count">Intervals count: </label><input type="text" id="intervals-count" value="20" /><br/>
+  <input type="submit" value="Calculate" />
+</form>
+
+<div id="answer" style="margin-bottom: 50px;"></div>
+
+<div id="rectangle"></div>
+<div id="trapezoid"></div>
+<div id="simpson"></div>
+<div id="riemann"></div>
+
+<script src="main.js"></script>
+
+</body>
+</html>
