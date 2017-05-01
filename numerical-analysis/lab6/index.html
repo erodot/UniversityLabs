@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Lab 2</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.10.0/math.min.js"></script>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://maurizzzio.github.io/function-plot/js/function-plot.js"></script>
+
+  <style>
+    input[type=text] {
+      width: 50px;
+    }
+    #eq {
+      width: 300px;
+    }
+    input {
+      padding: 6px;
+    }
+    body, html, input {
+      font-family: sans-serif;
+      font-size: 11pt;
+    }
+    form {
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div style="width:50%; float:left;">
+    <h1>Euler</h1>
+    <form id="euler-form">
+      <label for="euler-eq">dy/dx=</label><input type="text" id="euler-eq" value="-sin(x)" style="width:200px;"/><br/>
+      <label for="euler-start-point">y(0)=</label><input type="text" id="euler-start-point" value="1" /><br/>
+      <label for="euler-upper-limit">Upper limit: </label><input type="text" id="euler-upper-limit" value="5" /><br/>
+      <label for="euler-intervals-count">Intervals count: </label><input type="text" id="euler-intervals-count" value="40" /><br/>
+      <input type="submit" value="Calculate" />
+    </form>
+    <div id="euler"></div>
+    <script src="euler.js"></script>
+  </div>
+
+  <div style="width:50%; float:left;">
+    <h1>Runge-Kutta</h1>
+    <form id="runge-kutta-form">
+      <label for="runge-kutta-eq-x">dx/dt=</label><input type="text" id="runge-kutta-eq-x" value="-axy+bx" style="width:200px;"/><br/>
+      <label for="runge-kutta-eq-y">dy/dt=</label><input type="text" id="runge-kutta-eq-y" value="cxy-dy" style="width:200px;"/><br/>
+      <label for="runge-kutta-start-point-x">x(0)=</label><input type="text" id="runge-kutta-start-point-x" value="1" /><br/>
+      <label for="runge-kutta-start-point-y">y(0)=</label><input type="text" id="runge-kutta-start-point-y" value="1" /><br/>
+      <label for="runge-kutta-upper-limit">Upper limit: </label><input type="text" id="runge-kutta-upper-limit" value="5" /><br/>
+      <label for="runge-kutta-intervals-count">Intervals count: </label><input type="text" id="runge-kutta-intervals-count" value="50" /><br/>
+      <input type="submit" value="Calculate" />
+    </form>
+    <div id="runge-kutta"></div>
+    <script src="runge-kutta.js"></script>
+  </div>
+
+</body>
+</html>
