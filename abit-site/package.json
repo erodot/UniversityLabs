@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index"
+    "start": "node --max-old-space-size=4096 index"
   },
   "author": "",
   "license": "ISC",
