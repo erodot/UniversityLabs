@@ -4,11 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node --max-old-space-size=4096 index"
+    "start": "node --expose-gc --max-old-space-size=4096 index"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "async": "^2.4.0",
     "cheerio": "latest",
     "express": "latest",
     "promised-simple-retry": "^0.2.0",
