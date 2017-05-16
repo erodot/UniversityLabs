@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Lab 2</title>
+   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.10.0/math.min.js"></script>
+
+  <style>
+    input[type=text] {
+      width: 50px;
+    }
+    #eq {
+      width: 300px;
+    }
+    input {
+      padding: 6px;
+    }
+    body, html, input {
+      font-family: sans-serif;
+      font-size: 11pt;
+    }
+    form {
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div style="width:50%; float:left;">
+    <h1>Finite difference method</h1>
+    <form id="finite-difference-form">
+      <h2><b><sup>du</sup>/<sub>dt</sub>=k<sup>d<sup>2</sup>u</sup>/<sub>dx<sup>2</sup></sub>+f(x,t)</b></h2>
+      <label for="finite-difference-k">k = </label><input type="text" id="finite-difference-k" value="0.00002" style="width:100px;"/><br/>
+      <label for="finite-difference-f-eq">f(x,t) = </label><input type="text" id="finite-difference-f-eq" value="0" style="width:200px;"/><br/>
+      <label for="finite-difference-u0-eq">u(0,t) = </label><input type="text" id="finite-difference-u0-eq" value="0" style="width:200px;"/><br/>
+      <label for="finite-difference-u1-eq">u(1,t) = </label><input type="text" id="finite-difference-u1-eq" value="40" style="width:200px;"/><br/>
+      <label for="finite-difference-g-eq">u(x,0)=g(x) = </label><input type="text" id="finite-difference-g-eq" value="0" style="width:200px;"/><br/>
+      <input type="submit" value="Run" /> <button id="stop-button">Stop</button>
+    </form>
+    <div id="finite-difference-plot" style="width:600px;height:250px;"></div>
+    <script src="finite-difference.js"></script>
+  </div>
+
+</body>
+</html>

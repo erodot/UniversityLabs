@@ -16,4 +16,7 @@
 **/*.user
 **/AssemblyInfo.cs
 
+# NodeJS files
+node_modules/
+
 **/verylongfile.txt
