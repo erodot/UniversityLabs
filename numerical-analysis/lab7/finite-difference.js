@@ -51,7 +51,6 @@ var update = async function(){
 
 var run = async function(){
     stop = false;
-    //document.getElementById('finite-difference-plot').innerHTML="";
 
     k = math.eval(document.getElementById('finite-difference-k').value);
     f = document.getElementById('finite-difference-f-eq').value;
@@ -61,6 +60,7 @@ var run = async function(){
     g = document.getElementById('finite-difference-g-eq').value;
     h = 1/N;
 
+    T = [];
     for(var i=0; i<N+1; i++){
         T.push(math.eval(g, {x: i*h}));
     }
