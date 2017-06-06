@@ -5,6 +5,10 @@ CIMG_OPTIONS = -O2 -lm -lpthread -I/usr/X11R6/include -L/usr/X11R6/lib -lm -lpth
 GCC_COMPILER = g++-7
 MPI_COMPILER = mpic++
 
+EXECS=serial mpi openmp
+
+default: ${EXECS}
+
 serial: serial.cpp
 	 $(GCC_COMPILER) serial.cpp -o exec $(CIMG_OPTIONS) && ./exec && rm -rf exec
 
