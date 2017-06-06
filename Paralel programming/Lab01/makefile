@@ -1,14 +1,15 @@
 # export MPICC=/usr/local/bin/mpicc && export MPIRUN=/usr/local/bin/mpirun && export TMPDIR=/tmp
-# make && mpirun -n 4 eratosthenes && mpirun -n 4 singleprime
-# make && mpirun eratosthenes && mpirun singleprime
 
-EXECS=eratosthenes singleprime
+EXECS=sort sort-mpi sort-openmp
 MPICC?=mpicc
 
 all: ${EXECS}
 
-eratosthenes: eratosthenes.c
-	${MPICC} -o eratosthenes eratosthenes.c
+sort: sort.cpp
+	clang++ ./sort.cpp -o sort && ./sort && rm -rf sort
 
-singleprime: singleprime.c 
-	${MPICC} -o singleprime singleprime.c
+sort-mpi: sort-mpi.c
+	${MPICC} -o sort-mpi sort-mpi.c && mpirun -n 4 sort-mpi && rm -rf sort-mpi
+
+sort-openmp: sort-openmp.c
+	gcc -openmp sort-openmp.c -o sort-openmp && ./sort-openmp && rm -rf sort-openmp

@@ -10,12 +10,12 @@ public class lab1 {
     private static final String LANG_PATH = "Examples/All_Algorithm/C0_GR.txt";
     private static final int LLK = 1;
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         MyLang lang = new MyLang(LANG_PATH, LLK);
 
-        if(lang.isCreate()) {
-            int [] epsilon = createEpsilonNonterminals (lang);
-            int [] internal_epsilon = lang.createEpsilonNonterminals();
+        if (lang.isCreate()) {
+            int[] epsilon = createEpsilonNonterminals(lang);
+            int[] internal_epsilon = lang.createEpsilonNonterminals();
 
             System.out.println("My epsilon-nonterminals length: " + epsilon.length);
             System.out.println("Internal: " + internal_epsilon.length);
@@ -25,7 +25,7 @@ public class lab1 {
         }
     }
 
-    public static int[] createEpsilonNonterminals(MyLang lang){
+    static int[] createEpsilonNonterminals(MyLang lang) {
 
         LinkedList<Node> language = lang.getLanguarge();
 
@@ -38,7 +38,7 @@ public class lab1 {
 
         int old_length;
 
-        do{
+        do {
             final int[] old_S = S.clone();
             old_length = old_S.length;
             S = language.parallelStream()
@@ -47,25 +47,26 @@ public class lab1 {
                     .distinct()
                     .toArray();
 
-        } while(S.length != old_length);
+        } while (S.length != old_length);
 
         return S;
     }
 
-    public static boolean rightPartConsistsOf(int[]rooles, int[] alphabet){
-        if(rooles.length == 1)
+    static boolean rightPartConsistsOf(int[] rooles, int[] alphabet) {
+        if (rooles.length == 1)
             return true;
 
         for (int i = 1; i < rooles.length; i++) {
             boolean in_alphabet = false;
-            for(int a: alphabet){
-                if(a == rooles[i])
+            for (int a : alphabet) {
+                if (a == rooles[i])
                     in_alphabet = true;
             }
-            if(!in_alphabet)
+            if (!in_alphabet)
                 return false;
         }
 
         return true;
     }
 }
+
