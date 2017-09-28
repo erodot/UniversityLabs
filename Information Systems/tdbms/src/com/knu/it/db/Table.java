@@ -52,18 +52,39 @@ public class Table {
             JSONObject jfield = (JSONObject)ofield;
             for(TableColumn column: columns){
                 Object value = jfield.get(column.name);
-                if(column.type == HTML.class){
-                    new HTML((String)value).validate();
-                }
-                else {
-                    try {
-                        column.type.cast(value);
-                    }
-                    catch(Exception e){
-                        throw(new IllegalArgumentException("In table \"" + name + "\" field \"" + value + "\" is not type of \"" + column.type.getSimpleName() + "\""));
-                    }
-                }
+                validateValue(value, column);
             }
+        }
+    }
+
+    void validateValue(Object value, TableColumn column) throws IllegalArgumentException{
+        Class<?> valueClass = value.getClass();
+
+        IllegalArgumentException ex = new IllegalArgumentException("In table \"" + name + "\" field \"" + value + "\" is not type of \"" + column.type.getSimpleName() + "\"");
+
+        if(column.type == HTML.class){
+            try {
+                new HTML((String) value).validate();
+            }
+            catch(IllegalArgumentException illegalArgumentException){
+                throw ex;
+            }
+        }
+        else if(column.type == Integer.class){
+            if(!(valueClass == Long.class && (long)value <= Integer.MAX_VALUE))
+                throw ex;
+        }
+        else if(column.type == Long.class){
+            if(!(valueClass == Long.class))
+                throw ex;
+        }
+        else if(column.type == Character.class){
+            if(!(valueClass == String.class && ((String)value).length() == 1))
+                throw ex;
+        }
+        else if(column.type == Double.class){
+            if(!(valueClass == Double.class || valueClass == Long.class))
+                throw ex;
         }
     }
 }

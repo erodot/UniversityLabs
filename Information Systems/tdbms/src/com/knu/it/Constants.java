@@ -10,24 +10,23 @@ public class Constants {
 
         Class<?> c;
         switch (key) {
+            case "html":
+                c = HTML.class;
+                break;
             case "int":
                 c = Integer.class;
                 break;
             case "long":
                 c = Long.class;
                 break;
-            case "string":
-                c = String.class;
+            case "char":
+                c = Character.class;
                 break;
-            case "float":
-                c = Float.class;
-                break;
-            case "html":
-                c = HTML.class;
+            case "double":
+                c = Double.class;
                 break;
             default:
-                c = Object.class;
-                break;
+                throw new IllegalArgumentException("Invalid type");
         }
 
         return c;
