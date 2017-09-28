@@ -1,8 +1,8 @@
 package com.knu.it.db;
 
 class TableColumn {
-    private String name;
-    private Class<?> type;
+    public String name;
+    public Class<?> type;
 
     TableColumn(String name, Class<?> type){
         this.name = name;

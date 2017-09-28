@@ -3,7 +3,7 @@ package com.knu.it;
 import org.json.simple.parser.JSONParser;
 
 public class Constants {
-    public static String DB_PATH = "/Users/tedromanus/Documents/db";
+    public static String DB_PATH = "/Users/tedromanus/Documents/db/";
     public static JSONParser jsonParser = new JSONParser();
 
     public static Class<?> GetClass(String key){
@@ -21,6 +21,9 @@ public class Constants {
                 break;
             case "float":
                 c = Float.class;
+                break;
+            case "html":
+                c = HTML.class;
                 break;
             default:
                 c = Object.class;

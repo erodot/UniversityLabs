@@ -15,5 +15,12 @@ public class Database {
     public void loadTables(List<Table> tables){
         this.tables.addAll(tables);
         this.tables.forEach(Table::load);
+        try{
+            this.tables.forEach(Table::validate);
+            System.out.println("Validation successful.");
+        }
+        catch (IllegalArgumentException illegalArgumentException){
+            System.out.println("Validation failed: " + illegalArgumentException.getMessage());
+        }
     }
 }

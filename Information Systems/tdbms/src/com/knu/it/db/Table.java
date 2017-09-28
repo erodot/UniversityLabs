@@ -1,6 +1,7 @@
 package com.knu.it.db;
 
 import com.knu.it.Constants;
+import com.knu.it.HTML;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
@@ -10,20 +11,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("deprecation")
 public class Table {
     public String name;
     public String path;
     private List<TableColumn> columns;
-    public List<TableRow> rows;
+    public JSONArray fields;
 
     public Table(String name, String path){
         this.name = name;
         this.path = path;
         columns = new ArrayList<>();
-        rows = new ArrayList<>();
     }
 
-    @SuppressWarnings("deprecation")
     void load(){
         try {
             // reading table data
@@ -39,9 +39,31 @@ public class Table {
             }
 
             // reading table data
+            fields = (JSONArray)jtable.get("fields");
+
         }
         catch(ParseException | IOException iOException){
             iOException.printStackTrace();
+        }
+    }
+
+    void validate() throws IllegalArgumentException {
+        for(Object ofield:fields){
+            JSONObject jfield = (JSONObject)ofield;
+            for(TableColumn column: columns){
+                Object value = jfield.get(column.name);
+                if(column.type == HTML.class){
+                    new HTML((String)value).validate();
+                }
+                else {
+                    try {
+                        column.type.cast(value);
+                    }
+                    catch(Exception e){
+                        throw(new IllegalArgumentException("In table \"" + name + "\" field \"" + value + "\" is not type of \"" + column.type.getSimpleName() + "\""));
+                    }
+                }
+            }
         }
     }
 }

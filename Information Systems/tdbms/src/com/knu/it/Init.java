@@ -16,7 +16,7 @@ public class Init {
     @SuppressWarnings("deprecation")
     public static void main(String[] args){
         try{
-            JSONObject jdb = (JSONObject) Constants.jsonParser.parse(new FileReader(Constants.DB_PATH + "/db.json"));
+            JSONObject jdb = (JSONObject) Constants.jsonParser.parse(new FileReader(Constants.DB_PATH + "db.json"));
 
             String dbname = (String)jdb.get("name");
 
