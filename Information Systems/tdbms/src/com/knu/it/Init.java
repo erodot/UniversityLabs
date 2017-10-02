@@ -20,10 +20,17 @@ public class Init {
 
             Database db = new Database((String)jdb.get("name"));
             db.loadTables((JSONArray)jdb.get("tables"));
+
+            List<String> proj_columns = new ArrayList<>();
+            proj_columns.add("filepath");
+            proj_columns.add("timestamp");
+            db
+                    .getTableByName("table2")
+                    .project(proj_columns)
+                    .show();
         }
         catch(ParseException | IOException parseException){
             parseException.printStackTrace();
         }
-
     }
 }
