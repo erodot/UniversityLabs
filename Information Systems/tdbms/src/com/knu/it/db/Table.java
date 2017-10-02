@@ -57,18 +57,13 @@ public class Table {
         }
     }
 
-    void validateValue(Object value, TableColumn column) throws IllegalArgumentException{
+    private void validateValue(Object value, TableColumn column) throws IllegalArgumentException{
         Class<?> valueClass = value.getClass();
 
         IllegalArgumentException ex = new IllegalArgumentException("In table \"" + name + "\" field \"" + value + "\" is not type of \"" + column.type.getSimpleName() + "\"");
 
         if(column.type == HTML.class){
-            try {
-                new HTML((String) value).validate();
-            }
-            catch(IllegalArgumentException illegalArgumentException){
-                throw ex;
-            }
+            new HTML((String) value).validate();
         }
         else if(column.type == Integer.class){
             if(!(valueClass == Long.class && (long)value <= Integer.MAX_VALUE))

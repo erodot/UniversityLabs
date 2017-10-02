@@ -18,20 +18,8 @@ public class Init {
         try{
             JSONObject jdb = (JSONObject) Constants.jsonParser.parse(new FileReader(Constants.DB_PATH + "db.json"));
 
-            String dbname = (String)jdb.get("name");
-
-            List<Table> dbtables = new ArrayList<>();
-            JSONArray jtables = (JSONArray)jdb.get("tables");
-            for (Object otable : jtables) {
-                JSONObject jtable = (JSONObject) otable;
-                String tname = (String) jtable.get("name");
-                String tpath = (String) jtable.get("path");
-                Table table = new Table(tname, tpath);
-                dbtables.add(table);
-            }
-
-            Database db = new Database(dbname);
-            db.loadTables(dbtables);
+            Database db = new Database((String)jdb.get("name"));
+            db.loadTables((JSONArray)jdb.get("tables"));
         }
         catch(ParseException | IOException parseException){
             parseException.printStackTrace();
