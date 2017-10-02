@@ -6,6 +6,7 @@ import org.json.simple.JSONObject;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import org.json.simple.parser.ParseException;
 import java.util.ArrayList;
@@ -54,6 +55,36 @@ public class Database {
         }
         table.append(horizontal_line);
         System.out.println(table.toString());
+    }
+
+    public void save() throws IOException{
+        JSONObject databaseInfo = new JSONObject();
+        databaseInfo.put("name", this.name);
+
+        JSONArray tablesInfo = new JSONArray();
+        for(Table t: this.tables){
+            JSONObject j = new JSONObject();
+            j.put("name", t.name);
+            j.put("path", t.path);
+            tablesInfo.add(j);
+        }
+        databaseInfo.put("tables", tablesInfo);
+
+        try (FileWriter file = new FileWriter(this.root + "db.json")) {
+
+            file.write(databaseInfo.toJSONString());
+            file.flush();
+
+        } catch (IOException e) {
+            throw e;
+        }
+    }
+
+    public boolean doesTableExist(String tablename){
+        for(Table t: tables)
+            if(t.name.equals(tablename))
+                return true;
+        return false;
     }
 
     public static Database createFromPath(String root) throws IOException, ParseException{

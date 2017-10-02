@@ -7,6 +7,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,12 +15,20 @@ import java.util.List;
 @SuppressWarnings("deprecation")
 public class Table {
     public String name;
-    public String path;
-    public String root;
-    public List<TableColumn> columns;
+    String path;
+    private String root;
+    private List<TableColumn> columns;
     public JSONArray fields;
 
     /* PUBLIC METHODS */
+    public Table(String name, String path, String root){ // initialization from file
+        this.name = name;
+        this.path = path;
+        this.root = root;
+        this.columns = new ArrayList<>();
+        this.fields = new JSONArray();
+    }
+
     public Table project(List<String> columnNames){
         String newTableName = this.name + " projected";
 
@@ -53,7 +62,7 @@ public class Table {
         StringBuilder table = new StringBuilder();
         table.append(horizontal_line);
         this.columns.forEach(col -> {
-            StringBuilder field = new StringBuilder(col.name);
+            StringBuilder field = new StringBuilder(col.name + ", " + col.type.getSimpleName());
             while(field.length() < column_width)
                 field.append(" ");
             table.append("|" + field.toString());
@@ -75,16 +84,32 @@ public class Table {
         System.out.println(table.toString());
     }
 
-    /* PACKAGE-PRIVATE METHODS */
-    Table(String name, String path, String root){ // initialization from file
-        this.name = name;
-        this.path = path;
-        this.root = root;
-        this.columns = new ArrayList<>();
-        this.fields = new JSONArray();
+    public void save() throws IOException{
+        JSONObject tableInfo = new JSONObject();
+        tableInfo.put("fields", this.fields);
+
+        JSONArray columnsInfo = new JSONArray();
+        for(TableColumn tc: this.columns){
+            JSONObject j = new JSONObject();
+            j.put("name", tc.name);
+            j.put("type", Constants.GetClassName(tc.type));
+            columnsInfo.add(j);
+        }
+
+        tableInfo.put("columns", columnsInfo);
+
+        try (FileWriter file = new FileWriter(this.root + this.path)) {
+
+            file.write(tableInfo.toJSONString());
+            file.flush();
+
+        } catch (IOException e) {
+            throw e;
+        }
     }
 
-    Table(String name, List<TableColumn> columns, JSONArray fields){
+    /* PACKAGE-PRIVATE METHODS */
+    private Table(String name, List<TableColumn> columns, JSONArray fields){
         this.name = name;
         this.path = "";
         this.columns = columns;
@@ -108,7 +133,7 @@ public class Table {
         fields = (JSONArray)jtable.get("fields");
     }
 
-    void validate() throws IllegalArgumentException {
+    public void validate() throws IllegalArgumentException {
         for(Object ofield:fields){
             JSONObject jfield = (JSONObject)ofield;
             for(TableColumn column: columns){
