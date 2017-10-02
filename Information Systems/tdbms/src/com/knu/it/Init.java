@@ -6,6 +6,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
+import javax.xml.crypto.Data;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,23 +16,77 @@ import java.util.List;
 public class Init {
 
     @SuppressWarnings("deprecation")
-    public static void main(String[] args){
-        try{
-            JSONObject jdb = (JSONObject) Constants.jsonParser.parse(new FileReader(Constants.DB_PATH + "db.json"));
+    public static void main(String[] args) {
+        byte[] readline = new byte[80];
+        int codeAction, textLen;
+        Database db;
+        String[] menu = {"1.  Прочитати базу даних з диску",
+                         "2.  Прочитати таблицю з поточної бази даних"
+        };
+        do {
+            String upr;
+            for (String ss : menu) System.out.println(ss); // вивести меню
+            System.out.println("Введіть код дії або end:");
+            do {
+                try {
+                    textLen = System.in.read(readline);
+                    upr = new String(readline, 0, textLen, "ISO-8859-1");
+                    if (upr.trim().equals("end")) return;
+                    codeAction = new Integer(upr.trim());
+                } catch (Exception ee) {
+                    System.out.println("Невірний код дії, повторіть: ");
+                    continue;
+                }
+                if (codeAction >= 1 && codeAction <= menu.length) {
+                    break;
+                } else {
+                    System.out.println("Невірний код дії, повторіть: ");
+                    continue;
+                }
+            } while (true);
 
-            Database db = new Database((String)jdb.get("name"));
-            db.loadTables((JSONArray)jdb.get("tables"));
+            switch (codeAction) {
+                case 1: { //1.  Прочитати базу даних з диску,
+                    String root;
+                    do {
+                        System.out.println("Введіть шлях до бази: ");
+                        try {
+                            textLen = System.in.read(readline);
+                            root = new String(readline, 0, textLen, "ISO-8859-1");
+                            root = root.trim();
+                            if(!root.endsWith("/"))
+                                root = root + "/";
 
-            List<String> proj_columns = new ArrayList<>();
-            proj_columns.add("filepath");
-            proj_columns.add("timestamp");
-            db
-                    .getTableByName("table2")
-                    .project(proj_columns)
-                    .show();
-        }
-        catch(ParseException | IOException parseException){
-            parseException.printStackTrace();
-        }
+                            File path = new File(root);
+                            File db_file = new File(root + "db.json");
+                            if (!path.isDirectory())
+                                System.out.println("Шляху " + root +" не існує");
+                            else if(!db_file.isFile())
+                                System.out.println("За цим шляхом не існує жодної бази");
+                            else break;
+                        } catch (IOException ex) {
+                            System.out.println("Помилка: " + ex.getMessage());
+                        }
+                    }
+                    while(true);
+
+                    try {
+                        // root is stated an here
+                        db = Database.createFromPath(root);
+                        System.out.println("Базу даних \"" + db.name + "\" успішно завантажено.");
+                        db.show();
+                    }
+                    catch(IOException | ParseException ex){
+                        System.out.println("Помилка: " + ex.getMessage());
+                    }
+
+                }
+                break;
+                case 2: { //2.  Прочитати таблицю з поточної бази даних,
+
+                }
+                break;
+            }
+        } while (true);  //глобальний цикл  обробки
     }
 }

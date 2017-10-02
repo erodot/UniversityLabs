@@ -3,8 +3,8 @@ package com.knu.it;
 import org.json.simple.parser.JSONParser;
 
 public class Constants {
-    public static String DB_PATH = "/Users/tedromanus/Documents/db/";
     public static JSONParser jsonParser = new JSONParser();
+    public static int COLUMN_WIDTH = 15;
 
     public static Class<?> GetClass(String key){
 

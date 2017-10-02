@@ -15,6 +15,7 @@ import java.util.List;
 public class Table {
     public String name;
     public String path;
+    public String root;
     public List<TableColumn> columns;
     public JSONArray fields;
 
@@ -45,7 +46,7 @@ public class Table {
     }
 
     public void show(){
-        final int column_width = 15;
+        final int column_width = Constants.COLUMN_WIDTH;
         int columns_length = this.columns.size();
         String horizontal_line = new String(new char[columns_length * (column_width + 1)]).replace("\0", "-") + "\n";;
 
@@ -75,9 +76,10 @@ public class Table {
     }
 
     /* PACKAGE-PRIVATE METHODS */
-    Table(String name, String path){ // initialization from file
+    Table(String name, String path, String root){ // initialization from file
         this.name = name;
         this.path = path;
+        this.root = root;
         this.columns = new ArrayList<>();
         this.fields = new JSONArray();
     }
@@ -91,7 +93,7 @@ public class Table {
 
     void loadFromFile() throws ParseException, IOException{
         // reading table data
-        JSONObject jtable = (JSONObject) Constants.jsonParser.parse(new FileReader(Constants.DB_PATH + path));
+        JSONObject jtable = (JSONObject) Constants.jsonParser.parse(new FileReader(root + path));
 
         // reading table columns
         JSONArray jheaders = (JSONArray) jtable.get("columns");
@@ -123,7 +125,7 @@ public class Table {
         IllegalArgumentException ex = new IllegalArgumentException("In table \"" + name + "\" field \"" + value + "\" is not type of \"" + column.type.getSimpleName() + "\"");
 
         if(column.type == HTML.class){
-            new HTML((String) value).validate();
+            new HTML(this.root, (String) value).validate();
         }
         else if(column.type == Integer.class){
             if(!(valueClass == Long.class && (long)value <= Integer.MAX_VALUE))

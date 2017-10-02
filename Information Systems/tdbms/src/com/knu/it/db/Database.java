@@ -1,9 +1,11 @@
 package com.knu.it.db;
 
+import com.knu.it.Constants;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import org.json.simple.parser.ParseException;
 import java.util.ArrayList;
@@ -11,22 +13,73 @@ import java.util.List;
 
 @SuppressWarnings("deprecation")
 public class Database {
-    private String name;
-    private List<Table> tables;
+    public String name;
+    public String root;
+    public List<Table> tables;
 
-    public Database(String name){
+    public Database(String name, String root){
         this.name = name;
+        this.root = root;
         this.tables = new ArrayList<>();
     }
 
-    public void loadTables(JSONArray jtablesinfo){
+    public void show(){
+        final int column_width = Constants.COLUMN_WIDTH;
+        int columns_length = 2;
+        String horizontal_line = new String(new char[columns_length * (column_width + 1)]).replace("\0", "-") + "\n";;
+
+        StringBuilder table = new StringBuilder();
+        table.append(horizontal_line);
+        StringBuilder field = new StringBuilder("Name");
+        while(field.length() < column_width)
+            field.append(" ");
+        table.append("|" + field.toString());
+        field = new StringBuilder("Path");
+        while(field.length() < column_width)
+            field.append(" ");
+        table.append("|" + field.toString());
+        table.append("|\n");
+
+        for(Table t: tables){
+            table.append(horizontal_line);
+            field = new StringBuilder(t.name);
+            while(field.length() < column_width)
+                field.append(" ");
+            table.append("|" + field.toString());
+            field = new StringBuilder(t.path);
+            while(field.length() < column_width)
+                field.append(" ");
+            table.append("|" + field.toString());
+            table.append("|\n");
+        }
+        table.append(horizontal_line);
+        System.out.println(table.toString());
+    }
+
+    public static Database createFromPath(String root) throws IOException, ParseException{
+        JSONObject jdb = (JSONObject) Constants.jsonParser.parse(new FileReader(root + "db.json"));
+
+        String db_name_string = (String) jdb.get("name");
+        if(db_name_string == null)
+            throw new IOException("db.json file does not contain field \"name\"");
+        Database db = new Database(db_name_string, root);
+
+        JSONArray db_tables_array = (JSONArray) jdb.get("tables");
+        if(db_tables_array == null)
+            throw new IOException("db.json file does not contain field \"tables\"");
+        db.loadTables(db_tables_array);
+
+        return db;
+    }
+
+    private void loadTables(JSONArray jtablesinfo){
         // loading table data from json object
         List<Table> tables = new ArrayList<>();
         for (Object otableinfo : jtablesinfo) {
             JSONObject jtableinfo = (JSONObject) otableinfo;
             String tname = (String) jtableinfo.get("name");
             String tpath = (String) jtableinfo.get("path");
-            Table table = new Table(tname, tpath);
+            Table table = new Table(tname, tpath, this.root);
             tables.add(table);
         }
 
@@ -45,7 +98,6 @@ public class Database {
         // validate tables data
         try{
             this.tables.forEach(Table::validate);
-            System.out.println("Validation successful.");
         }
         catch (IllegalArgumentException ex){
             ex.printStackTrace();
