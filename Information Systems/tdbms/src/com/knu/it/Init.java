@@ -25,14 +25,14 @@ public class Init {
         Table t = new Table("Untitled", "Untitled", "Untitled");
         boolean db_initialized = false;
         boolean t_initialized = false;
-        String[] menu = {"+1.  Прочитати базу даних з диску",
-                         "+2.  Прочитати таблицю з поточної бази даних",
-                         "+3.  Створити базу",
-                         "+4.  Створити таблицю в поточній базі",
-                         "+5.  Видалити таблицю з поточної бази",
-                         "-6.  Редагувати поточну таблицю в базі",
-                         "+7.  Проекція поточної таблиці",
-                         "+8.  Додати до поточної таблиці новий рядок"
+        String[] menu = {"1.  Прочитати базу даних з диску",
+                         "2.  Прочитати таблицю з поточної бази даних",
+                         "3.  Створити базу",
+                         "4.  Створити таблицю в поточній базі",
+                         "5.  Видалити таблицю з поточної бази",
+                         "6.  Проекція поточної таблиці",
+                         "7.  Додати до поточної таблиці новий рядок",
+                         "8.  Редагувати поточну таблицю в базі"
         };
         do {
             String upr;
@@ -293,11 +293,7 @@ public class Init {
                     }
                 }
                 break;
-                case 6: { //6.  Редагувати поточну таблицю в базі
-
-                }
-                break;
-                case 7: { //7.  Проекція поточної таблиці
+                case 6: { //6.  Проекція поточної таблиці
                     if(!db_initialized){
                         System.out.println("Прочитайте базу даних з диску або створіть нову.");
                         break;
@@ -345,7 +341,7 @@ public class Init {
                     projectedTable.show();
                 }
                 break;
-                case 8: { //8.  Додати до поточної таблиці новий рядок
+                case 7: { //7.  Додати до поточної таблиці новий рядок
                     if(!db_initialized){
                         System.out.println("Прочитайте базу даних з диску або створіть нову.");
                         break;
@@ -399,6 +395,92 @@ public class Init {
                         t.fields.add(row);
                         t.save();
                         System.out.println("Новий рядок додано.");
+                        t.show();
+                    }
+                    catch(IOException ex){
+                        System.out.println("Помилка: " + ex.getMessage());
+                    }
+                }
+                break;
+                case 8:{ //8.  Редагувати поточну таблицю в базі
+                    if(!db_initialized){
+                        System.out.println("Прочитайте базу даних з диску або створіть нову.");
+                        break;
+                    }
+
+                    if(!t_initialized){
+                        System.out.println("Прочитайте таблицю з диску або створіть нову.");
+                        break;
+                    }
+
+                    int row_num = 0;
+                    TableColumn col = null;
+                    do {
+                        System.out.println("Будь ласка, введіть через кому номер рядка і назву стовпчика, який Ви хочете редагувати:");
+                        try {
+                            textLen = System.in.read(readline);
+                            String str = new String(readline, 0, textLen, "ISO-8859-1");
+                            str = str.trim();
+                            String[] data = str.split(",");
+                            row_num = new Integer(data[0].trim());
+                            String col_name = data[1].trim();
+
+                            boolean col_found = false;
+                            for(TableColumn tc: t.columns){
+                                if(tc.name.equals(col_name)){
+                                    col = tc;
+                                    col_found = true;
+                                }
+                            }
+                            if(col_found)
+                                break;
+                            else
+                                throw new IllegalArgumentException("Стовпчика з назвою \"" + col_name + "\" не існує");
+                        } catch (IOException | IllegalArgumentException ex) {
+                            System.out.println("Помилка: " + ex.getMessage());
+                        }
+                    }
+                    while(true);
+
+
+                    Object value;
+                    do {
+                        System.out.println("Будь ласка, введіть нове значення поля типу \"" + Constants.GetClassName(col.type) + "\":");
+                        try {
+                            textLen = System.in.read(readline);
+                            String str = new String(readline, 0, textLen, "ISO-8859-1");
+                            str = str.trim();
+                            if(col.type == HTML.class) {
+                                value = str;
+                                new HTML(t.root, str).validate();
+                            }
+                            else if (col.type == Integer.class){
+                                value = new Integer(str);
+                            }
+                            else if (col.type == Long.class){
+                                value = new Long(str);
+                            }
+                            else if (col.type == Character.class){
+                                if(str.length()!= 1)
+                                    throw new IllegalArgumentException("Please enter exactly 1 symbol.");
+                                value = str.substring(0, 1);
+                            }
+                            else if (col.type == Double.class){
+                                value = new Double(str);
+                            }
+                            else
+                                value = null;
+                            break;
+                        } catch (IOException | IllegalArgumentException ex) {
+                            System.out.println("Помилка: " + ex.getMessage());
+                        }
+                    }
+                    while(true);
+
+                    try {
+                        t.update(row_num, col, value);
+                        t.save();
+                        System.out.println("Таблицю успішно оновлено!");
                         t.show();
                     }
                     catch(IOException ex){
