@@ -15,9 +15,9 @@ import java.util.List;
 @SuppressWarnings("deprecation")
 public class Table {
     public String name;
-    String path;
-    private String root;
-    private List<TableColumn> columns;
+    public String path;
+    public String root;
+    public List<TableColumn> columns;
     public JSONArray fields;
 
     /* PUBLIC METHODS */
@@ -27,6 +27,14 @@ public class Table {
         this.root = root;
         this.columns = new ArrayList<>();
         this.fields = new JSONArray();
+    }
+
+    public Table(String name, String root, String path, List<TableColumn> columns, JSONArray fields){
+        this.name = name;
+        this.root = root;
+        this.path = path;
+        this.columns = columns;
+        this.fields = fields;
     }
 
     public Table project(List<String> columnNames){
@@ -51,7 +59,7 @@ public class Table {
             newTableFields.add(newjrow);
         }
 
-        return new Table(newTableName, newTableColumns, newTableFields);
+        return new Table(newTableName, null, null, newTableColumns, newTableFields);
     }
 
     public void show(){
@@ -109,12 +117,6 @@ public class Table {
     }
 
     /* PACKAGE-PRIVATE METHODS */
-    private Table(String name, List<TableColumn> columns, JSONArray fields){
-        this.name = name;
-        this.path = "";
-        this.columns = columns;
-        this.fields = fields;
-    }
 
     void loadFromFile() throws ParseException, IOException{
         // reading table data
@@ -144,7 +146,7 @@ public class Table {
     }
 
     /* PRIVATE METHODS */
-    private void validateValue(Object value, TableColumn column) throws IllegalArgumentException{
+    public void validateValue(Object value, TableColumn column) throws IllegalArgumentException{
         Class<?> valueClass = value.getClass();
 
         IllegalArgumentException ex = new IllegalArgumentException("In table \"" + name + "\" field \"" + value + "\" is not type of \"" + column.type.getSimpleName() + "\"");

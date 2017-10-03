@@ -26,7 +26,7 @@ public class Constants {
                 c = Double.class;
                 break;
             default:
-                throw new IllegalArgumentException("Invalid type");
+                throw new IllegalArgumentException("Invalid type \"" + key + "\"");
         }
 
         return c;
@@ -51,7 +51,7 @@ public class Constants {
             c = "double";
         }
         else
-            throw new IllegalArgumentException("Invalid type");
+            throw new IllegalArgumentException("Invalid type \"" + key + "\"");
 
         return c;
     }

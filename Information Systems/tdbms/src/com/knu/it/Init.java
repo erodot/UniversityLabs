@@ -2,6 +2,7 @@ package com.knu.it;
 
 import com.knu.it.db.Database;
 import com.knu.it.db.Table;
+import com.knu.it.db.TableColumn;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
@@ -27,9 +28,11 @@ public class Init {
         String[] menu = {"+1.  Прочитати базу даних з диску",
                          "+2.  Прочитати таблицю з поточної бази даних",
                          "+3.  Створити базу",
-                         "-4.  Створити таблицю в поточній базі",
-                         "-5.  Видалити таблицю з поточної бази",
-                         "-6.  Редагувати поточну таблицю в базі"
+                         "+4.  Створити таблицю в поточній базі",
+                         "+5.  Видалити таблицю з поточної бази",
+                         "-6.  Редагувати поточну таблицю в базі",
+                         "+7.  Проекція поточної таблиці",
+                         "+8.  Додати до поточної таблиці новий рядок"
         };
         do {
             String upr;
@@ -54,7 +57,7 @@ public class Init {
             } while (true);
 
             switch (codeAction) {
-                case 1: { //1.  Прочитати базу даних з диску,
+                case 1: { //1.  Прочитати базу даних з диску
                     db_initialized = false;
                     t_initialized = false;
 
@@ -94,7 +97,9 @@ public class Init {
 
                 }
                 break;
-                case 2: { //2.  Прочитати таблицю з поточної бази даних,
+                case 2: { //2.  Прочитати таблицю з поточної бази даних
+                    t_initialized = false;
+
                     if(!db_initialized){
                         System.out.println("Прочитайте базу даних з диску або створіть нову.");
                         break;
@@ -183,16 +188,225 @@ public class Init {
                     }
                 }
                 break;
-                case 4: { //4.  Створити таблицю в поточній базі",
+                case 4: { //4.  Створити таблицю в поточній базі
+                    t_initialized = false;
+
                     if(!db_initialized){
                         System.out.println("Прочитайте базу даних з диску або створіть нову.");
                         break;
                     }
 
-                    
+                    String tableName;
+                    do {
+                        System.out.println("Будь ласка, введіть назву таблиці:");
+                        try {
+                            textLen = System.in.read(readline);
+                            tableName = new String(readline, 0, textLen, "ISO-8859-1");
+                            tableName = tableName.trim();
+                            break;
+                        } catch (IOException ex) {
+                            System.out.println("Помилка: " + ex.getMessage());
+                        }
+                    }
+                    while(true);
+
+                    int columns_count;
+                    do {
+                        System.out.println("Будь ласка, введіть кількість стовпчиків:");
+                        try {
+                            textLen = System.in.read(readline);
+                            String str = new String(readline, 0, textLen, "ISO-8859-1");
+                            str = str.trim();
+                            columns_count = new Integer(str);
+                            break;
+                        } catch (IOException | NumberFormatException ex) {
+                            System.out.println("Помилка: " + ex.getMessage());
+                        }
+                    }
+                    while(true);
+
+                    List<TableColumn> columns = new ArrayList<>();
+                    for(int i = 0; i < columns_count; i++){
+                        do {
+                            System.out.println("Будь ласка, введіть назву стовпчика " + (i+1) + "/" +  columns_count + " і його тип через кому (один з {html, int, long, char, double}):");
+                            try {
+                                textLen = System.in.read(readline);
+                                String str = new String(readline, 0, textLen, "ISO-8859-1");
+                                str = str.trim();
+                                String[] data = str.split(",");
+                                TableColumn newCol = new TableColumn(data[0].trim(), Constants.GetClass(data[1].trim()));
+                                columns.add(newCol);
+                                break;
+                            } catch (IOException | IllegalArgumentException ex) {
+                                System.out.println("Помилка: " + ex.getMessage());
+                            }
+                        }
+                        while(true);
+                    }
+
+                    try {
+                        t = new Table(tableName, db.root, tableName + ".json", columns, new JSONArray());
+                        db.tables.add(t);
+                        t.save();
+                        db.save();
+                        System.out.println("Нову таблицю \"" + tableName + "\" створено!");
+                        t_initialized = true;
+                    }
+                    catch(IOException ex){
+                        System.out.println("Помилка: " + ex.getMessage());
+                    }
+                }
+                break;
+                case 5: { //5.  Видалити таблицю з поточної бази
+                    if(!db_initialized){
+                        System.out.println("Прочитайте базу даних з диску або створіть нову.");
+                        break;
+                    }
+
+                    String tableName;
+                    do {
+                        System.out.println("Будь ласка, введіть назву таблиці, яку хочете видалити:");
+                        try {
+                            textLen = System.in.read(readline);
+                            tableName = new String(readline, 0, textLen, "ISO-8859-1");
+                            tableName = tableName.trim();
+
+                            t = db.getTableByName(tableName);
+                            break;
+                        } catch (IOException ex) {
+                            System.out.println("Помилка: " + ex.getMessage());
+                        }
+                    }
+                    while(true);
+
+                    try{
+                        db.tables.remove(t);
+                        db.save();
+
+                        File tableFile = new File(t.root + t.path);
+                        tableFile.delete();
+
+                        System.out.println("Таблицю \"" + tableName + "\" видалено!");
+                    }
+                    catch(IOException ex){
+                        System.out.println("Помилка: " + ex.getMessage());
+                    }
+                }
+                break;
+                case 6: { //6.  Редагувати поточну таблицю в базі
+
+                }
+                break;
+                case 7: { //7.  Проекція поточної таблиці
+                    if(!db_initialized){
+                        System.out.println("Прочитайте базу даних з диску або створіть нову.");
+                        break;
+                    }
+
+                    if(!t_initialized){
+                        System.out.println("Прочитайте таблицю з диску або створіть нову.");
+                        break;
+                    }
+
+                    int columns_count;
+                    do {
+                        System.out.println("Будь ласка, введіть кількість стовпчиків в проекції:");
+                        try {
+                            textLen = System.in.read(readline);
+                            String str = new String(readline, 0, textLen, "ISO-8859-1");
+                            str = str.trim();
+                            columns_count = new Integer(str);
+                            break;
+                        } catch (IOException | NumberFormatException ex) {
+                            System.out.println("Помилка: " + ex.getMessage());
+                        }
+                    }
+                    while(true);
+
+                    List<String> columns = new ArrayList<>();
+                    for(int i = 0; i < columns_count; i++){
+                        do {
+                            System.out.println("Будь ласка, введіть назву стовпчика " + (i+1) + "/" +  columns_count + " в проекції:");
+                            try {
+                                textLen = System.in.read(readline);
+                                String str = new String(readline, 0, textLen, "ISO-8859-1");
+                                str = str.trim();
+                                columns.add(str);
+                                break;
+                            } catch (IOException | IllegalArgumentException ex) {
+                                System.out.println("Помилка: " + ex.getMessage());
+                            }
+                        }
+                        while(true);
+                    }
+
+                    Table projectedTable = t.project(columns);
+                    System.out.println("Таблицю успішно спроектовано.");
+                    projectedTable.show();
+                }
+                break;
+                case 8: { //8.  Додати до поточної таблиці новий рядок
+                    if(!db_initialized){
+                        System.out.println("Прочитайте базу даних з диску або створіть нову.");
+                        break;
+                    }
+
+                    if(!t_initialized){
+                        System.out.println("Прочитайте таблицю з диску або створіть нову.");
+                        break;
+                    }
+
+                    JSONObject row = new JSONObject();
+                    for(TableColumn tc: t.columns){
+                        do {
+                            System.out.println("Будь ласка, введіть поле \"" + tc.name + "\", тип поля \""+ Constants.GetClassName(tc.type) +"\":");
+                            try {
+                                textLen = System.in.read(readline);
+                                String str = new String(readline, 0, textLen, "ISO-8859-1");
+                                str = str.trim();
+
+                                Object o;
+                                if(tc.type == HTML.class) {
+                                    o = str;
+                                    new HTML(t.root, str).validate();
+                                }
+                                else if (tc.type == Integer.class){
+                                    o = new Integer(str);
+                                }
+                                else if (tc.type == Long.class){
+                                    o = new Long(str);
+                                }
+                                else if (tc.type == Character.class){
+                                    if(str.length()!= 1)
+                                        throw new IllegalArgumentException("Please enter exactly 1 symbol.");
+                                    o = str.substring(0, 1);
+                                }
+                                else if (tc.type == Double.class){
+                                    o = new Double(str);
+                                }
+                                else
+                                    o = null;
+                                row.put(tc.name, o);
+                                break;
+                            } catch (IOException | IllegalArgumentException ex) {
+                                System.out.println("Помилка: " + ex.getMessage());
+                            }
+                        }
+                        while(true);
+                    }
+
+                    try{
+                        t.fields.add(row);
+                        t.save();
+                        System.out.println("Новий рядок додано.");
+                        t.show();
+                    }
+                    catch(IOException ex){
+                        System.out.println("Помилка: " + ex.getMessage());
+                    }
                 }
                 break;
             }
-        } while (true);  //глобальний цикл  обробки
+        } while (true);
     }
 }
