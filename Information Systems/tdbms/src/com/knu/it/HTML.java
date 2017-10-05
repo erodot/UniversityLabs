@@ -3,8 +3,8 @@ package com.knu.it;
 import java.io.File;
 
 public class HTML {
-    public String root;
-    public String relativePath;
+    private String root;
+    private String relativePath;
 
     public HTML(String root, String relativePath){
         this.root = root;

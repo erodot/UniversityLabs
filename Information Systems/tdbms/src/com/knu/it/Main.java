@@ -1,5 +1,6 @@
-package sample;
+package com.knu.it;
 
+import com.knu.it.stages.database.chooser.ChooserController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,8 +11,11 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-        primaryStage.setTitle("Hello World");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("stages/database/chooser/chooser.fxml"));
+        Parent root = (Parent)loader.load();
+        ChooserController controller = (ChooserController)loader.getController();
+        controller.setStageAndSetupListeners(primaryStage);
+        primaryStage.setTitle("Choose database");
         primaryStage.setScene(new Scene(root, 300, 275));
         primaryStage.show();
     }
