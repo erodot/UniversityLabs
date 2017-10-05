@@ -12,11 +12,11 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("stages/database/chooser/chooser.fxml"));
-        Parent root = (Parent)loader.load();
-        ChooserController controller = (ChooserController)loader.getController();
+        Parent root = loader.load();
+        ChooserController controller = loader.getController();
         controller.setStageAndSetupListeners(primaryStage);
         primaryStage.setTitle("Choose database");
-        primaryStage.setScene(new Scene(root, 300, 275));
+        primaryStage.setScene(new Scene(root, 600, 400));
         primaryStage.show();
     }
 

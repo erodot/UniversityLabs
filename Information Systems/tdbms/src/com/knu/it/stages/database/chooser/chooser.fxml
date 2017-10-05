@@ -1,11 +1,10 @@
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.control.Label?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.HBox?>
-
-<?import javafx.scene.control.Button?>
 <VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.knu.it.stages.database.chooser.ChooserController" fx:id="window">
     <children>
         <Label text="Create database">
@@ -41,5 +40,19 @@
                 <Font size="18.0"/>
             </font>
         </Label>
+        <HBox>
+            <Label text="Path:">
+                <font>
+                    <Font size="14.0"/>
+                </font>
+            </Label>
+            <Button text="Browse" fx:id="existingDatabaseDirectoryChooser"/>
+            <Label fx:id="existingDatabasePath">
+                <font>
+                    <Font size="14.0"/>
+                </font>
+            </Label>
+        </HBox>
+        <Button text="Open database" fx:id="openExistingDatabaseButton"/>
     </children>
 </VBox>

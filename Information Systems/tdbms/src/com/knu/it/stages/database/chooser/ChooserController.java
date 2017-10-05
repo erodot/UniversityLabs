@@ -1,42 +1,70 @@
 package com.knu.it.stages.database.chooser;
 
+import com.knu.it.Function2;
 import com.knu.it.db.Database;
+import com.knu.it.stages.database.viewer.ViewerController;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import org.json.simple.parser.ParseException;
 
 import java.io.File;
 import java.io.IOException;
 
 public class ChooserController {
 
+    private Function2<Stage, Label, EventHandler<ActionEvent>> onDirectoryChoose = (Stage stage, Label path) -> (EventHandler<ActionEvent>) event -> {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        File directory = directoryChooser.showDialog(stage);
+
+        if (directory == null) {
+            path.setText("");
+        } else {
+            path.setText(directory.getAbsolutePath());
+        }
+    };
+    private void openDatabaseWindow(Database db) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../viewer/viewer.fxml"));
+            Parent root = loader.load();
+            ViewerController controller = loader.getController();
+            controller.setStageAndSetupListeners(stage, db);
+
+            Stage stage = new Stage();
+            stage.setTitle(db.name);
+            stage.setScene(new Scene(root, 600, 400));
+            stage.show();
+            this.stage.getScene().getWindow().hide();
+        }
+        catch (IOException | NullPointerException ex) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText(ex.getMessage());
+
+            alert.showAndWait();
+        }
+    }
+
+    private Stage stage;
+
     /* CREATE DATABASE */
     @FXML private TextField newDatabaseName;
     @FXML private Label newDatabasePath;
     @FXML private Button newDatabaseDirectoryChooser;
     @FXML private Button createDatabaseButton;
-
-    private File newDatabasePathDirectory;
-
-    public void setStageAndSetupListeners(Stage stage){
-        /* CREATE DATABASE */
-        newDatabaseDirectoryChooser.setOnAction(event -> {
-            DirectoryChooser directoryChooser = new DirectoryChooser();
-            newDatabasePathDirectory =
-                    directoryChooser.showDialog(stage);
-
-            if(newDatabasePathDirectory == null){
-                newDatabasePath.setText("");
-            }else{
-                newDatabasePath.setText(newDatabasePathDirectory.getAbsolutePath());
-            }
-        });
-
-        createDatabaseButton.setOnAction(event -> {
+    private EventHandler<ActionEvent> onDatabaseCreate = new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
             if(newDatabaseName.getText().isEmpty()){
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
@@ -47,7 +75,9 @@ public class ChooserController {
                 return;
             }
 
-            if(newDatabasePathDirectory == null){
+            String root = newDatabasePath.getText();
+
+            if(root.isEmpty()){
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
@@ -57,9 +87,10 @@ public class ChooserController {
                 return;
             }
 
+            root = root + "/";
             String dbname = newDatabaseName.getText();
 
-            File path = new File(newDatabasePathDirectory.getAbsolutePath() + "/" + dbname);
+            File path = new File(root + dbname);
             path.mkdirs();
 
             File dbfilepath = new File(path.getAbsolutePath() + "/db.json");
@@ -76,12 +107,7 @@ public class ChooserController {
             try {
                 Database db = new Database(dbname, path.getAbsolutePath() + "/");
                 db.save();
-
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Success");
-                alert.setHeaderText(null);
-                alert.setContentText("Нову базу \"" + db.name + "\" створено!");
-                alert.showAndWait();
+                openDatabaseWindow(db);
             }
             catch(IOException ex){
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -91,6 +117,53 @@ public class ChooserController {
 
                 alert.showAndWait();
             }
-        });
+        }
+    };
+
+    /* CHOOSE EXISTING DATABASE */
+    @FXML private Label existingDatabasePath;
+    @FXML private Button existingDatabaseDirectoryChooser;
+    @FXML private Button openExistingDatabaseButton;
+    private EventHandler<ActionEvent> onDatabaseOpenExisting = new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+            String root = existingDatabasePath.getText();
+
+            if(root.isEmpty()){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Please select path to database");
+
+                alert.showAndWait();
+                return;
+            }
+            root = root + "/";
+
+            try{
+                Database db = Database.createFromPath(root);
+                openDatabaseWindow(db);
+            }
+            catch(IOException | ParseException ex){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText(ex.getMessage());
+
+                alert.showAndWait();
+            }
+        }
+    };
+
+    public void setStageAndSetupListeners(Stage stage){
+        this.stage = stage;
+
+        /* CREATE DATABASE */
+        newDatabaseDirectoryChooser.setOnAction(onDirectoryChoose.apply(stage, newDatabasePath));
+        createDatabaseButton.setOnAction(onDatabaseCreate);
+
+        /* CHOOSE EXISTING DATABASE */
+        existingDatabaseDirectoryChooser.setOnAction(onDirectoryChoose.apply(stage, existingDatabasePath));
+        openExistingDatabaseButton.setOnAction(onDatabaseOpenExisting);
     }
 }

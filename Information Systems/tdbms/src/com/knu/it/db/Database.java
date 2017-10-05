@@ -58,7 +58,6 @@ public class Database {
     }
 
     public void save() throws IOException{
-        System.out.println("Saving to " + this.root);
         JSONObject databaseInfo = new JSONObject();
         databaseInfo.put("name", this.name);
 
