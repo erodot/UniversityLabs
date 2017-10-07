@@ -7,15 +7,16 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
+<?import javafx.geometry.Insets?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.knu.it.stages.database.viewer.ViewerController"
       prefHeight="400.0" prefWidth="600.0">
-    <children>
-        <Label fx:id="hello">
-            <font>
-                <Font size="18.0"/>
-            </font>
-        </Label>
-    </children>
+    <Hyperlink fx:id="databaseName"/>
+    <GridPane fx:id="tableGrid" hgap="5" vgap="5" gridLinesVisible="true"/>
+    <Button text="Add new table" fx:id="addNewTable">
+        <VBox.margin>
+            <Insets left="5"/>
+        </VBox.margin>
+    </Button>
 </VBox>

@@ -3,6 +3,7 @@ package com.knu.it.stages.database.chooser;
 import com.knu.it.Function2;
 import com.knu.it.db.Database;
 import com.knu.it.stages.database.viewer.ViewerController;
+import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -37,13 +38,12 @@ public class ChooserController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../viewer/viewer.fxml"));
             Parent root = loader.load();
             ViewerController controller = loader.getController();
-            controller.setStageAndSetupListeners(stage, db);
+            controller.setStageAndSetupListeners(stage, application, db);
 
             Stage stage = new Stage();
             stage.setTitle(db.name);
             stage.setScene(new Scene(root, 600, 400));
             stage.show();
-            this.stage.getScene().getWindow().hide();
         }
         catch (IOException | NullPointerException ex) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -56,6 +56,7 @@ public class ChooserController {
     }
 
     private Stage stage;
+    private Application application;
 
     /* CREATE DATABASE */
     @FXML private TextField newDatabaseName;
@@ -155,8 +156,9 @@ public class ChooserController {
         }
     };
 
-    public void setStageAndSetupListeners(Stage stage){
+    public void setStageAndSetupListeners(Stage stage, Application application){
         this.stage = stage;
+        this.application = application;
 
         /* CREATE DATABASE */
         newDatabaseDirectoryChooser.setOnAction(onDirectoryChoose.apply(stage, newDatabasePath));

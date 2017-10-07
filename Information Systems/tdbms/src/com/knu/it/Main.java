@@ -14,7 +14,7 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("stages/database/chooser/chooser.fxml"));
         Parent root = loader.load();
         ChooserController controller = loader.getController();
-        controller.setStageAndSetupListeners(primaryStage);
+        controller.setStageAndSetupListeners(primaryStage, this);
         primaryStage.setTitle("Choose database");
         primaryStage.setScene(new Scene(root, 600, 400));
         primaryStage.show();
