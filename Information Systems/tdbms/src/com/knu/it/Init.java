@@ -25,9 +25,9 @@ public class Init {
         Table t = new Table("Untitled", "Untitled", "Untitled");
         boolean db_initialized = false;
         boolean t_initialized = false;
-        String[] menu = {"1.  Прочитати базу даних з диску",
+        String[] menu = {"+1.  Прочитати базу даних з диску",
                          "2.  Прочитати таблицю з поточної бази даних",
-                         "3.  Створити базу",
+                         "+3.  Створити базу",
                          "4.  Створити таблицю в поточній базі",
                          "5.  Видалити таблицю з поточної бази",
                          "6.  Проекція поточної таблиці",

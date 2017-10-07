@@ -62,62 +62,58 @@ public class ChooserController {
     @FXML private TextField newDatabaseName;
     @FXML private Label newDatabasePath;
     @FXML private Button newDatabaseDirectoryChooser;
-    @FXML private Button createDatabaseButton;
-    private EventHandler<ActionEvent> onDatabaseCreate = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent event) {
-            if(newDatabaseName.getText().isEmpty()){
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText(null);
-                alert.setContentText("Name of database cannot be empty");
+    @FXML private void onDatabaseCreate(){
+        if(newDatabaseName.getText().isEmpty()){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Name of database cannot be empty");
 
-                alert.showAndWait();
-                return;
-            }
+            alert.showAndWait();
+            return;
+        }
 
-            String root = newDatabasePath.getText();
+        String root = newDatabasePath.getText();
 
-            if(root.isEmpty()){
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText(null);
-                alert.setContentText("Please select path to database");
+        if(root.isEmpty()){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select path to database");
 
-                alert.showAndWait();
-                return;
-            }
+            alert.showAndWait();
+            return;
+        }
 
-            root = root + "/";
-            String dbname = newDatabaseName.getText();
+        root = root + "/";
+        String dbname = newDatabaseName.getText();
 
-            File path = new File(root + dbname);
-            path.mkdirs();
+        File path = new File(root + dbname);
+        path.mkdirs();
 
-            File dbfilepath = new File(path.getAbsolutePath() + "/db.json");
-            if(dbfilepath.exists()){
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText(null);
-                alert.setContentText("Database already exists on this path. Please try another path.");
+        File dbfilepath = new File(path.getAbsolutePath() + "/db.json");
+        if(dbfilepath.exists()){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Database already exists on this path. Please try another path.");
 
-                alert.showAndWait();
-                return;
-            }
+            alert.showAndWait();
+            return;
+        }
 
-            try {
-                Database db = new Database(dbname, path.getAbsolutePath() + "/");
-                db.save();
-                openDatabaseWindow(db);
-            }
-            catch(IOException ex){
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText(null);
-                alert.setContentText(ex.getMessage());
+        try {
+            Database db = new Database(dbname, path.getAbsolutePath() + "/");
+            db.save();
+            openDatabaseWindow(db);
+        }
+        catch(IOException ex){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText(ex.getMessage());
 
-                alert.showAndWait();
-            }
+            alert.showAndWait();
         }
     };
 
@@ -125,34 +121,31 @@ public class ChooserController {
     @FXML private Label existingDatabasePath;
     @FXML private Button existingDatabaseDirectoryChooser;
     @FXML private Button openExistingDatabaseButton;
-    private EventHandler<ActionEvent> onDatabaseOpenExisting = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent event) {
-            String root = existingDatabasePath.getText();
+    @FXML private void onDatabaseOpenExisting(){
+        String root = existingDatabasePath.getText();
 
-            if(root.isEmpty()){
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText(null);
-                alert.setContentText("Please select path to database");
+        if(root.isEmpty()){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select path to database");
 
-                alert.showAndWait();
-                return;
-            }
-            root = root + "/";
+            alert.showAndWait();
+            return;
+        }
+        root = root + "/";
 
-            try{
-                Database db = Database.createFromPath(root);
-                openDatabaseWindow(db);
-            }
-            catch(IOException | ParseException ex){
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText(null);
-                alert.setContentText(ex.getMessage());
+        try{
+            Database db = Database.createFromPath(root);
+            openDatabaseWindow(db);
+        }
+        catch(IOException | ParseException ex){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText(ex.getMessage());
 
-                alert.showAndWait();
-            }
+            alert.showAndWait();
         }
     };
 
@@ -162,10 +155,8 @@ public class ChooserController {
 
         /* CREATE DATABASE */
         newDatabaseDirectoryChooser.setOnAction(onDirectoryChoose.apply(stage, newDatabasePath));
-        createDatabaseButton.setOnAction(onDatabaseCreate);
 
         /* CHOOSE EXISTING DATABASE */
         existingDatabaseDirectoryChooser.setOnAction(onDirectoryChoose.apply(stage, existingDatabasePath));
-        openExistingDatabaseButton.setOnAction(onDatabaseOpenExisting);
     }
 }

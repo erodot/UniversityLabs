@@ -5,7 +5,6 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 
 <?import javafx.geometry.Insets?>
 <VBox xmlns="http://javafx.com/javafx"
@@ -14,9 +13,14 @@
       prefHeight="400.0" prefWidth="600.0">
     <Hyperlink fx:id="databaseName"/>
     <GridPane fx:id="tableGrid" hgap="5" vgap="5" gridLinesVisible="true"/>
-    <Button text="Add new table" fx:id="addNewTable">
+    <Hyperlink text="Add new table" onAction="#addNewTable" style="-fx-border-style: hidden">
         <VBox.margin>
             <Insets left="5"/>
         </VBox.margin>
-    </Button>
+    </Hyperlink>
+    <Hyperlink text="Refresh" onAction="#refresh" style="-fx-border-style: hidden">
+        <VBox.margin>
+            <Insets left="5"/>
+        </VBox.margin>
+    </Hyperlink>
 </VBox>
