@@ -80,7 +80,9 @@ public class ViewerController {
             openFile(database.root + "db.json");
         });
 
+        Node node = tableGrid.getChildren().get(0);
         tableGrid.getChildren().clear();
+        tableGrid.getChildren().add(0,node);
         tableGrid.setPadding(new Insets(5,5,5,5));
         Label tableHeaderName = new Label("Table Name");
         Label tableHeaderPath = new Label("Table Path");
