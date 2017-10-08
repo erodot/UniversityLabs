@@ -16,7 +16,7 @@ public class Main extends Application {
         DatabaseChooserController controller = loader.getController();
         controller.setStageAndSetupListeners(primaryStage, this);
         primaryStage.setTitle("Choose database");
-        primaryStage.setScene(new Scene(root, 600, 400));
+        primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
 

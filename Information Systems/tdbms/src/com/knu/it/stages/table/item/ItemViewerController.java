@@ -2,11 +2,9 @@ package com.knu.it.stages.table.item;
 
 import com.knu.it.Constants;
 import com.knu.it.HTML;
-import com.knu.it.db.Database;
 import com.knu.it.db.Table;
 import com.knu.it.db.TableColumn;
 import com.knu.it.stages.table.viewer.TableViewerController;
-import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;

@@ -1,7 +1,6 @@
 package com.knu.it.db;
 
 import com.knu.it.Constants;
-import com.knu.it.HTML;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;

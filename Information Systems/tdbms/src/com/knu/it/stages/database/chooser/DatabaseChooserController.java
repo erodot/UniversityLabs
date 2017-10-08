@@ -44,6 +44,7 @@ public class DatabaseChooserController {
             stage.setTitle(db.name);
             stage.setScene(new Scene(root, 600, 400));
             stage.show();
+            this.stage.hide();
         }
         catch (IOException | NullPointerException ex) {
             Alert alert = new Alert(Alert.AlertType.ERROR);

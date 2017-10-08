@@ -10,7 +10,6 @@ import com.knu.it.stages.database.viewer.DatabaseViewerController;
 import com.knu.it.stages.table.item.ItemViewerController;
 import javafx.application.Application;
 import javafx.application.HostServices;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,19 +20,17 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @SuppressWarnings("deprecation")
@@ -242,7 +239,7 @@ public class TableViewerController {
             Stage stage = new Stage();
             stage.setTitle("Cell editing");
             controller.setStageAndSetupListeners(stage, this, table, cellContent, row, column);
-            stage.setScene(new Scene(root, 450, 300));
+            stage.setScene(new Scene(root));
             stage.show();
         }
         catch (IOException | NullPointerException ex) {
@@ -331,4 +328,84 @@ public class TableViewerController {
 
         return dataValid;
     };
+
+    @FXML private void project(ActionEvent event){
+        if(event != null) {
+            Hyperlink link = (Hyperlink) event.getSource();
+            if (link != null)
+                link.setVisited(false);
+        }
+
+        Dialog<List<String>> dialog = new Dialog<>();
+
+        dialog.setTitle("Project Table");
+        dialog.setHeaderText("Please select columns:");
+
+        ButtonType projectButtonType = new ButtonType("Project", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(projectButtonType, ButtonType.CANCEL);
+
+        List<CheckBox> checkBoxes = new ArrayList<>();
+        VBox vbox = new VBox();
+
+        for(TableColumn column: table.columns){
+            CheckBox checkBox = new CheckBox(column.name);
+            checkBox.setPadding(new Insets(5,5,5,5));
+            checkBoxes.add(checkBox);
+            vbox.getChildren().add(checkBox);
+        }
+
+        dialog.getDialogPane().setContent(vbox);
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == projectButtonType) {
+                List<String> checked = new ArrayList<>();
+                checkBoxes.forEach(checkBox -> {
+                    if(checkBox.isSelected())
+                        checked.add(checkBox.getText());
+                });
+                return checked;
+            }
+            return null;
+        });
+
+        Optional<List<String>> result = dialog.showAndWait();
+
+        result.ifPresent(columnNames -> {
+            Table table = this.table.project(columnNames);
+
+            Alert alert = new Alert(Alert.AlertType.NONE);
+            alert.setTitle("Table Projection");
+            alert.setHeaderText(null);
+
+            GridPane grid = new GridPane();
+            grid.setGridLinesVisible(true);
+            for(int i=0; i<table.columns.size(); i++){
+                TableColumn column = table.columns.get(i);
+                Label headerLabel = new Label(column.name);
+                headerLabel.setPadding(new Insets(5,5,5,5));
+                grid.add(headerLabel, i, 0);
+            }
+
+            int gridRow = 1;
+            for(Object orow: table.fields){
+                JSONObject jrow = (JSONObject) orow;
+                for(int i=0; i<table.columns.size(); i++){
+                    final int rowNum = gridRow - 1;
+                    TableColumn column = table.columns.get(i);
+                    Label cell = new Label();
+                    String cellContent = jrow.get(column.name).toString();
+                    cell.setText(cellContent.length() > 30 ? cellContent.substring(0,30) + "..." : cellContent);
+                    cell.setPadding(new Insets(5, 5, 5, 5));
+
+                    grid.add(cell, i, gridRow);
+                }
+                gridRow++;
+            }
+
+            alert.getDialogPane().setContent(grid);
+            alert.getDialogPane().getButtonTypes().add(ButtonType.OK);
+
+            alert.showAndWait();
+        });
+    }
 }

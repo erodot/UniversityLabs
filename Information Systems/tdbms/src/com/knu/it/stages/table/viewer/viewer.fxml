@@ -24,6 +24,11 @@
             <Insets left="5"/>
         </VBox.margin>
     </Hyperlink>
+    <Hyperlink text="Project" onAction="#project" style="-fx-border-style: hidden">
+        <VBox.margin>
+            <Insets left="5"/>
+        </VBox.margin>
+    </Hyperlink>
     <Hyperlink text="Delete table" onAction="#deleteTable" style="-fx-border-style: hidden">
         <VBox.margin>
             <Insets left="5"/>
