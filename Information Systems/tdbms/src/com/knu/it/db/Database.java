@@ -24,39 +24,6 @@ public class Database {
         this.tables = new ArrayList<>();
     }
 
-    public void show(){
-        final int column_width = Constants.COLUMN_WIDTH;
-        int columns_length = 2;
-        String horizontal_line = new String(new char[columns_length * (column_width + 1)]).replace("\0", "-") + "\n";;
-
-        StringBuilder table = new StringBuilder();
-        table.append(horizontal_line);
-        StringBuilder field = new StringBuilder("Name");
-        while(field.length() < column_width)
-            field.append(" ");
-        table.append("|" + field.toString());
-        field = new StringBuilder("Path");
-        while(field.length() < column_width)
-            field.append(" ");
-        table.append("|" + field.toString());
-        table.append("|\n");
-
-        for(Table t: tables){
-            table.append(horizontal_line);
-            field = new StringBuilder(t.name);
-            while(field.length() < column_width)
-                field.append(" ");
-            table.append("|" + field.toString());
-            field = new StringBuilder(t.path);
-            while(field.length() < column_width)
-                field.append(" ");
-            table.append("|" + field.toString());
-            table.append("|\n");
-        }
-        table.append(horizontal_line);
-        System.out.println(table.toString());
-    }
-
     public void save() throws IOException{
         JSONObject databaseInfo = new JSONObject();
         databaseInfo.put("name", this.name);

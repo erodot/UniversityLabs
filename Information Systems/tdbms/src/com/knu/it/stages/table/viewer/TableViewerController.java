@@ -1,5 +1,8 @@
 package com.knu.it.stages.table.viewer;
 
+import com.knu.it.Constants;
+import com.knu.it.Function2;
+import com.knu.it.HTML;
 import com.knu.it.db.Database;
 import com.knu.it.db.Table;
 import com.knu.it.db.TableColumn;
@@ -7,6 +10,7 @@ import com.knu.it.stages.database.viewer.DatabaseViewerController;
 import com.knu.it.stages.table.item.ItemViewerController;
 import javafx.application.Application;
 import javafx.application.HostServices;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,18 +18,23 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Hyperlink;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Pair;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @SuppressWarnings("deprecation")
 public class TableViewerController {
@@ -73,7 +82,7 @@ public class TableViewerController {
                 TableColumn column = table.columns.get(i);
                 Hyperlink cell = new Hyperlink();
                 String cellContent = jrow.get(column.name).toString();
-                cell.setText(cellContent);
+                cell.setText(cellContent.length() > 30 ? cellContent.substring(0,30) + "..." : cellContent);
                 cell.setStyle("-fx-underline: false;");
                 cell.setOnAction(event -> {
                     openCellInfo(cellContent, rowNum, column);
@@ -124,7 +133,104 @@ public class TableViewerController {
     }
 
     @FXML private void addNewRow(ActionEvent event){
+        if(event != null) {
+            Hyperlink link = (Hyperlink) event.getSource();
+            if (link != null)
+                link.setVisited(false);
+        }
 
+        Dialog<JSONObject> dialog = new Dialog<>();
+        dialog.setTitle("Adding New Row");
+        dialog.setHeaderText("Please enter row info:");
+
+        ButtonType addRowType = new ButtonType("Add row", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(addRowType, ButtonType.CANCEL);
+
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
+
+        Node addRow = dialog.getDialogPane().lookupButton(addRowType);
+        addRow.setDisable(true);
+
+        List<Pair<TableColumn, TextField>> textFieldInputs = new ArrayList<>();
+        List<Pair<TableColumn, TextArea>> textAreaInputs = new ArrayList<>();
+
+        for(int i=0; i<table.columns.size(); i++){
+            TableColumn column = table.columns.get(i);
+
+            Label label = new Label(column.name);
+            grid.add(label, 0, i);
+
+            if(column.type == HTML.class){
+                TextArea textArea = new TextArea();
+                textArea.setPromptText("typeof \"" + Constants.GetClassName(column.type) + "\"");
+                textArea.textProperty().addListener((observable, oldValue, newValue) -> addRow.setDisable(!validateData.apply(textFieldInputs, textAreaInputs)));
+                grid.add(textArea, 1, i);
+                textAreaInputs.add(new Pair<>(column, textArea));
+            }
+            else{
+                TextField textField = new TextField();
+                textField.setPromptText("typeof \"" + Constants.GetClassName(column.type) + "\"");
+                textField.textProperty().addListener((observable, oldValue, newValue) -> addRow.setDisable(!validateData.apply(textFieldInputs, textAreaInputs)));
+                grid.add(textField, 1, i);
+                textFieldInputs.add(new Pair<>(column, textField));
+            }
+        }
+
+        scrollPane.setContent(grid);
+        dialog.getDialogPane().setContent(scrollPane);
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == addRowType) {
+                JSONObject array = new JSONObject();
+                try {
+                    for (Pair<TableColumn, TextField> pair : textFieldInputs) {
+                        Class<?> type = pair.getKey().type;
+                        Object value = validateProperty(pair.getValue().getText(), type);
+                        array.put(pair.getKey().name, value);
+                    }
+                    for (Pair<TableColumn, TextArea> pair : textAreaInputs) {
+                        Class<?> type = pair.getKey().type;
+                        Object value = validateProperty(pair.getValue().getText(), type);
+                        array.put(pair.getKey().name, value);
+                    }
+                }
+                catch(Exception ex){
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText(null);
+                    alert.setContentText(ex.getMessage());
+
+                    alert.showAndWait();
+                    return null;
+                }
+                return array;
+            }
+            return null;
+        });
+
+        Optional<JSONObject> result = dialog.showAndWait();
+
+        result.ifPresent(row -> {
+            try{
+                table.fields.add(row);
+                table.save();
+                this.refreshTable();
+            }
+            catch (IOException ex){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText(ex.getMessage());
+
+                alert.showAndWait();
+            }
+        });
     }
 
     private void openCellInfo(String cellContent, int row, TableColumn column){
@@ -134,7 +240,7 @@ public class TableViewerController {
             ItemViewerController controller = loader.getController();
 
             Stage stage = new Stage();
-            stage.setTitle("\"" + cellContent + "\" cell editing");
+            stage.setTitle("Cell editing");
             controller.setStageAndSetupListeners(stage, this, table, cellContent, row, column);
             stage.setScene(new Scene(root, 450, 300));
             stage.show();
@@ -148,4 +254,81 @@ public class TableViewerController {
             alert.showAndWait();
         }
     }
+
+    @FXML private void deleteTable(ActionEvent event){
+        if(event != null) {
+            Hyperlink link = (Hyperlink) event.getSource();
+            if (link != null)
+                link.setVisited(false);
+        }
+
+        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationAlert.setTitle("Delete");
+        confirmationAlert.setHeaderText(null);
+        confirmationAlert.setContentText("Are you sure you want to delete table?");
+
+        Optional<ButtonType> result = confirmationAlert.showAndWait();
+
+        if (result.get() == ButtonType.OK){
+            try{
+                database.tables.remove(table);
+                database.save();
+
+                File tableFile = new File(database.root + table.path);
+                tableFile.delete();
+
+                stage.hide();
+            }
+            catch(Exception ex){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText(ex.getMessage());
+
+                alert.showAndWait();
+                return;
+            }
+
+            databasecontroller.refresh(null);
+        }
+    }
+
+    private Object validateProperty(String str, Class<?> type) throws IllegalArgumentException{
+        Object value;
+        if(type == HTML.class) {
+            value = str;
+        }
+        else if (type == Integer.class){
+            value = new Integer(str);
+        }
+        else if (type == Long.class){
+            value = new Long(str);
+        }
+        else if (type == Character.class){
+            if(str.length()!= 1)
+                throw new IllegalArgumentException("Please enter exactly 1 symbol.");
+            value = str.substring(0, 1);
+        }
+        else if (type == Double.class){
+            value = new Double(str);
+        }
+        else
+            value = null;
+
+        return value;
+    }
+
+    private Function2<List<Pair<TableColumn, TextField>>, List<Pair<TableColumn, TextArea>>, Boolean> validateData = (List<Pair<TableColumn, TextField>> textFields, List<Pair<TableColumn, TextArea>> textAreas) -> {
+        boolean dataValid = true;
+
+        for(Pair<TableColumn, TextField> pair: textFields)
+            if(pair.getValue().getText().trim().isEmpty())
+                dataValid = false;
+
+        for(Pair<TableColumn, TextArea> pair: textAreas)
+            if(pair.getValue().getText().trim().isEmpty())
+                dataValid = false;
+
+        return dataValid;
+    };
 }

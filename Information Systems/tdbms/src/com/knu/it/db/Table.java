@@ -62,45 +62,6 @@ public class Table {
         return new Table(newTableName, null, null, newTableColumns, newTableFields);
     }
 
-    public void show(){
-        final int column_width = Constants.COLUMN_WIDTH;
-        final int number_column_width = 5;
-        int columns_length = this.columns.size();
-        String horizontal_line = new String(new char[columns_length * (column_width + 1) + number_column_width + 1]).replace("\0", "-") + "\n";;
-
-        StringBuilder table = new StringBuilder();
-        table.append(horizontal_line);
-        table.append("|#");
-        for(int i=0; i< number_column_width-1; i++)
-            table.append(" ");
-        this.columns.forEach(col -> {
-            StringBuilder field = new StringBuilder(col.name + ", " + col.type.getSimpleName());
-            while(field.length() < column_width)
-                field.append(" ");
-            table.append("|" + field.toString());
-        });
-        table.append("|\n");
-
-        int row_num = 0;
-        for(Object orow: this.fields){
-            JSONObject jrow = (JSONObject)orow;
-            table.append(horizontal_line);
-            table.append("|");
-            table.append(row_num);
-            table.append(new String(new char[number_column_width - Integer.toString(row_num).length()]).replace("\0", " "));
-            row_num++;
-            this.columns.forEach(col -> {
-                StringBuilder field = new StringBuilder(jrow.get(col.name).toString());
-                while(field.length() < column_width)
-                    field.append(" ");
-                table.append("|" + field.toString());
-            });
-            table.append("|\n");
-        }
-        table.append(horizontal_line);
-        System.out.println(table.toString());
-    }
-
     public void save() throws IOException{
         JSONObject tableInfo = new JSONObject();
         tableInfo.put("fields", this.fields);
@@ -165,10 +126,7 @@ public class Table {
 
         IllegalArgumentException ex = new IllegalArgumentException("In table \"" + name + "\" field \"" + value + "\" is not type of \"" + column.type.getSimpleName() + "\"");
 
-        if(column.type == HTML.class){
-            new HTML(this.root, (String) value).validate();
-        }
-        else if(column.type == Integer.class){
+        if(column.type == Integer.class){
             if(!(valueClass == Long.class && (long)value <= Integer.MAX_VALUE))
                 throw ex;
         }

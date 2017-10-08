@@ -9,9 +9,9 @@ import com.knu.it.stages.table.viewer.TableViewerController;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
 public class ItemViewerController {
@@ -23,6 +23,8 @@ public class ItemViewerController {
 
     @FXML private TextField propertyType;
     @FXML private TextField propertyValue;
+    @FXML private TextArea propertyValueArea;
+    @FXML private Button showHTMLButton;
     @FXML private GridPane grid;
 
     public void setStageAndSetupListeners(Stage stage, TableViewerController tablecontroller, Table table, String cellContent, int row, TableColumn column){
@@ -35,12 +37,22 @@ public class ItemViewerController {
         grid.setPadding(new Insets(5,5,5,5));
 
         propertyType.setText(Constants.GetClassName(column.type));
-        propertyValue.setText(cellContent);
+
+        if(column.type == HTML.class){
+            propertyValue.setVisible(false);
+            propertyValueArea.setVisible(true);
+            propertyValueArea.setManaged(true);
+            propertyValueArea.setText(cellContent);
+            showHTMLButton.setVisible(true);
+        }
+        else {
+            propertyValue.setText(cellContent);
+        }
     }
 
     @FXML private void updateProperty(){
         try{
-            Object value = validateProperty(propertyValue.getText(), column.type);
+            Object value = validateProperty((column.type == HTML.class ? propertyValueArea.getText() : propertyValue.getText()), column.type);
             table.update(row, column, value);
             table.save();
             tablecontroller.refresh(null);
@@ -80,5 +92,19 @@ public class ItemViewerController {
             value = null;
 
         return value;
+    }
+
+    @FXML private void showHTML(){
+        Alert alert = new Alert(Alert.AlertType.NONE);
+        alert.setTitle("HTML Viewer");
+        alert.setHeaderText(null);
+
+        WebView content = new WebView();
+        content.getEngine().loadContent(propertyValueArea.getText());
+
+        alert.getDialogPane().setContent(content);
+        alert.getDialogPane().getButtonTypes().add(ButtonType.OK);
+
+        alert.showAndWait();
     }
 }
