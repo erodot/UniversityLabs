@@ -77,7 +77,7 @@ public class Database {
             JSONObject jtableinfo = (JSONObject) otableinfo;
             String tname = (String) jtableinfo.get("name");
             String tpath = (String) jtableinfo.get("path");
-            Table table = new Table(tname, tpath, this.root);
+            Table table = new Table(tname, this.root, tpath);
             tables.add(table);
         }
 

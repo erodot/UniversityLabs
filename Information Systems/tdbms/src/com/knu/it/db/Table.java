@@ -20,7 +20,7 @@ public class Table {
     public JSONArray fields;
 
     /* PUBLIC METHODS */
-    public Table(String name, String path, String root){ // initialization from file
+    public Table(String name, String root, String path){ // initialization from file
         this.name = name;
         this.path = path;
         this.root = root;
@@ -126,7 +126,7 @@ public class Table {
         IllegalArgumentException ex = new IllegalArgumentException("In table \"" + name + "\" field \"" + value + "\" is not type of \"" + column.type.getSimpleName() + "\"");
 
         if(column.type == Integer.class){
-            if(!(valueClass == Long.class && (long)value <= Integer.MAX_VALUE))
+            if(!(valueClass == Long.class && (long)value <= Integer.MAX_VALUE && (long)value >= Integer.MIN_VALUE))
                 throw ex;
         }
         else if(column.type == Long.class){
