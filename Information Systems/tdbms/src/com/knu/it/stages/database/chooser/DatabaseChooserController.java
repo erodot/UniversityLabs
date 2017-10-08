@@ -2,7 +2,7 @@ package com.knu.it.stages.database.chooser;
 
 import com.knu.it.Function2;
 import com.knu.it.db.Database;
-import com.knu.it.stages.database.viewer.ViewerController;
+import com.knu.it.stages.database.viewer.DatabaseViewerController;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -21,7 +21,7 @@ import org.json.simple.parser.ParseException;
 import java.io.File;
 import java.io.IOException;
 
-public class ChooserController {
+public class DatabaseChooserController {
 
     private Function2<Stage, Label, EventHandler<ActionEvent>> onDirectoryChoose = (Stage stage, Label path) -> (EventHandler<ActionEvent>) event -> {
         DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -37,7 +37,7 @@ public class ChooserController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../viewer/viewer.fxml"));
             Parent root = loader.load();
-            ViewerController controller = loader.getController();
+            DatabaseViewerController controller = loader.getController();
             controller.setStageAndSetupListeners(stage, application, db);
 
             Stage stage = new Stage();

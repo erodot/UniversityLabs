@@ -1,6 +1,6 @@
 package com.knu.it;
 
-import com.knu.it.stages.database.chooser.ChooserController;
+import com.knu.it.stages.database.chooser.DatabaseChooserController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,7 +13,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("stages/database/chooser/chooser.fxml"));
         Parent root = loader.load();
-        ChooserController controller = loader.getController();
+        DatabaseChooserController controller = loader.getController();
         controller.setStageAndSetupListeners(primaryStage, this);
         primaryStage.setTitle("Choose database");
         primaryStage.setScene(new Scene(root, 600, 400));

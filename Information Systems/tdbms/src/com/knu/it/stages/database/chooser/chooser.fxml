@@ -6,7 +6,7 @@
 <?import javafx.scene.text.*?>
 
 <?import javafx.geometry.Insets?>
-<GridPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.knu.it.stages.database.chooser.ChooserController"
+<GridPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.knu.it.stages.database.chooser.DatabaseChooserController"
           hgap="5" vgap="5" minWidth="600">
     <padding>
         <Insets left="10" top="10"/>

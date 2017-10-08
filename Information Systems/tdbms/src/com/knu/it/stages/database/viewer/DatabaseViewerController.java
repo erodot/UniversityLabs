@@ -5,14 +5,13 @@ import com.knu.it.Function2;
 import com.knu.it.db.Database;
 import com.knu.it.db.Table;
 import com.knu.it.db.TableColumn;
-import com.sun.org.apache.xpath.internal.operations.Bool;
+import com.knu.it.stages.table.viewer.TableViewerController;
 import javafx.application.Application;
 import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -34,7 +33,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.*;
 
-public class ViewerController {
+public class DatabaseViewerController {
 
     private Stage stage;
     private Database database;
@@ -47,11 +46,11 @@ public class ViewerController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../../table/viewer/viewer.fxml"));
             Parent root = loader.load();
-            com.knu.it.stages.table.viewer.ViewerController controller = loader.getController();
-            controller.setStageAndSetupListeners(stage, application, database, table);
+            TableViewerController controller = loader.getController();
 
             Stage stage = new Stage();
             stage.setTitle(table.name);
+            controller.setStageAndSetupListeners(stage, this, application, database, table);
             stage.setScene(new Scene(root, 600, 400));
             stage.show();
         }
@@ -95,6 +94,7 @@ public class ViewerController {
         for (Table table : database.tables) {
             Hyperlink tableName = new Hyperlink();
             tableName.setText(table.name);
+            tableName.setStyle("-fx-underline: false;");
             tableName.setOnAction(event -> {
                 openTableWindow(table);
             });
@@ -104,6 +104,7 @@ public class ViewerController {
 
             Hyperlink tablePath = new Hyperlink();
             tablePath.setText(table.path);
+            tablePath.setStyle("-fx-underline: false;");
             tablePath.setOnAction(event -> {
                 openFile(database.root + table.path);
             });
@@ -245,8 +246,13 @@ public class ViewerController {
         return dataValid;
     };
 
-    @FXML private void refresh(ActionEvent event){
-        ((Hyperlink)event.getSource()).setVisited(false);
+    @FXML public void refresh(ActionEvent event){
+        if(event != null) {
+            Hyperlink link = (Hyperlink) event.getSource();
+            if(link != null)
+                link.setVisited(false);
+        }
+
         try {
             database = Database.createFromPath(database.root);
             this.refreshTable();
