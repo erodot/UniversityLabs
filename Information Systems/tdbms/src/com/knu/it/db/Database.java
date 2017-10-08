@@ -47,14 +47,7 @@ public class Database {
         }
     }
 
-    public boolean doesTableExist(String tablename){
-        for(Table t: tables)
-            if(t.name.equals(tablename))
-                return true;
-        return false;
-    }
-
-    public static Database createFromPath(String root) throws IOException, ParseException{
+    public static Database loadFromPath(String root) throws IOException, ParseException{
         JSONObject jdb = (JSONObject) Constants.jsonParser.parse(new FileReader(root + "db.json"));
 
         String db_name_string = (String) jdb.get("name");

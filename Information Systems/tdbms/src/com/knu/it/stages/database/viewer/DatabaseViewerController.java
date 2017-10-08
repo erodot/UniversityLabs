@@ -254,7 +254,7 @@ public class DatabaseViewerController {
         }
 
         try {
-            database = Database.createFromPath(database.root);
+            database = Database.loadFromPath(database.root);
             this.refreshTable();
         }
         catch (IOException | ParseException ex){

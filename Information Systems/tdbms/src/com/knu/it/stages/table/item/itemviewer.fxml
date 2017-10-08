@@ -19,5 +19,5 @@
     <TextArea fx:id="propertyValueArea" GridPane.columnIndex="1" GridPane.rowIndex="2" visible="false" managed="false"/>
 
     <Button text="Update property" onAction="#updateProperty" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
-    <Button text="Show HTML" fx:id="showHTMLButton" onAction="#showHTML" GridPane.columnIndex="1" GridPane.rowIndex="4" visible="false"/>
+    <Button text="Show HTML" fx:id="showHTMLButton" onAction="#showHTML" GridPane.columnIndex="1" GridPane.rowIndex="4" visible="false" managed="false"/>
 </GridPane>

@@ -137,7 +137,7 @@ public class DatabaseChooserController {
         root = root + "/";
 
         try{
-            Database db = Database.createFromPath(root);
+            Database db = Database.loadFromPath(root);
             openDatabaseWindow(db);
         }
         catch(IOException | ParseException ex){

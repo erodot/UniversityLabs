@@ -42,6 +42,7 @@ public class ItemViewerController {
             propertyValueArea.setManaged(true);
             propertyValueArea.setText(cellContent);
             showHTMLButton.setVisible(true);
+            showHTMLButton.setManaged(true);
         }
         else {
             propertyValue.setText(cellContent);

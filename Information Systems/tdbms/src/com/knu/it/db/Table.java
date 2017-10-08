@@ -20,7 +20,7 @@ public class Table {
     public JSONArray fields;
 
     /* PUBLIC METHODS */
-    public Table(String name, String root, String path){ // initialization from file
+    Table(String name, String root, String path){ // initialization from file
         this.name = name;
         this.path = path;
         this.root = root;
@@ -109,7 +109,7 @@ public class Table {
         fields = (JSONArray)jtable.get("fields");
     }
 
-    public void validate() throws IllegalArgumentException {
+    void validate() throws IllegalArgumentException {
         for(Object ofield:fields){
             JSONObject jfield = (JSONObject)ofield;
             for(TableColumn column: columns){
@@ -120,7 +120,7 @@ public class Table {
     }
 
     /* PRIVATE METHODS */
-    public void validateValue(Object value, TableColumn column) throws IllegalArgumentException{
+    void validateValue(Object value, TableColumn column) throws IllegalArgumentException{
         Class<?> valueClass = value.getClass();
 
         IllegalArgumentException ex = new IllegalArgumentException("In table \"" + name + "\" field \"" + value + "\" is not type of \"" + column.type.getSimpleName() + "\"");

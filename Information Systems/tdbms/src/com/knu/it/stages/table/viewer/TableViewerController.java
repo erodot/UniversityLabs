@@ -113,7 +113,7 @@ public class TableViewerController {
 
         try {
             databasecontroller.refresh(null);
-            database = Database.createFromPath(database.root);
+            database = Database.loadFromPath(database.root);
             table = database.getTableByName(table.name);
         }
         catch(Exception ex){
