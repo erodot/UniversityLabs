@@ -1,10 +1,10 @@
-package com.knu.it.stages.table.item;
+package com.knu.it.javafx.table.item;
 
 import com.knu.it.Constants;
 import com.knu.it.HTML;
-import com.knu.it.db.Table;
-import com.knu.it.db.TableColumn;
-import com.knu.it.stages.table.viewer.TableViewerController;
+import com.knu.it.db.table.ITable;
+import com.knu.it.db.table.column.ITableColumn;
+import com.knu.it.javafx.table.viewer.TableViewerController;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
@@ -15,9 +15,9 @@ import javafx.stage.Stage;
 public class ItemViewerController {
     private Stage stage;
     private TableViewerController tablecontroller;
-    private Table table;
+    private ITable table;
     private int row;
-    private TableColumn column;
+    private ITableColumn column;
 
     @FXML private TextField propertyType;
     @FXML private TextField propertyValue;
@@ -25,7 +25,7 @@ public class ItemViewerController {
     @FXML private Button showHTMLButton;
     @FXML private GridPane grid;
 
-    public void setStageAndSetupListeners(Stage stage, TableViewerController tablecontroller, Table table, String cellContent, int row, TableColumn column){
+    public void setStageAndSetupListeners(Stage stage, TableViewerController tablecontroller, ITable table, String cellContent, int row, ITableColumn column){
         this.stage = stage;
         this.tablecontroller = tablecontroller;
         this.table = table;
@@ -34,9 +34,9 @@ public class ItemViewerController {
 
         grid.setPadding(new Insets(5,5,5,5));
 
-        propertyType.setText(Constants.GetClassName(column.type));
+        propertyType.setText(Constants.GetClassName(column.getType()));
 
-        if(column.type == HTML.class){
+        if(column.getType() == HTML.class){
             propertyValue.setVisible(false);
             propertyValueArea.setVisible(true);
             propertyValueArea.setManaged(true);
@@ -51,7 +51,7 @@ public class ItemViewerController {
 
     @FXML private void updateProperty(){
         try{
-            Object value = validateProperty((column.type == HTML.class ? propertyValueArea.getText() : propertyValue.getText()), column.type);
+            Object value = validateProperty((column.getType() == HTML.class ? propertyValueArea.getText() : propertyValue.getText()), column.getType());
             table.update(row, column, value);
             table.save();
             tablecontroller.refresh(null);

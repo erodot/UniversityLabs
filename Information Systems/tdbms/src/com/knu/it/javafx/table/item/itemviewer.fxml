@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 <GridPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.knu.it.stages.table.item.ItemViewerController"
-    hgap="5" vgap="5" fx:id="grid">
+          xmlns:fx="http://javafx.com/fxml"
+          fx:controller="com.knu.it.javafx.table.item.ItemViewerController"
+          hgap="5" vgap="5" fx:id="grid">
     <Label text="Property type: " GridPane.columnIndex="0" GridPane.rowIndex="0" minWidth="100"/>
     <TextField fx:id="propertyType" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 

@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
-<?import javafx.scene.text.Font?>
-<?import javafx.geometry.Insets?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.knu.it.stages.table.viewer.TableViewerController"
+      fx:controller="com.knu.it.javafx.table.viewer.TableViewerController"
       prefHeight="400.0" prefWidth="600.0">
     <Hyperlink fx:id="tableName" underline="false"/>
     <GridPane fx:id="tableGrid" hgap="5" vgap="5" gridLinesVisible="true"/>

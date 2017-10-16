@@ -1,11 +1,14 @@
-package com.knu.it.stages.database.viewer;
+package com.knu.it.javafx.database.viewer;
 
 import com.knu.it.Constants;
 import com.knu.it.Function2;
-import com.knu.it.db.Database;
-import com.knu.it.db.Table;
-import com.knu.it.db.TableColumn;
-import com.knu.it.stages.table.viewer.TableViewerController;
+import com.knu.it.db.database.DatabaseFactory;
+import com.knu.it.db.database.IDatabase;
+import com.knu.it.db.table.ITable;
+import com.knu.it.db.table.TableFactory;
+import com.knu.it.db.table.column.ITableColumn;
+import com.knu.it.db.table.column.TableColumnFactory;
+import com.knu.it.javafx.table.viewer.TableViewerController;
 import javafx.application.Application;
 import javafx.application.HostServices;
 import javafx.application.Platform;
@@ -25,7 +28,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-import org.json.simple.JSONArray;
 import org.json.simple.parser.ParseException;
 
 import java.io.File;
@@ -36,20 +38,20 @@ import java.util.*;
 public class DatabaseViewerController {
 
     private Stage stage;
-    private Database database;
+    private IDatabase database;
     private Application application;
 
     @FXML private GridPane tableGrid;
     @FXML private Hyperlink databaseName;
 
-    private void openTableWindow(Table table) {
+    private void openTableWindow(ITable table) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../../table/viewer/viewer.fxml"));
             Parent root = loader.load();
             TableViewerController controller = loader.getController();
 
             Stage stage = new Stage();
-            stage.setTitle(table.name);
+            stage.setTitle(table.getName());
             controller.setStageAndSetupListeners(stage, this, application, database, table);
             stage.setScene(new Scene(root, 600, 400));
             stage.show();
@@ -71,12 +73,12 @@ public class DatabaseViewerController {
     }
 
     private void refreshTable(){
-        databaseName.setText(database.name);
+        databaseName.setText(database.getName());
         databaseName.setVisited(true);
         databaseName.setBorder(Border.EMPTY);
         databaseName.setFont(Font.font("Roboto", FontWeight.BOLD, 20));
         databaseName.setOnAction(event -> {
-            openFile(database.root + "db.json");
+            openFile(database.getRoot() + "db.json");
         });
 
         Node node = tableGrid.getChildren().get(0);
@@ -91,9 +93,9 @@ public class DatabaseViewerController {
         tableGrid.add(tableHeaderName, 0, 0);
         tableGrid.add(tableHeaderPath, 1, 0);
         int row = 1;
-        for (Table table : database.tables) {
+        for (ITable table : database.getTables()) {
             Hyperlink tableName = new Hyperlink();
-            tableName.setText(table.name);
+            tableName.setText(table.getName());
             tableName.setStyle("-fx-underline: false;");
             tableName.setOnAction(event -> {
                 openTableWindow(table);
@@ -103,10 +105,10 @@ public class DatabaseViewerController {
             tableName.setPadding(new Insets(5, 5, 5, 5));
 
             Hyperlink tablePath = new Hyperlink();
-            tablePath.setText(table.path);
+            tablePath.setText(table.getPath());
             tablePath.setStyle("-fx-underline: false;");
             tablePath.setOnAction(event -> {
-                openFile(database.root + table.path);
+                openFile(database.getRoot() + table.getPath());
             });
             tablePath.setBorder(Border.EMPTY);
             tablePath.setVisited(true);
@@ -117,7 +119,7 @@ public class DatabaseViewerController {
         }
     }
 
-    public void setStageAndSetupListeners(Stage stage, Application application, Database database) {
+    public void setStageAndSetupListeners(Stage stage, Application application, IDatabase database) {
         this.stage = stage;
         this.application = application;
         this.database = database;
@@ -128,7 +130,7 @@ public class DatabaseViewerController {
     @FXML private void addNewTable(ActionEvent event){
         ((Hyperlink)event.getSource()).setVisited(false);
 
-        Dialog<Pair<String, List<TableColumn>>> dialog = new Dialog<>();
+        Dialog<Pair<String, List<ITableColumn>>> dialog = new Dialog<>();
         dialog.setTitle("Adding New Table");
         dialog.setHeaderText("Please enter table info:");
 
@@ -198,11 +200,11 @@ public class DatabaseViewerController {
 
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == addTableType) {
-                List<TableColumn> columns = new ArrayList<>();
+                List<ITableColumn> columns = new ArrayList<>();
                 for(Map.Entry<TextField, ComboBox<String>> entry: fieldsMap.entrySet()){
                     String columnName = entry.getKey().getText();
                     Class<?> columnType = Constants.GetClass(entry.getValue().getValue());
-                    columns.add(new TableColumn(columnName, columnType));
+                    columns.add(TableColumnFactory.Create(columnName, columnType));
                 }
 
                 return new Pair<>(tableName.getText(), columns);
@@ -210,13 +212,13 @@ public class DatabaseViewerController {
             return null;
         });
 
-        Optional<Pair<String, List<TableColumn>>> result = dialog.showAndWait();
+        Optional<Pair<String, List<ITableColumn>>> result = dialog.showAndWait();
 
         result.ifPresent(data -> {
             String tName = data.getKey();
-            List<TableColumn> columns = data.getValue();
-            Table newTable = new Table(tName, database.root, tName + ".json", columns, new JSONArray());
-            database.tables.add(newTable);
+            List<ITableColumn> columns = data.getValue();
+            ITable newTable =  TableFactory.CreateEmpty(tName, database.getRoot(), tName + ".json", columns);
+            database.getTables().add(newTable);
             try {
                 newTable.save();
                 database.save();
@@ -254,7 +256,7 @@ public class DatabaseViewerController {
         }
 
         try {
-            database = Database.loadFromPath(database.root);
+            database = DatabaseFactory.CreateFromPath(database.getRoot());
             this.refreshTable();
         }
         catch (IOException | ParseException ex){

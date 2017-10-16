@@ -1,6 +1,8 @@
-package com.knu.it.db;
+package com.knu.it.db.table;
 
 import com.knu.it.Constants;
+import com.knu.it.db.table.column.ITableColumn;
+import com.knu.it.db.table.column.TableColumnFactory;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
@@ -11,24 +13,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("deprecation")
-public class Table {
-    public String name;
-    public String path;
-    public String root;
-    public List<TableColumn> columns;
-    public JSONArray fields;
+class Table implements ITable {
+    protected String name;
+    protected String path;
+    protected String root;
+    protected List<ITableColumn> columns;
+    protected JSONArray fields;
 
     /* PUBLIC METHODS */
-    Table(String name, String root, String path){ // initialization from file
-        this.name = name;
-        this.path = path;
-        this.root = root;
-        this.columns = new ArrayList<>();
-        this.fields = new JSONArray();
-    }
-
-    public Table(String name, String root, String path, List<TableColumn> columns, JSONArray fields){
+    Table(String name, String root, String path, List<ITableColumn> columns, JSONArray fields){
         this.name = name;
         this.root = root;
         this.path = path;
@@ -36,13 +29,39 @@ public class Table {
         this.fields = fields;
     }
 
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String getPath() {
+        return path;
+    }
+
+    @Override
+    public String getRoot() {
+        return root;
+    }
+
+    @Override
+    public JSONArray getFields() {
+        return fields;
+    }
+
+    @Override
+    public List<ITableColumn> getColumns() {
+        return columns;
+    }
+
+    @Override
     public Table project(List<String> columnNames){
         String newTableName = this.name + " projected";
 
-        List<TableColumn> newTableColumns = new ArrayList<>();
+        List<ITableColumn> newTableColumns = new ArrayList<>();
         columnNames.forEach(columnName -> {
             this.columns.forEach(tableColumn -> {
-                if(tableColumn.name.equals(columnName)){
+                if(tableColumn.getName().equals(columnName)){
                     newTableColumns.add(tableColumn);
                 }
             });
@@ -52,8 +71,8 @@ public class Table {
         for(Object orow: this.fields){
             JSONObject jrow = (JSONObject)orow;
             JSONObject newjrow = new JSONObject();
-            for(TableColumn tc: newTableColumns){
-                newjrow.put(tc.name, jrow.get(tc.name));
+            for(ITableColumn tc: newTableColumns){
+                newjrow.put(tc.getName(), jrow.get(tc.getName()));
             }
             newTableFields.add(newjrow);
         }
@@ -61,15 +80,16 @@ public class Table {
         return new Table(newTableName, null, null, newTableColumns, newTableFields);
     }
 
+    @Override
     public void save() throws IOException{
         JSONObject tableInfo = new JSONObject();
         tableInfo.put("fields", this.fields);
 
         JSONArray columnsInfo = new JSONArray();
-        for(TableColumn tc: this.columns){
+        for(ITableColumn tc: this.columns){
             JSONObject j = new JSONObject();
-            j.put("name", tc.name);
-            j.put("type", Constants.GetClassName(tc.type));
+            j.put("name", tc.getName());
+            j.put("type", Constants.GetClassName(tc.getType()));
             columnsInfo.add(j);
         }
 
@@ -85,14 +105,15 @@ public class Table {
         }
     }
 
-    public void update(int row_number, TableColumn column, Object value){
+    @Override
+    public void update(int row_number, ITableColumn column, Object value){
         JSONObject row = (JSONObject)this.fields.get(row_number);
-        row.put(column.name, value);
+        row.put(column.getName(), value);
     }
 
     /* PACKAGE-PRIVATE METHODS */
 
-    void loadFromFile() throws ParseException, IOException{
+    public void loadFromFile() throws ParseException, IOException{
         // reading table data
         JSONObject jtable = (JSONObject) Constants.jsonParser.parse(new FileReader(root + path));
 
@@ -102,42 +123,41 @@ public class Table {
             JSONObject jheader = (JSONObject)oheader;
             String hname = (String)jheader.get("name");
             String htype = (String)jheader.get("type");
-            this.columns.add(new TableColumn(hname, Constants.GetClass(htype)));
+            this.columns.add(TableColumnFactory.Create(hname, Constants.GetClass(htype)));
         }
 
         // reading table data
         fields = (JSONArray)jtable.get("fields");
     }
 
-    void validate() throws IllegalArgumentException {
+    public void validate() throws IllegalArgumentException {
         for(Object ofield:fields){
             JSONObject jfield = (JSONObject)ofield;
-            for(TableColumn column: columns){
-                Object value = jfield.get(column.name);
+            for(ITableColumn column: columns){
+                Object value = jfield.get(column.getName());
                 validateValue(value, column);
             }
         }
     }
 
-    /* PRIVATE METHODS */
-    void validateValue(Object value, TableColumn column) throws IllegalArgumentException{
+    void validateValue(Object value, ITableColumn column) throws IllegalArgumentException{
         Class<?> valueClass = value.getClass();
 
-        IllegalArgumentException ex = new IllegalArgumentException("In table \"" + name + "\" field \"" + value + "\" is not type of \"" + column.type.getSimpleName() + "\"");
+        IllegalArgumentException ex = new IllegalArgumentException("In table \"" + name + "\" field \"" + value + "\" is not type of \"" + column.getType().getSimpleName() + "\"");
 
-        if(column.type == Integer.class){
+        if(column.getType() == Integer.class){
             if(!(valueClass == Long.class && (long)value <= Integer.MAX_VALUE && (long)value >= Integer.MIN_VALUE))
                 throw ex;
         }
-        else if(column.type == Long.class){
+        else if(column.getType() == Long.class){
             if(!(valueClass == Long.class))
                 throw ex;
         }
-        else if(column.type == Character.class){
+        else if(column.getType() == Character.class){
             if(!(valueClass == String.class && ((String)value).length() == 1))
                 throw ex;
         }
-        else if(column.type == Double.class){
+        else if(column.getType() == Double.class){
             if(!(valueClass == Double.class || valueClass == Long.class))
                 throw ex;
         }

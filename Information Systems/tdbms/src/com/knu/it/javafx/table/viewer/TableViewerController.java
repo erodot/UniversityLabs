@@ -1,13 +1,14 @@
-package com.knu.it.stages.table.viewer;
+package com.knu.it.javafx.table.viewer;
 
 import com.knu.it.Constants;
 import com.knu.it.Function2;
 import com.knu.it.HTML;
-import com.knu.it.db.Database;
-import com.knu.it.db.Table;
-import com.knu.it.db.TableColumn;
-import com.knu.it.stages.database.viewer.DatabaseViewerController;
-import com.knu.it.stages.table.item.ItemViewerController;
+import com.knu.it.db.database.DatabaseFactory;
+import com.knu.it.db.database.IDatabase;
+import com.knu.it.db.table.ITable;
+import com.knu.it.db.table.column.ITableColumn;
+import com.knu.it.javafx.database.viewer.DatabaseViewerController;
+import com.knu.it.javafx.table.item.ItemViewerController;
 import javafx.application.Application;
 import javafx.application.HostServices;
 import javafx.event.ActionEvent;
@@ -33,14 +34,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@SuppressWarnings("deprecation")
 public class TableViewerController {
 
     private Stage stage;
-    private DatabaseViewerController databasecontroller;
+    private DatabaseViewerController databaseController;
     private Application application;
-    private Database database;
-    private Table table;
+    private IDatabase database;
+    private ITable table;
 
     @FXML private Hyperlink tableName;
     @FXML private GridPane tableGrid;
@@ -52,33 +52,33 @@ public class TableViewerController {
     }
 
     private void refreshTable(){
-        tableName.setText(table.name);
+        tableName.setText(table.getName());
         tableName.setVisited(true);
         tableName.setBorder(Border.EMPTY);
         tableName.setFont(Font.font("Roboto", FontWeight.BOLD, 20));
         tableName.setOnAction(event -> {
-            openFile(table.root + table.path);
+            openFile(table.getRoot() + table.getPath());
         });
 
         Node node = tableGrid.getChildren().get(0);
         tableGrid.getChildren().clear();
         tableGrid.getChildren().add(0,node);
         tableGrid.setPadding(new Insets(5,5,5,5));
-        for(int i=0; i<table.columns.size(); i++){
-            TableColumn column = table.columns.get(i);
-            Label headerLabel = new Label(column.name);
+        for(int i=0; i<table.getColumns().size(); i++){
+            ITableColumn column = table.getColumns().get(i);
+            Label headerLabel = new Label(column.getName());
             headerLabel.setPadding(new Insets(5,5,5,5));
             tableGrid.add(headerLabel, i, 0);
         }
 
         int gridRow = 1;
-        for(Object orow: table.fields){
+        for(Object orow: table.getFields()){
             JSONObject jrow = (JSONObject) orow;
-            for(int i=0; i<table.columns.size(); i++){
+            for(int i=0; i<table.getColumns().size(); i++){
                 final int rowNum = gridRow - 1;
-                TableColumn column = table.columns.get(i);
+                ITableColumn column = table.getColumns().get(i);
                 Hyperlink cell = new Hyperlink();
-                String cellContent = jrow.get(column.name).toString();
+                String cellContent = jrow.get(column.getName()).toString();
                 cell.setText(cellContent.length() > 30 ? cellContent.substring(0,30) + "..." : cellContent);
                 cell.setStyle("-fx-underline: false;");
                 cell.setOnAction(event -> {
@@ -94,9 +94,9 @@ public class TableViewerController {
         }
     }
 
-    public void setStageAndSetupListeners(Stage stage, DatabaseViewerController databasecontroller, Application application, Database database, Table table){
+    public void setStageAndSetupListeners(Stage stage, DatabaseViewerController databaseController, Application application, IDatabase database, ITable table){
         this.stage = stage;
-        this.databasecontroller = databasecontroller;
+        this.databaseController = databaseController;
         this.application = application;
         this.database = database;
         this.table = table;
@@ -112,9 +112,9 @@ public class TableViewerController {
         }
 
         try {
-            databasecontroller.refresh(null);
-            database = Database.loadFromPath(database.root);
-            table = database.getTableByName(table.name);
+            databaseController.refresh(null);
+            database = DatabaseFactory.CreateFromPath(database.getRoot());
+            table = database.getTableByName(table.getName());
         }
         catch(Exception ex){
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -154,25 +154,25 @@ public class TableViewerController {
         Node addRow = dialog.getDialogPane().lookupButton(addRowType);
         addRow.setDisable(true);
 
-        List<Pair<TableColumn, TextField>> textFieldInputs = new ArrayList<>();
-        List<Pair<TableColumn, TextArea>> textAreaInputs = new ArrayList<>();
+        List<Pair<ITableColumn, TextField>> textFieldInputs = new ArrayList<>();
+        List<Pair<ITableColumn, TextArea>> textAreaInputs = new ArrayList<>();
 
-        for(int i=0; i<table.columns.size(); i++){
-            TableColumn column = table.columns.get(i);
+        for(int i=0; i<table.getColumns().size(); i++){
+            ITableColumn column = table.getColumns().get(i);
 
-            Label label = new Label(column.name);
+            Label label = new Label(column.getName());
             grid.add(label, 0, i);
 
-            if(column.type == HTML.class){
+            if(column.getType() == HTML.class){
                 TextArea textArea = new TextArea();
-                textArea.setPromptText("typeof \"" + Constants.GetClassName(column.type) + "\"");
+                textArea.setPromptText("typeof \"" + Constants.GetClassName(column.getType()) + "\"");
                 textArea.textProperty().addListener((observable, oldValue, newValue) -> addRow.setDisable(!validateData.apply(textFieldInputs, textAreaInputs)));
                 grid.add(textArea, 1, i);
                 textAreaInputs.add(new Pair<>(column, textArea));
             }
             else{
                 TextField textField = new TextField();
-                textField.setPromptText("typeof \"" + Constants.GetClassName(column.type) + "\"");
+                textField.setPromptText("typeof \"" + Constants.GetClassName(column.getType()) + "\"");
                 textField.textProperty().addListener((observable, oldValue, newValue) -> addRow.setDisable(!validateData.apply(textFieldInputs, textAreaInputs)));
                 grid.add(textField, 1, i);
                 textFieldInputs.add(new Pair<>(column, textField));
@@ -186,15 +186,15 @@ public class TableViewerController {
             if (dialogButton == addRowType) {
                 JSONObject array = new JSONObject();
                 try {
-                    for (Pair<TableColumn, TextField> pair : textFieldInputs) {
-                        Class<?> type = pair.getKey().type;
+                    for (Pair<ITableColumn, TextField> pair : textFieldInputs) {
+                        Class<?> type = pair.getKey().getType();
                         Object value = validateProperty(pair.getValue().getText(), type);
-                        array.put(pair.getKey().name, value);
+                        array.put(pair.getKey().getName(), value);
                     }
-                    for (Pair<TableColumn, TextArea> pair : textAreaInputs) {
-                        Class<?> type = pair.getKey().type;
+                    for (Pair<ITableColumn, TextArea> pair : textAreaInputs) {
+                        Class<?> type = pair.getKey().getType();
                         Object value = validateProperty(pair.getValue().getText(), type);
-                        array.put(pair.getKey().name, value);
+                        array.put(pair.getKey().getName(), value);
                     }
                 }
                 catch(Exception ex){
@@ -215,7 +215,7 @@ public class TableViewerController {
 
         result.ifPresent(row -> {
             try{
-                table.fields.add(row);
+                table.getFields().add(row);
                 table.save();
                 this.refreshTable();
             }
@@ -230,7 +230,7 @@ public class TableViewerController {
         });
     }
 
-    private void openCellInfo(String cellContent, int row, TableColumn column){
+    private void openCellInfo(String cellContent, int row, ITableColumn column){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../item/itemviewer.fxml"));
             Parent root = loader.load();
@@ -268,10 +268,10 @@ public class TableViewerController {
 
         if (result.get() == ButtonType.OK){
             try{
-                database.tables.remove(table);
+                database.getTables().remove(table);
                 database.save();
 
-                File tableFile = new File(database.root + table.path);
+                File tableFile = new File(database.getRoot() + table.getPath());
                 tableFile.delete();
 
                 stage.hide();
@@ -286,7 +286,7 @@ public class TableViewerController {
                 return;
             }
 
-            databasecontroller.refresh(null);
+            databaseController.refresh(null);
         }
     }
 
@@ -315,14 +315,14 @@ public class TableViewerController {
         return value;
     }
 
-    private Function2<List<Pair<TableColumn, TextField>>, List<Pair<TableColumn, TextArea>>, Boolean> validateData = (List<Pair<TableColumn, TextField>> textFields, List<Pair<TableColumn, TextArea>> textAreas) -> {
+    private Function2<List<Pair<ITableColumn, TextField>>, List<Pair<ITableColumn, TextArea>>, Boolean> validateData = (List<Pair<ITableColumn, TextField>> textFields, List<Pair<ITableColumn, TextArea>> textAreas) -> {
         boolean dataValid = true;
 
-        for(Pair<TableColumn, TextField> pair: textFields)
+        for(Pair<ITableColumn, TextField> pair: textFields)
             if(pair.getValue().getText().trim().isEmpty())
                 dataValid = false;
 
-        for(Pair<TableColumn, TextArea> pair: textAreas)
+        for(Pair<ITableColumn, TextArea> pair: textAreas)
             if(pair.getValue().getText().trim().isEmpty())
                 dataValid = false;
 
@@ -347,8 +347,8 @@ public class TableViewerController {
         List<CheckBox> checkBoxes = new ArrayList<>();
         VBox vbox = new VBox();
 
-        for(TableColumn column: table.columns){
-            CheckBox checkBox = new CheckBox(column.name);
+        for(ITableColumn column: table.getColumns()){
+            CheckBox checkBox = new CheckBox(column.getName());
             checkBox.setPadding(new Insets(5,5,5,5));
             checkBoxes.add(checkBox);
             vbox.getChildren().add(checkBox);
@@ -371,7 +371,7 @@ public class TableViewerController {
         Optional<List<String>> result = dialog.showAndWait();
 
         result.ifPresent(columnNames -> {
-            Table table = this.table.project(columnNames);
+            ITable table = this.table.project(columnNames);
 
             Alert alert = new Alert(Alert.AlertType.NONE);
             alert.setTitle("Table Projection");
@@ -379,21 +379,21 @@ public class TableViewerController {
 
             GridPane grid = new GridPane();
             grid.setGridLinesVisible(true);
-            for(int i=0; i<table.columns.size(); i++){
-                TableColumn column = table.columns.get(i);
-                Label headerLabel = new Label(column.name);
+            for(int i=0; i<table.getColumns().size(); i++){
+                ITableColumn column = table.getColumns().get(i);
+                Label headerLabel = new Label(column.getName());
                 headerLabel.setPadding(new Insets(5,5,5,5));
                 grid.add(headerLabel, i, 0);
             }
 
             int gridRow = 1;
-            for(Object orow: table.fields){
+            for(Object orow: table.getFields()){
                 JSONObject jrow = (JSONObject) orow;
-                for(int i=0; i<table.columns.size(); i++){
+                for(int i=0; i<table.getColumns().size(); i++){
                     final int rowNum = gridRow - 1;
-                    TableColumn column = table.columns.get(i);
+                    ITableColumn column = table.getColumns().get(i);
                     Label cell = new Label();
-                    String cellContent = jrow.get(column.name).toString();
+                    String cellContent = jrow.get(column.getName()).toString();
                     cell.setText(cellContent.length() > 30 ? cellContent.substring(0,30) + "..." : cellContent);
                     cell.setPadding(new Insets(5, 5, 5, 5));
 

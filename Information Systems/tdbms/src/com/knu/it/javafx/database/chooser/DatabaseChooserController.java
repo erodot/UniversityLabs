@@ -1,8 +1,9 @@
-package com.knu.it.stages.database.chooser;
+package com.knu.it.javafx.database.chooser;
 
 import com.knu.it.Function2;
-import com.knu.it.db.Database;
-import com.knu.it.stages.database.viewer.DatabaseViewerController;
+import com.knu.it.db.database.DatabaseFactory;
+import com.knu.it.db.database.IDatabase;
+import com.knu.it.javafx.database.viewer.DatabaseViewerController;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -33,7 +34,7 @@ public class DatabaseChooserController {
             path.setText(directory.getAbsolutePath());
         }
     };
-    private void openDatabaseWindow(Database db) {
+    private void openDatabaseWindow(IDatabase db) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../viewer/viewer.fxml"));
             Parent root = loader.load();
@@ -41,7 +42,7 @@ public class DatabaseChooserController {
             controller.setStageAndSetupListeners(stage, application, db);
 
             Stage stage = new Stage();
-            stage.setTitle(db.name);
+            stage.setTitle(db.getName());
             stage.setScene(new Scene(root, 600, 400));
             stage.show();
             this.stage.hide();
@@ -104,7 +105,7 @@ public class DatabaseChooserController {
         }
 
         try {
-            Database db = new Database(dbname, path.getAbsolutePath() + "/");
+            IDatabase db = DatabaseFactory.CreateEmpty(dbname, path.getAbsolutePath() + "/");
             db.save();
             openDatabaseWindow(db);
         }
@@ -137,7 +138,7 @@ public class DatabaseChooserController {
         root = root + "/";
 
         try{
-            Database db = Database.loadFromPath(root);
+            IDatabase db = DatabaseFactory.CreateFromPath(root);
             openDatabaseWindow(db);
         }
         catch(IOException | ParseException ex){
