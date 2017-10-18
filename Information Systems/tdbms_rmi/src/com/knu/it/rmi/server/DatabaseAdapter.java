@@ -9,4 +9,5 @@ import java.util.List;
 public interface DatabaseAdapter extends Remote {
     List<String> getAvailableDatabases() throws RemoteException;
     IRMIDatabase getDatabaseWithName(String name) throws RemoteException;
+    IRMIDatabase createDatabaseWithName(String name) throws RemoteException;
 }

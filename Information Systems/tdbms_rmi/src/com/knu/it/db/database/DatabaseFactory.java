@@ -17,6 +17,7 @@ public class DatabaseFactory {
     }
 
     public static IDatabase CreateFromPath(String root) throws RemoteException {
+
         try {
             JSONObject jdb = (JSONObject) Constants.jsonParser.parse(new FileReader(root + "db.json"));
 
@@ -25,7 +26,7 @@ public class DatabaseFactory {
                 throw new RemoteException("db.json file does not contain field \"name\"");
             Database db = new Database(db_name_string, root);
 
-            JSONArray db_tables_array = (JSONArray) jdb.get("tables");
+            JSONArray db_tables_array = (JSONArray) jdb.get("table");
             if (db_tables_array == null)
                 throw new RemoteException("db.json file does not contain field \"table\"");
             db.loadTables(db_tables_array);
@@ -33,6 +34,7 @@ public class DatabaseFactory {
             return db;
         }
         catch (ParseException | IOException ex){
+            ex.printStackTrace();
             throw new RemoteException(ex.getMessage());
         }
     }

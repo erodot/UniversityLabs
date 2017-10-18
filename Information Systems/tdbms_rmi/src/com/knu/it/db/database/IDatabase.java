@@ -14,5 +14,6 @@ public interface IDatabase extends Remote{
     List<ITable> getTables() throws RemoteException;
 
     void save()  throws RemoteException;
-    ITable getTableByName(String tableName)  throws RemoteException;
+    ITable getTableByName(String tableName) throws RemoteException;
+    void addTable(ITable table) throws RemoteException;
 }

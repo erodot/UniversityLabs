@@ -12,7 +12,7 @@ import java.rmi.server.UnicastRemoteObject;
 public class RMIDatabase extends UnicastRemoteObject implements IRMIDatabase{
     public String root;
 
-    public RMIDatabase(String name, String root) throws RemoteException{
+    public RMIDatabase(String root) throws RemoteException{
         this.root = root;
     }
 

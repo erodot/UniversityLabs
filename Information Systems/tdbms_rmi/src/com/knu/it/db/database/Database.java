@@ -96,6 +96,12 @@ class Database extends UnicastRemoteObject implements IDatabase {
         throw new RemoteException("Database " + name + ": table with name " + tableName + " not found.");
     }
 
+    @Override
+    public void addTable(ITable table) throws RemoteException {
+        tables.add(table);
+        table.save();
+        this.save();
+    }
 
     @Override
     public String getName() throws RemoteException {
