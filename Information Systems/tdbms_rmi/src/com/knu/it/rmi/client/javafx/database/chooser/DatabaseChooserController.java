@@ -57,7 +57,6 @@ public class DatabaseChooserController {
 
         try {
             IRMIDatabase db = databaseAdapter.createDatabaseWithName(dbname);
-            db.Invoke("save");
             IDatabase database = db.getDatabase();
             openDatabaseWindow(database);
         }

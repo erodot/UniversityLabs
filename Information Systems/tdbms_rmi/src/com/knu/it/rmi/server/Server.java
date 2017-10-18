@@ -1,8 +1,9 @@
 package com.knu.it.rmi.server;
 
+import com.knu.it.db.database.DatabaseFactory;
+import com.knu.it.db.database.IDatabase;
 import com.knu.it.db.database.rmi.IRMIDatabase;
 import com.knu.it.db.database.rmi.RMIDatabase;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.File;
 import java.rmi.RemoteException;
@@ -71,9 +72,11 @@ public class Server implements DatabaseAdapter {
 
     @Override
     public IRMIDatabase createDatabaseWithName(String name) throws RemoteException{
-//        String db_path = root + "/" + name + "/";
-//        IRMIDatabase rmi_db = new RMIDatabase(name, db_path);
-//        return rmi_db;
-        throw new NotImplementedException();
+        String db_path = root + "/" + name + "/";
+        File f = new File(db_path);
+        f.mkdirs();
+        IDatabase db = DatabaseFactory.CreateEmpty(name, db_path);
+        db.save();
+        return new RMIDatabase(db_path);
     }
 }
