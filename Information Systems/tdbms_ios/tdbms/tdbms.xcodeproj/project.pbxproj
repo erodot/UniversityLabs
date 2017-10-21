@@ -12,7 +12,20 @@
 		D14C65AA1F9A9EEF00F25099 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D14C65A81F9A9EEF00F25099 /* Main.storyboard */; };
 		D14C65AC1F9A9EEF00F25099 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D14C65AB1F9A9EEF00F25099 /* Assets.xcassets */; };
 		D14C65AF1F9A9EEF00F25099 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D14C65AD1F9A9EEF00F25099 /* LaunchScreen.storyboard */; };
+		D18209A41F9BC90E00436A77 /* RatingControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18209A31F9BC90E00436A77 /* RatingControl.swift */; };
+		D18209A61F9BD82300436A77 /* Meal.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18209A51F9BD82300436A77 /* Meal.swift */; };
+		D18209AE1F9BD94E00436A77 /* tdbmsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18209AD1F9BD94E00436A77 /* tdbmsTests.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D18209B01F9BD94E00436A77 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D14C65991F9A9EEF00F25099 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D14C65A01F9A9EEF00F25099;
+			remoteInfo = tdbms;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		D14C65A11F9A9EEF00F25099 /* tdbms.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tdbms.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -22,10 +35,22 @@
 		D14C65AB1F9A9EEF00F25099 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D14C65AE1F9A9EEF00F25099 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D14C65B01F9A9EEF00F25099 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D18209A31F9BC90E00436A77 /* RatingControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingControl.swift; sourceTree = "<group>"; };
+		D18209A51F9BD82300436A77 /* Meal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Meal.swift; sourceTree = "<group>"; };
+		D18209AB1F9BD94E00436A77 /* tdbmsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = tdbmsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D18209AD1F9BD94E00436A77 /* tdbmsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tdbmsTests.swift; sourceTree = "<group>"; };
+		D18209AF1F9BD94E00436A77 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		D14C659E1F9A9EEF00F25099 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D18209A81F9BD94E00436A77 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -39,6 +64,7 @@
 			isa = PBXGroup;
 			children = (
 				D14C65A31F9A9EEF00F25099 /* tdbms */,
+				D18209AC1F9BD94E00436A77 /* tdbmsTests */,
 				D14C65A21F9A9EEF00F25099 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -47,6 +73,7 @@
 			isa = PBXGroup;
 			children = (
 				D14C65A11F9A9EEF00F25099 /* tdbms.app */,
+				D18209AB1F9BD94E00436A77 /* tdbmsTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -57,11 +84,22 @@
 				D14C65A41F9A9EEF00F25099 /* AppDelegate.swift */,
 				D14C65A61F9A9EEF00F25099 /* ViewController.swift */,
 				D14C65A81F9A9EEF00F25099 /* Main.storyboard */,
+				D18209A51F9BD82300436A77 /* Meal.swift */,
+				D18209A31F9BC90E00436A77 /* RatingControl.swift */,
 				D14C65AB1F9A9EEF00F25099 /* Assets.xcassets */,
 				D14C65AD1F9A9EEF00F25099 /* LaunchScreen.storyboard */,
 				D14C65B01F9A9EEF00F25099 /* Info.plist */,
 			);
 			path = tdbms;
+			sourceTree = "<group>";
+		};
+		D18209AC1F9BD94E00436A77 /* tdbmsTests */ = {
+			isa = PBXGroup;
+			children = (
+				D18209AD1F9BD94E00436A77 /* tdbmsTests.swift */,
+				D18209AF1F9BD94E00436A77 /* Info.plist */,
+			);
+			path = tdbmsTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -84,6 +122,24 @@
 			productReference = D14C65A11F9A9EEF00F25099 /* tdbms.app */;
 			productType = "com.apple.product-type.application";
 		};
+		D18209AA1F9BD94E00436A77 /* tdbmsTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D18209B21F9BD94E00436A77 /* Build configuration list for PBXNativeTarget "tdbmsTests" */;
+			buildPhases = (
+				D18209A71F9BD94E00436A77 /* Sources */,
+				D18209A81F9BD94E00436A77 /* Frameworks */,
+				D18209A91F9BD94E00436A77 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D18209B11F9BD94E00436A77 /* PBXTargetDependency */,
+			);
+			name = tdbmsTests;
+			productName = tdbmsTests;
+			productReference = D18209AB1F9BD94E00436A77 /* tdbmsTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -97,6 +153,11 @@
 					D14C65A01F9A9EEF00F25099 = {
 						CreatedOnToolsVersion = 9.0.1;
 						ProvisioningStyle = Automatic;
+					};
+					D18209AA1F9BD94E00436A77 = {
+						CreatedOnToolsVersion = 9.0.1;
+						ProvisioningStyle = Automatic;
+						TestTargetID = D14C65A01F9A9EEF00F25099;
 					};
 				};
 			};
@@ -114,6 +175,7 @@
 			projectRoot = "";
 			targets = (
 				D14C65A01F9A9EEF00F25099 /* tdbms */,
+				D18209AA1F9BD94E00436A77 /* tdbmsTests */,
 			);
 		};
 /* End PBXProject section */
@@ -129,6 +191,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D18209A91F9BD94E00436A77 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -136,12 +205,30 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D18209A61F9BD82300436A77 /* Meal.swift in Sources */,
 				D14C65A71F9A9EEF00F25099 /* ViewController.swift in Sources */,
+				D18209A41F9BC90E00436A77 /* RatingControl.swift in Sources */,
 				D14C65A51F9A9EEF00F25099 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D18209A71F9BD94E00436A77 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D18209AE1F9BD94E00436A77 /* tdbmsTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D18209B11F9BD94E00436A77 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D14C65A01F9A9EEF00F25099 /* tdbms */;
+			targetProxy = D18209B01F9BD94E00436A77 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		D14C65A81F9A9EEF00F25099 /* Main.storyboard */ = {
@@ -300,6 +387,38 @@
 			};
 			name = Release;
 		};
+		D18209B31F9BD94E00436A77 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = HZADNWCHML;
+				INFOPLIST_FILE = tdbmsTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.knu.tdbmsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/tdbms.app/tdbms";
+			};
+			name = Debug;
+		};
+		D18209B41F9BD94E00436A77 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = HZADNWCHML;
+				INFOPLIST_FILE = tdbmsTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.knu.tdbmsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/tdbms.app/tdbms";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -317,6 +436,15 @@
 			buildConfigurations = (
 				D14C65B41F9A9EEF00F25099 /* Debug */,
 				D14C65B51F9A9EEF00F25099 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D18209B21F9BD94E00436A77 /* Build configuration list for PBXNativeTarget "tdbmsTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D18209B31F9BD94E00436A77 /* Debug */,
+				D18209B41F9BD94E00436A77 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
