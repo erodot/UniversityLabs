@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<GridPane xmlns="http://javafx.com/javafx"
+          xmlns:fx="http://javafx.com/fxml"
+          fx:controller="com.knu.it.javafx.table.item.ItemViewerController"
+          hgap="5" vgap="5" fx:id="grid">
+    <Label text="Property type: " GridPane.columnIndex="0" GridPane.rowIndex="0" minWidth="100"/>
+    <TextField fx:id="propertyType" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+    <Label text="Property: " GridPane.columnIndex="0" GridPane.rowIndex="1" minWidth="100"/>
+    <TextField fx:id="propertyValue" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+    <TextArea fx:id="propertyValueArea" GridPane.columnIndex="1" GridPane.rowIndex="2" visible="false" managed="false"/>
+
+    <Button text="Update property" onAction="#updateProperty" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+    <Button text="Show HTML" fx:id="showHTMLButton" onAction="#showHTML" GridPane.columnIndex="1" GridPane.rowIndex="4" visible="false" managed="false"/>
+</GridPane>

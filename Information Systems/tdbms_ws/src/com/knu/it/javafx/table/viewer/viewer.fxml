@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.knu.it.javafx.table.viewer.TableViewerController"
+      prefHeight="400.0" prefWidth="600.0">
+    <Hyperlink fx:id="tableName" underline="false"/>
+    <GridPane fx:id="tableGrid" hgap="5" vgap="5" gridLinesVisible="true"/>
+    <Hyperlink text="Add new row" onAction="#addNewRow" style="-fx-border-style: hidden">
+        <VBox.margin>
+            <Insets left="5"/>
+        </VBox.margin>
+    </Hyperlink>
+    <Hyperlink text="Refresh" onAction="#refresh" style="-fx-border-style: hidden">
+        <VBox.margin>
+            <Insets left="5"/>
+        </VBox.margin>
+    </Hyperlink>
+    <Hyperlink text="Project" onAction="#project" style="-fx-border-style: hidden">
+        <VBox.margin>
+            <Insets left="5"/>
+        </VBox.margin>
+    </Hyperlink>
+    <Hyperlink text="Delete table" onAction="#deleteTable" style="-fx-border-style: hidden">
+        <VBox.margin>
+            <Insets left="5"/>
+        </VBox.margin>
+    </Hyperlink>
+</VBox>
