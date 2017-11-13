@@ -21,21 +21,9 @@
     </Label>
     <TextField fx:id="newDatabaseName" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.columnSpan="2"/>
 
-    <Label text="Path:" GridPane.columnIndex="0" GridPane.rowIndex="2">
-        <font>
-            <Font size="14.0"/>
-        </font>
-    </Label>
-    <Button text="Browse" fx:id="newDatabaseDirectoryChooser" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-    <Label fx:id="newDatabasePath" GridPane.columnIndex="2" GridPane.rowIndex="2">
-        <font>
-            <Font size="14.0"/>
-        </font>
-    </Label>
+    <Button text="Create database" onAction="#onDatabaseCreate" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="2"/>
 
-    <Button text="Create database" onAction="#onDatabaseCreate" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="2"/>
-
-    <Label text="Open existing database" GridPane.columnIndex="0" GridPane.rowIndex="4" GridPane.columnSpan="3">
+    <Label text="Open existing database" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="3">
         <font>
             <Font size="18.0"/>
         </font>
@@ -44,17 +32,13 @@
         </padding>
     </Label>
 
-    <Label text="Path:" GridPane.columnIndex="0" GridPane.rowIndex="5">
-        <font>
-            <Font size="14.0"/>
-        </font>
-    </Label>
-    <Button text="Browse" fx:id="existingDatabaseDirectoryChooser" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
-    <Label fx:id="existingDatabasePath" GridPane.columnIndex="2" GridPane.rowIndex="5">
+    <Label text="Name:" GridPane.columnIndex="0" GridPane.rowIndex="4">
         <font>
             <Font size="14.0"/>
         </font>
     </Label>
 
-    <Button text="Open database" onAction="#onDatabaseOpenExisting" GridPane.columnIndex="0" GridPane.rowIndex="6" GridPane.columnSpan="2"/>
+    <ComboBox fx:id="openExistingDatabaseComboBox" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+    <Button text="Open database" onAction="#onDatabaseOpenExisting" GridPane.columnIndex="0" GridPane.rowIndex="5" GridPane.columnSpan="2"/>
 </GridPane>

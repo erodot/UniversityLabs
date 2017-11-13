@@ -4,23 +4,25 @@ import com.knu.it.Function2;
 import com.knu.it.db.database.DatabaseFactory;
 import com.knu.it.javafx.database.viewer.DatabaseViewerController;
 import com.knu.it.db.database.Database;
+import com.knu.it.ws.IDatabaseAdapter;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import org.json.simple.parser.ParseException;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class DatabaseChooserController {
 
@@ -59,11 +61,11 @@ public class DatabaseChooserController {
 
     private Stage stage;
     private Application application;
+    private IDatabaseAdapter databaseAdapter;
+    private Database[] existingDatabases;
 
     /* CREATE DATABASE */
     @FXML private TextField newDatabaseName;
-    @FXML private Label newDatabasePath;
-    @FXML private Button newDatabaseDirectoryChooser;
     @FXML private void onDatabaseCreate(){
         if(newDatabaseName.getText().isEmpty()){
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -75,41 +77,15 @@ public class DatabaseChooserController {
             return;
         }
 
-        String root = newDatabasePath.getText();
-
-        if(root.isEmpty()){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText(null);
-            alert.setContentText("Please select path to database");
-
-            alert.showAndWait();
-            return;
-        }
-
-        root = root + "/";
         String dbname = newDatabaseName.getText();
 
-        File path = new File(root + dbname);
-        path.mkdirs();
-
-        File dbfilepath = new File(path.getAbsolutePath() + "/db.json");
-        if(dbfilepath.exists()){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText(null);
-            alert.setContentText("Database already exists on this path. Please try another path.");
-
-            alert.showAndWait();
-            return;
-        }
-
+        Database new_db = databaseAdapter.createDatabase(dbname);
         try {
-            Database db = DatabaseFactory.CreateEmpty(dbname);
-            db.save();
-            openDatabaseWindow(db);
+            new_db.save();
+            openDatabaseWindow(new_db);
         }
         catch(IOException ex){
+            ex.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText(null);
@@ -120,45 +96,24 @@ public class DatabaseChooserController {
     };
 
     /* CHOOSE EXISTING DATABASE */
-    @FXML private Label existingDatabasePath;
-    @FXML private Button existingDatabaseDirectoryChooser;
-    @FXML private Button openExistingDatabaseButton;
+    @FXML private ComboBox openExistingDatabaseComboBox;
     @FXML private void onDatabaseOpenExisting(){
-        String root = existingDatabasePath.getText();
-
-        if(root.isEmpty()){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText(null);
-            alert.setContentText("Please select path to database");
-
-            alert.showAndWait();
-            return;
-        }
-        root = root + "/";
-
-        try{
-            Database db = DatabaseFactory.CreateFromPath(root);
-            openDatabaseWindow(db);
-        }
-        catch(IOException | ParseException ex){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText(null);
-            alert.setContentText(ex.getMessage());
-
-            alert.showAndWait();
-        }
+        String value = (String)openExistingDatabaseComboBox.getValue();
+        for(Database db: existingDatabases)
+            if(db.getName().equals(value))
+                openDatabaseWindow(db);
     };
 
-    public void setStageAndSetupListeners(Stage stage, Application application){
+    public void setStageAndSetupListeners(Stage stage, Application application, IDatabaseAdapter databaseAdapter){
         this.stage = stage;
         this.application = application;
+        this.databaseAdapter = databaseAdapter;
 
-        /* CREATE DATABASE */
-        newDatabaseDirectoryChooser.setOnAction(onDirectoryChoose.apply(stage, newDatabasePath));
+        existingDatabases = databaseAdapter.getDatabases();
+        List<String> existingDatabasesNames = Arrays.stream(existingDatabases).map(d -> d.getName()).collect(Collectors.toList());
+        openExistingDatabaseComboBox.setItems(FXCollections.observableArrayList(existingDatabasesNames));
+        if(existingDatabasesNames.size() > 0)
+            openExistingDatabaseComboBox.setValue(existingDatabasesNames.get(0));
 
-        /* CHOOSE EXISTING DATABASE */
-        existingDatabaseDirectoryChooser.setOnAction(onDirectoryChoose.apply(stage, existingDatabasePath));
     }
 }

@@ -57,6 +57,7 @@ public class DatabaseViewerController {
             stage.show();
         }
         catch (IOException | NullPointerException ex) {
+            ex.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText(null);
@@ -67,9 +68,12 @@ public class DatabaseViewerController {
     }
 
     private void openFile(String path){
-        File file = new File(path);
-        HostServices hostServices = application.getHostServices();
-        hostServices.showDocument(file.toURI().toString());
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText("Files opening is not supported so far.");
+
+        alert.showAndWait();
     }
 
     private void refreshTable(){

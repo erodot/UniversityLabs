@@ -10,6 +10,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Table{
@@ -50,9 +51,9 @@ public class Table{
         return fields;
     }
 
-    public void setColumns(List<TableColumn> columns) { this.columns = columns; }
-    public List<TableColumn> getColumns() {
-        return columns;
+    public void setColumns(TableColumn[] columns) { this.columns = new ArrayList<>(Arrays.asList(columns)); }
+    public TableColumn[] getColumns() {
+        return columns.toArray(new TableColumn[columns.size()]);
     }
 
     public Table project(List<String> columnNames){

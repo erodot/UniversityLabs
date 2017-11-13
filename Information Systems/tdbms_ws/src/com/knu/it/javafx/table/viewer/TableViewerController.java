@@ -64,8 +64,8 @@ public class TableViewerController {
         tableGrid.getChildren().clear();
         tableGrid.getChildren().add(0,node);
         tableGrid.setPadding(new Insets(5,5,5,5));
-        for(int i=0; i<table.getColumns().size(); i++){
-            TableColumn column = table.getColumns().get(i);
+        for(int i=0; i<table.getColumns().length; i++){
+            TableColumn column = table.getColumns()[i];
             Label headerLabel = new Label(column.getName());
             headerLabel.setPadding(new Insets(5,5,5,5));
             tableGrid.add(headerLabel, i, 0);
@@ -74,9 +74,9 @@ public class TableViewerController {
         int gridRow = 1;
         for(Object orow: table.getFields()){
             JSONObject jrow = (JSONObject) orow;
-            for(int i=0; i<table.getColumns().size(); i++){
+            for(int i=0; i<table.getColumns().length; i++){
                 final int rowNum = gridRow - 1;
-                TableColumn column = table.getColumns().get(i);
+                TableColumn column = table.getColumns()[i];
                 Hyperlink cell = new Hyperlink();
                 String cellContent = jrow.get(column.getName()).toString();
                 cell.setText(cellContent.length() > 30 ? cellContent.substring(0,30) + "..." : cellContent);
@@ -157,8 +157,8 @@ public class TableViewerController {
         List<Pair<TableColumn, TextField>> textFieldInputs = new ArrayList<>();
         List<Pair<TableColumn, TextArea>> textAreaInputs = new ArrayList<>();
 
-        for(int i=0; i<table.getColumns().size(); i++){
-            TableColumn column = table.getColumns().get(i);
+        for(int i=0; i<table.getColumns().length; i++){
+            TableColumn column = table.getColumns()[i];
 
             Label label = new Label(column.getName());
             grid.add(label, 0, i);
@@ -379,8 +379,8 @@ public class TableViewerController {
 
             GridPane grid = new GridPane();
             grid.setGridLinesVisible(true);
-            for(int i=0; i<table.getColumns().size(); i++){
-                TableColumn tableColumn = table.getColumns().get(i);
+            for(int i=0; i<table.getColumns().length; i++){
+                TableColumn tableColumn = table.getColumns()[i];
                 Label headerLabel = new Label(tableColumn.getName());
                 headerLabel.setPadding(new Insets(5,5,5,5));
                 grid.add(headerLabel, i, 0);
@@ -389,9 +389,9 @@ public class TableViewerController {
             int gridRow = 1;
             for(Object orow: table.getFields()){
                 JSONObject jrow = (JSONObject) orow;
-                for(int i=0; i<table.getColumns().size(); i++){
+                for(int i=0; i<table.getColumns().length; i++){
                     final int rowNum = gridRow - 1;
-                    TableColumn column = table.getColumns().get(i);
+                    TableColumn column = table.getColumns()[i];
                     Label cell = new Label();
                     String cellContent = jrow.get(column.getName()).toString();
                     cell.setText(cellContent.length() > 30 ? cellContent.substring(0,30) + "..." : cellContent);
