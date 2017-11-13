@@ -4,6 +4,8 @@ import javax.xml.ws.Endpoint;
 
 public class Publisher {
     public static void main(String[] args) {
-        Endpoint.publish("http://localhost:9999/", new DatabaseAdapter());
+        String address = "http://localhost:9999/";
+        Endpoint.publish(address, new DatabaseAdapter());
+        System.out.println("Server run on " + address);
     }
 }

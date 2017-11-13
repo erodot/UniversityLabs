@@ -4,6 +4,7 @@ import com.knu.it.Constants;
 import com.knu.it.db.table.column.TableColumn;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.FileReader;
@@ -46,9 +47,14 @@ public class Table{
         return root;
     }
 
-    public void setFields(JSONArray fields){ this.fields = fields; }
-    public JSONArray getFields() {
-        return fields;
+    public void setFields(String fields) {
+        try {
+            this.fields = (JSONArray) (new JSONParser().parse(fields));
+        }
+        catch(ParseException ignored) {}
+    }
+    public String getFields() {
+        return fields.toJSONString();
     }
 
     public void setColumns(TableColumn[] columns) { this.columns = new ArrayList<>(Arrays.asList(columns)); }

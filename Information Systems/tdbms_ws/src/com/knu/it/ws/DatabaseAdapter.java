@@ -14,12 +14,14 @@ import java.util.List;
 @WebService(endpointInterface = "com.knu.it.ws.IDatabaseAdapter")
 public class DatabaseAdapter implements IDatabaseAdapter {
 
+    private static final String global_path = "/Users/tedromanus/Documents/";
+
     @Override
     public Database[] getDatabases(){
 
         List<Database> databases = new ArrayList<>();
 
-        File rootDirectory = new File("/Users/tedromanus/Documents");
+        File rootDirectory = new File(global_path);
         File[] listOfFiles = rootDirectory.listFiles();
 
         for (File file : listOfFiles) {
@@ -43,6 +45,6 @@ public class DatabaseAdapter implements IDatabaseAdapter {
 
     @Override
     public Database createDatabase(String name){
-        return DatabaseFactory.CreateEmpty(name);
+        return DatabaseFactory.CreateEmpty(name, global_path);
     }
 }

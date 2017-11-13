@@ -9,6 +9,8 @@ public class TableColumn {
         this.type = type;
     }
 
+    public TableColumn(){}
+
     public void setName(String name) { this.name = name; }
     public String getName(){
         return name;

@@ -26,7 +26,10 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.File;
 import java.io.IOException;
@@ -71,26 +74,37 @@ public class TableViewerController {
             tableGrid.add(headerLabel, i, 0);
         }
 
-        int gridRow = 1;
-        for(Object orow: table.getFields()){
-            JSONObject jrow = (JSONObject) orow;
-            for(int i=0; i<table.getColumns().length; i++){
-                final int rowNum = gridRow - 1;
-                TableColumn column = table.getColumns()[i];
-                Hyperlink cell = new Hyperlink();
-                String cellContent = jrow.get(column.getName()).toString();
-                cell.setText(cellContent.length() > 30 ? cellContent.substring(0,30) + "..." : cellContent);
-                cell.setStyle("-fx-underline: false;");
-                cell.setOnAction(event -> {
-                    openCellInfo(cellContent, rowNum, column);
-                });
-                cell.setBorder(Border.EMPTY);
-                cell.setVisited(true);
-                cell.setPadding(new Insets(5, 5, 5, 5));
+        try {
+            int gridRow = 1;
+            JSONArray orows = (JSONArray) new JSONParser().parse(table.getFields());
+            for (Object orow : orows) {
+                JSONObject jrow = (JSONObject) orow;
+                for (int i = 0; i < table.getColumns().length; i++) {
+                    final int rowNum = gridRow - 1;
+                    TableColumn column = table.getColumns()[i];
+                    Hyperlink cell = new Hyperlink();
+                    String cellContent = jrow.get(column.getName()).toString();
+                    cell.setText(cellContent.length() > 30 ? cellContent.substring(0, 30) + "..." : cellContent);
+                    cell.setStyle("-fx-underline: false;");
+                    cell.setOnAction(event -> {
+                        openCellInfo(cellContent, rowNum, column);
+                    });
+                    cell.setBorder(Border.EMPTY);
+                    cell.setVisited(true);
+                    cell.setPadding(new Insets(5, 5, 5, 5));
 
-                tableGrid.add(cell, i, gridRow);
+                    tableGrid.add(cell, i, gridRow);
+                }
+                gridRow++;
             }
-            gridRow++;
+        }
+        catch(ParseException ex){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText(ex.getMessage());
+
+            alert.showAndWait();
         }
     }
 
@@ -215,11 +229,13 @@ public class TableViewerController {
 
         result.ifPresent(row -> {
             try{
-                table.getFields().add(row);
+                JSONArray fields = (JSONArray)(new JSONParser().parse(table.getFields()));
+                fields.add(row);
+                table.setFields(fields.toJSONString());
                 table.save();
                 this.refreshTable();
             }
-            catch (IOException ex){
+            catch (ParseException | IOException ex){
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
@@ -386,26 +402,30 @@ public class TableViewerController {
                 grid.add(headerLabel, i, 0);
             }
 
-            int gridRow = 1;
-            for(Object orow: table.getFields()){
-                JSONObject jrow = (JSONObject) orow;
-                for(int i=0; i<table.getColumns().length; i++){
-                    final int rowNum = gridRow - 1;
-                    TableColumn column = table.getColumns()[i];
-                    Label cell = new Label();
-                    String cellContent = jrow.get(column.getName()).toString();
-                    cell.setText(cellContent.length() > 30 ? cellContent.substring(0,30) + "..." : cellContent);
-                    cell.setPadding(new Insets(5, 5, 5, 5));
+            try {
+                int gridRow = 1;
+                JSONArray orows = (JSONArray)(new JSONParser().parse(table.getFields()));
+                for (Object orow : orows) {
+                    JSONObject jrow = (JSONObject) orow;
+                    for (int i = 0; i < table.getColumns().length; i++) {
+                        final int rowNum = gridRow - 1;
+                        TableColumn column = table.getColumns()[i];
+                        Label cell = new Label();
+                        String cellContent = jrow.get(column.getName()).toString();
+                        cell.setText(cellContent.length() > 30 ? cellContent.substring(0, 30) + "..." : cellContent);
+                        cell.setPadding(new Insets(5, 5, 5, 5));
 
-                    grid.add(cell, i, gridRow);
+                        grid.add(cell, i, gridRow);
+                    }
+                    gridRow++;
                 }
-                gridRow++;
+
+                alert.getDialogPane().setContent(grid);
+                alert.getDialogPane().getButtonTypes().add(ButtonType.OK);
+
+                alert.showAndWait();
             }
-
-            alert.getDialogPane().setContent(grid);
-            alert.getDialogPane().getButtonTypes().add(ButtonType.OK);
-
-            alert.showAndWait();
+            catch(ParseException ignored){}
         });
     }
 }

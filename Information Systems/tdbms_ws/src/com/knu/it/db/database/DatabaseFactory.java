@@ -9,8 +9,8 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class DatabaseFactory {
-    public static Database CreateEmpty(String name){
-        return new Database(name, "/Users/tedromanus/Documents/" + name + "/");
+    public static Database CreateEmpty(String name, String root){
+        return new Database(name, root + name + "/");
     }
 
     public static Database CreateFromPath(String root) throws IOException, ParseException {
