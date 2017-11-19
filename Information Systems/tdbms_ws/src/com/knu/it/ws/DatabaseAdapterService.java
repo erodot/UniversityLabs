@@ -7,14 +7,14 @@ import javax.xml.ws.WebServiceClient;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-@WebServiceClient(name = "DatabaseAdapterService", targetNamespace = "http://ws.it.knu.com/", wsdlLocation = "http://localhost:9999/?wsdl")
+@WebServiceClient(name = "DatabaseAdapterService", targetNamespace = "http://ws.it.knu.com/", wsdlLocation = "http://tdbms-theodoreromanus.c9users.io/?wsdl")
 public class DatabaseAdapterService extends Service {
     private final static URL WSDL_LOCATION;
 
     static {
         URL url = null;
         try {
-            url = new URL("http://localhost:9999/?wsdl");
+            url = new URL("http://tdbms-theodoreromanus.c9users.io/?wsdl");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
