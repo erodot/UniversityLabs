@@ -1,0 +1,21 @@
+{
+  "name": "tdbms_node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Theodore Romanus",
+  "license": "ISC",
+  "dependencies": {
+    "ajax-request": "^1.2.3",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "favicon": "0.0.2",
+    "jade": "^1.11.0",
+    "morgan": "^1.9.0",
+    "path": "^0.12.7",
+    "serve-favicon": "^2.4.5"
+  }
+}
