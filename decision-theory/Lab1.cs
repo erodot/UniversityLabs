@@ -93,7 +93,7 @@ namespace DecisionTheory
             Vector<double> ASum = A_V.get(0) * AkSum + A_V.get(1) * AdSum;
 
             // RESULTS
-            ASum.Print(withHeader:"ASum", andPercents:true);
+            ASum.PrintAsColumn(withHeader:"ASum", andPercents:true);
         }
     }
 }

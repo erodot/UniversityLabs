@@ -6,8 +6,8 @@ namespace DecisionTheory
 {
     public class Matrix<T>{
         private List<T> m;
-        private uint rowsCount;
-        private uint columnsCount;
+        public uint rowsCount { get; }
+        public uint columnsCount { get; }
 
         public Matrix(uint rowsCount, uint columnsCount, params T[] elements){
             this.rowsCount = rowsCount;
@@ -58,8 +58,23 @@ namespace DecisionTheory
             {
                 T row_sum = default(T);
                 for (int j = 0; j < columnsCount; j++)
-                    row_sum += (dynamic)m[i * (int)columnsCount + j];
+                    row_sum += (dynamic)get((uint)i, (uint)j);
                 sum.Add(row_sum);
+            }
+
+            return new Vector<T>(sum);
+        }
+
+        public Vector<T> GetColumnsSum()
+        {
+            List<T> sum = new List<T>();
+
+            for (int i = 0; i < columnsCount; i++)
+            {
+                T column_sum = default(T);
+                for (int j = 0; j < rowsCount; j++)
+                    column_sum += (dynamic)get((uint)j, (uint)i);
+                sum.Add(column_sum);
             }
 
             return new Vector<T>(sum);
@@ -72,6 +87,30 @@ namespace DecisionTheory
                 col.Add(m[j]);
             }
             return new Vector<T>(col);
+        }
+
+        public T get(uint x, uint y){
+            return m[(int)(x * columnsCount + y)];
+        }
+
+        /// Медіана по кожному стовпчику.
+        public Vector<T> GetColumnsMedian(){
+            List<T> medians = new List<T>();
+            for(int i=0; i<columnsCount; i++){
+                Vector<T> columnSorted = GetColumn((uint)i).SortAsc();
+
+                if(columnSorted.length % 2 == 0){ // парна кількість елементів
+                    T first = columnSorted.get(((int)(columnSorted.length) / 2) - 1);
+                    T second = columnSorted.get(((int)(columnSorted.length) / 2));
+                    dynamic average = ((dynamic)first + (dynamic)second) / 2;
+                    medians.Add(average);
+                }
+                else{ // непарна
+                    medians.Add(columnSorted.get((int)(columnSorted.length) / 2));
+                }
+            }
+            
+            return new Vector<T>(medians);
         }
     }
 
