@@ -44,18 +44,30 @@ namespace DecisionTheory{
 
             // узгоджене ранжування
             Console.WriteLine();
-            ClasteredRanking averageCR = new ClasteredRanking(withRanking: averageRanking);
-            ClasteredRanking medianCR = new ClasteredRanking(withRanking: medianRanking);
+            ClasteredRanking averageCR = new ClasteredRanking(withVectorRanking: averageRanking);
+            ClasteredRanking medianCR = new ClasteredRanking(withVectorRanking: medianRanking);
             
-            averageCR.Print(withHeader: "Кластеризоване ранжування середніх", withLetters: true);
-            medianCR.Print(withHeader: "Кластеризоване ранжування медіан  ", withLetters: true);
+            averageCR.Print(withHeader: "Кластеризоване ранжування середніх    ", withLetters: true);
+            medianCR.Print(withHeader: "Кластеризоване ранжування медіан      ", withLetters: true);
+
+            ClasteredRanking reconciliedRanking = ClasteredRanking.GetReconcilicationRanking(averageCR, medianCR);
+            reconciliedRanking.Print(withHeader: "Упорядковане кластеризоване ранжування", withLetters: true);
 
             // ядро суперечностей
             ClasteredRanking.PrintContradictionCore(averageCR, medianCR, withHeader: "Ядро суперечностей", withLetters: true);
-        }
 
-        private static string GetVariableName(int i){
-            return ((char)(((int)'А') + i)).ToString();
+            // PART 2
+            ClasteredRanking Ar = new ClasteredRanking(withClusteredRanking: new List<List<int>>(){
+                    new List<int>(){1},new List<int>(){2,3}, new List<int>(){4}, new List<int>(){5,6,7}, new List<int>(){8}, new List<int>(){9}, new List<int>(){10},
+                });
+
+            ClasteredRanking Br = new ClasteredRanking(withClusteredRanking: new List<List<int>>(){
+                    new List<int>(){1, 2},new List<int>(){3,4,5}, new List<int>(){6}, new List<int>(){7}, new List<int>(){9}, new List<int>(){8, 10},
+                });
+            
+            Console.WriteLine();
+            Ar.Print(withHeader: "Ar");
+            Br.Print(withHeader: "Br");
         }
     }
 }

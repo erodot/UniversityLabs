@@ -6,19 +6,39 @@ namespace DecisionTheory{
     public class ClasteredRanking{
         private Vector<int> ranking;
 
-        private List<Tuple<int, List<int>>> ranks { get {
-            List<Tuple<int, List<int>>> ranks = new List<Tuple<int, List<int>>>();
-            for(int i = 1; i <= ranking.ToList().Max(); i++)
-                ranks.Add(new Tuple<int, List<int>>(i, new List<int>()));
-            
-            for(int i=0; i<ranking.length; i++){
-                ranks.First(t => t.Item1 == ranking.get(i)).Item2.Add(i);
+        private List<Tuple<int, List<int>>> ranks { 
+            get {
+                List<Tuple<int, List<int>>> ranks = new List<Tuple<int, List<int>>>();
+                for(int i = 1; i <= ranking.ToList().Max(); i++)
+                    ranks.Add(new Tuple<int, List<int>>(i, new List<int>()));
+                
+                for(int i=0; i<ranking.length; i++){
+                    ranks.First(t => t.Item1 == ranking.get(i)).Item2.Add(i);
+                }
+                return ranks;
             }
-            return ranks;
-        }}
+            set {
+                List<Tuple<int, int>> rankingTuple = new List<Tuple<int, int>>();
+                foreach(Tuple<int, List<int>> rankList in value)
+                    foreach(int rankListItem in rankList.Item2)
+                        rankingTuple.Add(new Tuple<int,int>(rankList.Item1, rankListItem)); // first - rank, second - position
+                
+                rankingTuple.Sort((first, second) => first.Item2 > second.Item2 ? 1 : -1);
+                List<int> elems = rankingTuple.Select(x => x.Item1).ToList();
+                this.ranking = new Vector<int>(elems);
+            }
+        }
 
-        public ClasteredRanking(Vector<int> withRanking){
-            this.ranking = withRanking;
+        public ClasteredRanking(Vector<int> withVectorRanking){
+            this.ranking = withVectorRanking;
+        }
+
+        public ClasteredRanking(List<List<int>> withClusteredRanking){
+            List<Tuple<int, List<int>>> ranks = new List<Tuple<int, List<int>>>();
+            for(int i=0; i < withClusteredRanking.Count; i++){
+                ranks.Add(new Tuple<int, List<int>>(i+1, withClusteredRanking[i]));
+            }
+            this.ranks = ranks;
         }
 
         public void Print(string withHeader = "", bool withLetters = false){
@@ -75,6 +95,10 @@ namespace DecisionTheory{
                         contradictions.Add(new Tuple<int,int>(i, j));
                 }
             return contradictions;  
+        }
+
+        public static ClasteredRanking GetReconcilicationRanking(ClasteredRanking first, ClasteredRanking second){
+            return first;
         }
     }
 }
