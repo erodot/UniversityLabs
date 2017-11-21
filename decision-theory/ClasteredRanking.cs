@@ -4,47 +4,20 @@ using System.Linq;
 
 namespace DecisionTheory{
     public class ClasteredRanking{
-        private Vector<int> ranking;
-
-        private List<Tuple<int, List<int>>> ranks { 
-            get {
-                List<Tuple<int, List<int>>> ranks = new List<Tuple<int, List<int>>>();
-                for(int i = 1; i <= ranking.ToList().Max(); i++)
-                    ranks.Add(new Tuple<int, List<int>>(i, new List<int>()));
-                
-                for(int i=0; i<ranking.length; i++){
-                    ranks.First(t => t.Item1 == ranking.get(i)).Item2.Add(i);
-                }
-                return ranks;
-            }
-            set {
-                List<Tuple<int, int>> rankingTuple = new List<Tuple<int, int>>();
-                foreach(Tuple<int, List<int>> rankList in value)
-                    foreach(int rankListItem in rankList.Item2)
-                        rankingTuple.Add(new Tuple<int,int>(rankList.Item1, rankListItem)); // first - rank, second - position
-                
-                rankingTuple.Sort((first, second) => first.Item2 > second.Item2 ? 1 : -1);
-                List<int> elems = rankingTuple.Select(x => x.Item1).ToList();
-                this.ranking = new Vector<int>(elems);
-            }
-        }
-
+        private Ranking ranking;
+        
         public ClasteredRanking(Vector<int> withVectorRanking){
-            this.ranking = withVectorRanking;
+            this.ranking = new Ranking(){ vectorRanking = withVectorRanking };
         }
 
         public ClasteredRanking(List<List<int>> withClusteredRanking){
-            List<Tuple<int, List<int>>> ranks = new List<Tuple<int, List<int>>>();
-            for(int i=0; i < withClusteredRanking.Count; i++){
-                ranks.Add(new Tuple<int, List<int>>(i+1, withClusteredRanking[i]));
-            }
-            this.ranks = ranks;
+            this.ranking = new Ranking(){ clusteredRanking = withClusteredRanking };
         }
 
         public void Print(string withHeader = "", bool withLetters = false){
             List<string> clusters = new List<string>();
             
-            foreach(Tuple<int, List<int>> rank in ranks){
+            foreach(Tuple<int, List<int>> rank in ranking.tupleRanking){
                 if(rank.Item2.Count == 0)
                     continue;
 
@@ -81,16 +54,16 @@ namespace DecisionTheory{
         }
 
         private static List<Tuple<int, int>> GetContradictionCore(ClasteredRanking first, ClasteredRanking second){
-            if(first.ranking.length != second.ranking.length)
+            if(first.ranking.vectorRanking.length != second.ranking.vectorRanking.length)
                 throw new Exception("Clastered rankings have different number of elements.");
 
-            int rankingLength = (int)first.ranking.length;
+            int rankingLength = (int)first.ranking.vectorRanking.length;
             List<Tuple<int,int>> contradictions = new List<Tuple<int, int>>();
 
             for(int i=0; i<rankingLength; i++)
                 for(int j=i+1; j<rankingLength; j++){
-                    bool firstContradiction = first.ranking.get(i) < first.ranking.get(j) && second.ranking.get(i) > second.ranking.get(j);
-                    bool secondContradiction = first.ranking.get(i) > first.ranking.get(j) && second.ranking.get(i) < second.ranking.get(j);
+                    bool firstContradiction = first.ranking.vectorRanking.get(i) < first.ranking.vectorRanking.get(j) && second.ranking.vectorRanking.get(i) > second.ranking.vectorRanking.get(j);
+                    bool secondContradiction = first.ranking.vectorRanking.get(i) > first.ranking.vectorRanking.get(j) && second.ranking.vectorRanking.get(i) < second.ranking.vectorRanking.get(j);
                     if(firstContradiction || secondContradiction)
                         contradictions.Add(new Tuple<int,int>(i, j));
                 }
@@ -98,7 +71,23 @@ namespace DecisionTheory{
         }
 
         public static ClasteredRanking GetReconcilicationRanking(ClasteredRanking first, ClasteredRanking second){
-            return first;
+            List<List<int>> clusteredRankingFirst = first.ranking.clusteredRanking;
+            List<List<int>> clusteredRankingSecond = second.ranking.clusteredRanking;
+
+            List<List<int>> clusteredRankingResulted = new List<List<int>>();
+            while(clusteredRankingFirst.Count > 0 || clusteredRankingSecond.Count > 0){
+                if(clusteredRankingFirst.Count == 0){
+                    clusteredRankingResulted.AddRange(clusteredRankingSecond);
+                    break;
+                }
+                if(clusteredRankingSecond.Count == 0){
+                    clusteredRankingResulted.AddRange(clusteredRankingFirst);
+                    break;
+                }
+
+                
+            }
+            return new ClasteredRanking(withClusteredRanking: clusteredRankingSecond);
         }
     }
 }

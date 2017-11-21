@@ -6,6 +6,7 @@ namespace DecisionTheory{
     public class Lab2{
         public static void Main(string[] args)
         {
+            // PART 1
             Matrix<double> A = new Matrix<double>(
                 rowsCount:12,
                 columnsCount:8,
