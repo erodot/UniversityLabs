@@ -85,7 +85,7 @@ namespace DecisionTheory{
                     break;
                 }
 
-                
+                // here should be method logic
             }
             return new ClasteredRanking(withClusteredRanking: clusteredRankingSecond);
         }
