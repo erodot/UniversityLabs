@@ -41,5 +41,16 @@ namespace DecisionTheory{
                 this.tupleRanking = ranks;
             }
         }
+
+        public Matrix<int> matrixRanking {
+            get {
+                List<int> vectRanking = new List<int>();
+                for(int i =0; i<vectorRanking.length; i++)
+                    for(int j=0; j<vectorRanking.length; j++)
+                        vectRanking.Add(vectorRanking.get(i) <= vectorRanking.get(j) ? 1 : 0);
+
+                return new Matrix<int>(vectorRanking.length, vectorRanking.length, vectRanking.ToArray());
+            }
+        }
     }
 }

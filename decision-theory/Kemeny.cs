@@ -15,15 +15,15 @@ namespace DecisionTheory
         }
 
         public static int Distance(ClasteredRanking first, ClasteredRanking second){
-            Vector<int> firstVR = first.ranking.vectorRanking;
-            Vector<int> secondVR = second.ranking.vectorRanking;
+            Matrix<int> firstMR = first.ranking.matrixRanking;
+            Matrix<int> secondMR = second.ranking.matrixRanking;
 
-            if(firstVR.length != secondVR.length)
+            if(firstMR.rowsCount != firstMR.rowsCount || firstMR.columnsCount != firstMR.columnsCount)
                 throw new Exception("Rankings has different number of options.");
 
             int distance = 0;
-            for(int i=0; i<firstVR.length; i++)
-                distance += Math.Abs(firstVR.get(i) - secondVR.get(i));
+            for(int i=0; i<firstMR.rowsCount * firstMR.columnsCount; i++)
+                distance += Math.Abs(firstMR.m[i] - secondMR.m[i]);
 
             return distance;
         }

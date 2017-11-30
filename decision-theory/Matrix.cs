@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace DecisionTheory
 {
     public class Matrix<T>{
-        private List<T> m;
+        public List<T> m { get; }
         public uint rowsCount { get; }
         public uint columnsCount { get; }
 
