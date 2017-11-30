@@ -58,7 +58,6 @@ namespace DecisionTheory{
             ClasteredRanking.PrintContradictionCore(averageCR, medianCR, withHeader: "Ядро суперечностей", withLetters: true);
 
             // PART 2
-            Console.WriteLine();
             ClasteredRanking[] clasteredRankings = new ClasteredRanking[] {
                 new ClasteredRanking(withClusteredRanking: new List<List<int>>(){
                     new List<int>(){1},new List<int>(){2,3}, new List<int>(){4}, new List<int>(){5}, new List<int>(){6,7}
@@ -83,7 +82,13 @@ namespace DecisionTheory{
                 })
             };
 
+            // відстань Кемені між ранжуваннями
+            Matrix<int> kemenyDistance = Kemeny.DistanceAll(clasteredRankings);
+            kemenyDistance.Print(withHeader: "Відстань Кемені між ранжуваннями");
 
+            // медіана Кемені-Снелла
+            int kemenyMedian = Kemeny.Median(clasteredRankings);
+            Console.WriteLine("Медіана Кемені: " + kemenyMedian);
         }
     }
 }

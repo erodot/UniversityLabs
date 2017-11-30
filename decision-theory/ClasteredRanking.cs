@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace DecisionTheory{
     public class ClasteredRanking{
-        private Ranking ranking;
+        public Ranking ranking { get; }
         
         public ClasteredRanking(Vector<int> withVectorRanking){
             this.ranking = new Ranking(){ vectorRanking = withVectorRanking };

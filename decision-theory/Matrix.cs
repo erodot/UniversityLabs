@@ -9,6 +9,19 @@ namespace DecisionTheory
         public uint rowsCount { get; }
         public uint columnsCount { get; }
 
+        public List<Vector<T>> rows {
+            get {
+                List<Vector<T>> _rows = new List<Vector<T>>();
+                for(int i = 0; i< rowsCount; i++){
+                    List<T> row = new List<T>();
+                    for(int j = 0; j< columnsCount; j++)
+                        row.Add(m[(int)(i*columnsCount + j)]);
+                    _rows.Add(new Vector<T>(row));
+                }
+                return _rows;
+            }
+        }
+
         public Matrix(uint rowsCount, uint columnsCount, params T[] elements){
             this.rowsCount = rowsCount;
             this.columnsCount = columnsCount;
@@ -28,7 +41,7 @@ namespace DecisionTheory
             }
         }
 
-        public static Matrix<T> FromColumns(IList<Vector<T>> columns){
+        public static Matrix<T> FromColumns(List<Vector<T>> columns){
             List<T> m = new List<T>();
             uint rowsCount = columns[0].length;
             uint columnsCount = (uint)columns.Count;
@@ -111,6 +124,13 @@ namespace DecisionTheory
             }
             
             return new Vector<T>(medians);
+        }
+
+        public void Print(string withHeader=""){
+            Console.WriteLine("\n" + withHeader);
+            foreach(Vector<T> row in rows){
+                Console.WriteLine(string.Join(" ", row.ToList().Select(el => el.ToString()).Select(el => el = el.PadRight(3 - el.Length))));
+            }
         }
     }
 
