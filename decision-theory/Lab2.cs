@@ -87,8 +87,8 @@ namespace DecisionTheory{
             kemenyDistance.Print(withHeader: "Відстань Кемені між ранжуваннями");
 
             // медіана Кемені-Снелла
-            int kemenyMedian = Kemeny.Median(clasteredRankings);
-            Console.WriteLine("Медіана Кемені: " + kemenyMedian);
+            ClasteredRanking kemenyMedian = Kemeny.Median(clasteredRankings);
+            kemenyMedian.Print(withHeader:"Медіана Кемені");
         }
     }
 }

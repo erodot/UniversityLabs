@@ -5,11 +5,11 @@ using System;
 namespace DecisionTheory
 {
     public class Kemeny{
-        public static Matrix<int> DistanceAll(ClasteredRanking[] rankings){
-            uint rank = (uint)rankings.Length;
+        public static Matrix<int> DistanceAll(ClasteredRanking[] clasteredRankings){
+            uint rank = (uint)clasteredRankings.Length;
             List<int> matrix = new List<int>();
-            foreach(ClasteredRanking first in rankings)
-                foreach(ClasteredRanking second in rankings)
+            foreach(ClasteredRanking first in clasteredRankings)
+                foreach(ClasteredRanking second in clasteredRankings)
                     matrix.Add(Distance(first, second));
             return new Matrix<int>(rank, rank, matrix.ToArray());
         }
@@ -28,8 +28,15 @@ namespace DecisionTheory
             return distance;
         }
 
-        public static int Median(ClasteredRanking[] clasteredRankings){
-            throw new NotImplementedException();
+        public static ClasteredRanking Median(ClasteredRanking[] clasteredRankings){
+            Matrix<int> distances = DistanceAll(clasteredRankings);
+            Vector<int> rowSum = distances.GetRowsSum();
+            int min_i = 0; // first ranking
+            for(int i = 0; i< rowSum.length; i++)
+                if(rowSum.get(i) < rowSum.get(min_i))
+                    min_i = i;
+
+            return clasteredRankings[min_i];
         }
     }
 }
