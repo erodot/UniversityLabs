@@ -132,6 +132,16 @@ namespace DecisionTheory
                 Console.WriteLine(string.Join(" ", row.ToList().Select(el => el.ToString()).Select(el => el = el.PadRight(3 - el.Length))));
             }
         }
+
+        // Quasy Multiplication: multiply on elements level
+        public static Matrix<T> QMultiply(Matrix<T> first, Matrix<T> second){
+            List<T> multiplication = new List<T>();
+            for(int i = 0; i< first.m.Count; i++){
+                multiplication.Add((dynamic)first.m[i] * second.m[i]);
+            }
+
+            return new Matrix<T>(first.rowsCount, first.columnsCount, multiplication.ToArray());
+        }
     }
 
     public static class ArrayExtensions{

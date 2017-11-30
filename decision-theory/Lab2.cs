@@ -7,6 +7,7 @@ namespace DecisionTheory{
         public static void Main(string[] args)
         {
             // PART 1
+            Console.WriteLine("Завдання 1\n");
             Matrix<double> A = new Matrix<double>(
                 rowsCount:12,
                 columnsCount:8,
@@ -58,6 +59,7 @@ namespace DecisionTheory{
             ClasteredRanking.PrintContradictionCore(averageCR, medianCR, withHeader: "Ядро суперечностей", withLetters: true);
 
             // PART 2
+            Console.WriteLine("\nЗавдання 2");
             ClasteredRanking[] clasteredRankings = new ClasteredRanking[] {
                 new ClasteredRanking(withClusteredRanking: new List<List<int>>(){
                     new List<int>(){1},new List<int>(){2,3}, new List<int>(){4}, new List<int>(){5}, new List<int>(){6,7}
@@ -82,9 +84,21 @@ namespace DecisionTheory{
                 })
             };
 
+            Console.WriteLine("Приклад знаходження відстані Кемені для перших двох ранжувань");
+            ClasteredRanking first = clasteredRankings[0];
+            ClasteredRanking second = clasteredRankings[1];
+            Matrix<int> firstMR = first.ranking.matrixRanking;
+            Matrix<int> secondMR = second.ranking.matrixRanking;
+
+            first.Print(withHeader:"\nПерше ранжування");
+            firstMR.Print(withHeader:"Бінарна матриця відношень першого ранжування");
+            second.Print(withHeader:"\nДруге ранжування");
+            secondMR.Print(withHeader:"Бінарна матриця відношень другого ранжування");
+            Console.WriteLine("\nВідстань Кемені між цими двома ранжуваннями: " + Kemeny.Distance(first, second));
+
             // відстань Кемені між ранжуваннями
             Matrix<int> kemenyDistance = Kemeny.DistanceAll(clasteredRankings);
-            kemenyDistance.Print(withHeader: "Відстань Кемені між ранжуваннями");
+            kemenyDistance.Print(withHeader: "Відстань Кемені між усіма ранжуваннями");
 
             // медіана Кемені-Снелла
             ClasteredRanking kemenyMedian = Kemeny.Median(clasteredRankings);

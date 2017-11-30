@@ -14,6 +14,10 @@ namespace DecisionTheory{
             this.ranking = new Ranking(){ clusteredRanking = withClusteredRanking };
         }
 
+        public ClasteredRanking(Matrix<int> withMatrixRanking){
+            this.ranking = new Ranking(){ matrixRanking = withMatrixRanking };
+        }
+
         public void Print(string withHeader = "", bool withLetters = false){
             List<string> clusters = new List<string>();
             
@@ -71,10 +75,14 @@ namespace DecisionTheory{
         }
 
         public static ClasteredRanking GetReconcilicationRanking(ClasteredRanking first, ClasteredRanking second){
-            // hardcoded under certain input data
-            return new ClasteredRanking(withClusteredRanking: new List<List<int>>(){
-                    new List<int>(){4},new List<int>(){2, 3, 6}, new List<int>(){1}, new List<int>(){7}, new List<int>(){5, 8},
-                });
+            List<Tuple<int,int>> contradictionCore = GetContradictionCore(first, second);
+
+            Matrix<int> firstMR = first.ranking.matrixRanking;
+            Matrix<int> secondMR = second.ranking.matrixRanking;
+
+            Matrix<int> q_muptiplication = Matrix<int>.QMultiply(firstMR, secondMR);
+
+            return new ClasteredRanking(withMatrixRanking: q_muptiplication);
         }
     }
 }

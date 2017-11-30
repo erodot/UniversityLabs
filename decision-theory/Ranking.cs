@@ -51,6 +51,56 @@ namespace DecisionTheory{
 
                 return new Matrix<int>(vectorRanking.length, vectorRanking.length, vectRanking.ToArray());
             }
+            set{
+                Matrix<int> binaryRelations = value;
+                List<List<int>> groups = new List<List<int>>();
+                for(int i=0; i<binaryRelations.rowsCount; i++)
+                    groups.Add(new List<int>(){i+1});
+
+                // get eq classes
+                for(uint i=0; i< binaryRelations.rowsCount; i++)
+                    for(uint j=0; j< binaryRelations.rowsCount; j++)
+                        if(i != j && binaryRelations.get(i, j) == 1 && binaryRelations.get(j, i) == 1) {
+                            // elements are in the same eq class
+                            int firstListIndex = default(int), secondListIndex = default(int);
+                            for(int k = 0; k<binaryRelations.rowsCount; k++){
+                                Console.WriteLine(k);
+                                if(groups[k].Contains((int)(i+1)))
+                                    firstListIndex = k;
+                                else if(groups[k].Contains((int)(j+1)))
+                                    secondListIndex = k;
+                            }
+                            
+                            if(firstListIndex != secondListIndex){
+                                List<int> first = groups[firstListIndex];
+                                List<int> second = groups[secondListIndex];
+                                groups.Remove(first);
+                                groups.Remove(second);
+
+                                List<int> union = new List<int>();
+                                union.AddRange(first);
+                                union.AddRange(second);
+                            }
+                        }
+                
+                // now groups contains all eq classes
+                List<Tuple<int, List<int>>> groupsTuple = new List<Tuple<int, List<int>>>();
+                for(int i = 0; i< groups.Count; i++)
+                    groupsTuple.Add(new Tuple<int, List<int>>(1, groups[i]));
+                
+                for(int i = 0; i < groupsTuple.Count; i++)
+                    for(int j = 0; j < groupsTuple.Count; j++)
+                        if(i!=j){
+                            uint itemFromFirstClaster = (uint)(groupsTuple[i].Item2[0]-1);
+                            uint itemFromSecondClaster = (uint)(groupsTuple[j].Item2[0]-1);
+                            if(binaryRelations.get(itemFromFirstClaster, itemFromSecondClaster) == 1)
+                                groupsTuple[j] = new Tuple<int, List<int>>(groupsTuple[j].Item1+1, groupsTuple[j].Item2);
+                            else 
+                                groupsTuple[i] = new Tuple<int, List<int>>(groupsTuple[i].Item1+1, groupsTuple[i].Item2);
+                        }
+
+                this.tupleRanking = groupsTuple;
+            }
         }
     }
 }
