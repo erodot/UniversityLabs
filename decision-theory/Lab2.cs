@@ -58,17 +58,32 @@ namespace DecisionTheory{
             ClasteredRanking.PrintContradictionCore(averageCR, medianCR, withHeader: "Ядро суперечностей", withLetters: true);
 
             // PART 2
-            ClasteredRanking Ar = new ClasteredRanking(withClusteredRanking: new List<List<int>>(){
-                    new List<int>(){1},new List<int>(){2,3}, new List<int>(){4}, new List<int>(){5,6,7}, new List<int>(){8}, new List<int>(){9}, new List<int>(){10},
-                });
-
-            ClasteredRanking Br = new ClasteredRanking(withClusteredRanking: new List<List<int>>(){
-                    new List<int>(){1, 2},new List<int>(){3,4,5}, new List<int>(){6}, new List<int>(){7}, new List<int>(){9}, new List<int>(){8, 10},
-                });
-            
             Console.WriteLine();
-            Ar.Print(withHeader: "Ar");
-            Br.Print(withHeader: "Br");
+            ClasteredRanking[] clasteredRankings = new ClasteredRanking[] {
+                new ClasteredRanking(withClusteredRanking: new List<List<int>>(){
+                    new List<int>(){1},new List<int>(){2,3}, new List<int>(){4}, new List<int>(){5}, new List<int>(){6,7}
+                }),
+                new ClasteredRanking(withClusteredRanking: new List<List<int>>(){
+                    new List<int>(){1, 3},new List<int>(){4}, new List<int>(){2}, new List<int>(){5}, new List<int>(){7}, new List<int>(){6},
+                }),
+                new ClasteredRanking(withClusteredRanking: new List<List<int>>(){
+                    new List<int>(){1},new List<int>(){4}, new List<int>(){2}, new List<int>(){3}, new List<int>(){6}, new List<int>(){5}, new List<int>(){7}
+                }),
+                new ClasteredRanking(withClusteredRanking: new List<List<int>>(){
+                    new List<int>(){1},new List<int>(){2, 4}, new List<int>(){3}, new List<int>(){5}, new List<int>(){7}, new List<int>(){6}
+                }),
+                new ClasteredRanking(withClusteredRanking: new List<List<int>>(){
+                    new List<int>(){2},new List<int>(){3}, new List<int>(){4}, new List<int>(){5}, new List<int>(){1}, new List<int>(){6}, new List<int>(){7}
+                }),
+                new ClasteredRanking(withClusteredRanking: new List<List<int>>(){
+                    new List<int>(){1},new List<int>(){3}, new List<int>(){2}, new List<int>(){5}, new List<int>(){6}, new List<int>(){7}, new List<int>(){4}
+                }),
+                new ClasteredRanking(withClusteredRanking: new List<List<int>>(){
+                    new List<int>(){1},new List<int>(){5}, new List<int>(){3}, new List<int>(){4}, new List<int>(){2}, new List<int>(){6}, new List<int>(){7}
+                })
+            };
+
+
         }
     }
 }

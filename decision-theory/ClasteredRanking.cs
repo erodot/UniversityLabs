@@ -71,6 +71,7 @@ namespace DecisionTheory{
         }
 
         public static ClasteredRanking GetReconcilicationRanking(ClasteredRanking first, ClasteredRanking second){
+            // hardcoded under certain input data
             return new ClasteredRanking(withClusteredRanking: new List<List<int>>(){
                     new List<int>(){4},new List<int>(){2, 3, 6}, new List<int>(){1}, new List<int>(){7}, new List<int>(){5, 8},
                 });
