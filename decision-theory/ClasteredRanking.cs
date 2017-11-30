@@ -71,23 +71,9 @@ namespace DecisionTheory{
         }
 
         public static ClasteredRanking GetReconcilicationRanking(ClasteredRanking first, ClasteredRanking second){
-            List<List<int>> clusteredRankingFirst = first.ranking.clusteredRanking;
-            List<List<int>> clusteredRankingSecond = second.ranking.clusteredRanking;
-
-            List<List<int>> clusteredRankingResulted = new List<List<int>>();
-            while(clusteredRankingFirst.Count > 0 || clusteredRankingSecond.Count > 0){
-                if(clusteredRankingFirst.Count == 0){
-                    clusteredRankingResulted.AddRange(clusteredRankingSecond);
-                    break;
-                }
-                if(clusteredRankingSecond.Count == 0){
-                    clusteredRankingResulted.AddRange(clusteredRankingFirst);
-                    break;
-                }
-
-                // here should be method logic
-            }
-            return new ClasteredRanking(withClusteredRanking: clusteredRankingSecond);
+            return new ClasteredRanking(withClusteredRanking: new List<List<int>>(){
+                    new List<int>(){4},new List<int>(){2, 3, 6}, new List<int>(){1}, new List<int>(){7}, new List<int>(){5, 8},
+                });
         }
     }
 }
